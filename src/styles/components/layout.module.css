@@ -1,3 +1,23 @@
+.navigation {
+  background-color: white;
+  border-bottom: 1px solid lightgrey;
+  display: flex;
+  padding: 10px;
+  position: fixed;
+  width: 100%;
+}
+
+.main {
+  padding-top: 50px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.logo {
+  flex-grow: 1;
+  font-weight: bolder;
+}
+
 @media (max-width: 700px) {
 }
 

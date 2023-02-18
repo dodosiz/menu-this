@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import { Auth, ThemeSupa } from "@supabase/auth-ui-react";
 import { useRouter } from "next/router";
+import { Container } from "@chakra-ui/react";
 
 export default function Login() {
   const { user } = Auth.useUser();
@@ -9,11 +10,23 @@ export default function Login() {
     router.push("/");
   }
   return (
-    <Auth
-      appearance={{ theme: ThemeSupa }}
-      supabaseClient={supabase}
-      view="sign_in"
-      socialLayout="horizontal"
-    />
+    <Container>
+      <Auth
+        supabaseClient={supabase}
+        view="sign_in"
+        socialLayout="horizontal"
+        appearance={{
+          theme: ThemeSupa,
+          variables: {
+            default: {
+              colors: {
+                brand: "grey",
+                brandAccent: "darkgrey",
+              },
+            },
+          },
+        }}
+      />
+    </Container>
   );
 }

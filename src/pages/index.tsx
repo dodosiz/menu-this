@@ -1,5 +1,6 @@
 import { Layout } from "@/components/layout";
 import { Auth } from "@supabase/auth-ui-react";
+import { Heading } from "@chakra-ui/react";
 
 export default function Home() {
   const { user } = Auth.useUser();
@@ -7,7 +8,7 @@ export default function Home() {
   return (
     <Layout user={user}>
       <>
-        <h1>Menu This</h1>
+        <Heading>Menu This</Heading>
       </>
     </Layout>
   );
