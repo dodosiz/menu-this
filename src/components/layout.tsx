@@ -29,10 +29,20 @@ export function Layout({ children, user }: LayoutProps) {
           </Link>
         </div>
         {user && (
-          <button onClick={() => supabase.auth.signOut()}>Sign Out</button>
+          <>
+            <Link className={styles.nav_item} as={NextLink} href="/menu">
+              Create Menu
+            </Link>
+            <button
+              className={styles.nav_item}
+              onClick={() => supabase.auth.signOut()}
+            >
+              Sign Out
+            </button>
+          </>
         )}
         {!user && (
-          <Link as={NextLink} href="/login">
+          <Link className={styles.nav_item} as={NextLink} href="/login">
             Sign In
           </Link>
         )}

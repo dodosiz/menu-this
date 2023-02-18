@@ -1,6 +1,6 @@
 .navigation {
   background-color: white;
-  border-bottom: 1px solid lightgrey;
+  border-bottom: 1px solid rgba(211, 211, 211, 0.5);
   display: flex;
   padding: 10px;
   position: fixed;
@@ -14,8 +14,19 @@
 }
 
 .logo {
+  color: var(--logo-color);
   flex-grow: 1;
   font-weight: bolder;
+}
+
+.logo > a {
+  text-decoration: none !important;
+}
+
+.nav_item {
+  color: var(--main-color) !important;
+  text-decoration: none !important;
+  margin-left: 1rem;
 }
 
 @media (max-width: 700px) {

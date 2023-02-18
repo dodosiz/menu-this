@@ -2,6 +2,7 @@ import { supabase } from "@/lib/supabase";
 import { Auth, ThemeSupa } from "@supabase/auth-ui-react";
 import { useRouter } from "next/router";
 import { Container } from "@chakra-ui/react";
+import { LOGO_COLOR, LOGO_COLOR_LIGHT } from "@/styles/constants";
 
 export default function Login() {
   const { user } = Auth.useUser();
@@ -20,8 +21,8 @@ export default function Login() {
           variables: {
             default: {
               colors: {
-                brand: "grey",
-                brandAccent: "darkgrey",
+                brand: LOGO_COLOR,
+                brandAccent: LOGO_COLOR_LIGHT,
               },
             },
           },

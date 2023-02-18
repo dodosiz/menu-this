@@ -1,6 +1,9 @@
 import { Layout } from "@/components/layout";
 import { Auth } from "@supabase/auth-ui-react";
 import { Heading } from "@chakra-ui/react";
+import { Text } from "@chakra-ui/react";
+import styles from "@/styles/home.module.css";
+import { Divider } from "@chakra-ui/react";
 
 export default function Home() {
   const { user } = Auth.useUser();
@@ -8,7 +11,19 @@ export default function Home() {
   return (
     <Layout user={user}>
       <>
-        <Heading>Menu This</Heading>
+        <div className={styles.banner}>
+          <Heading className={styles.banner_header} as="h1">
+            Create your{" "}
+            <span className={styles.banner_header_coloured}>online menu</span>
+          </Heading>
+          <Text className={styles.banner_text} fontSize="md">
+            Use our tool to create the menu of your business online. Create
+            categories and add products with prices, this is all you need to do.
+            Everything else, like the URL and the QR code for the menu is done
+            by us.
+          </Text>
+        </div>
+        <Divider />
       </>
     </Layout>
   );
