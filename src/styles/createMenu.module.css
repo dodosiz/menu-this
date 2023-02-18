@@ -1,0 +1,7 @@
+.create_menu {
+  color: var(--main-color);
+}
+
+.create_menu a {
+  color: var(--logo-color) !important;
+}

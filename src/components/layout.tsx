@@ -30,7 +30,7 @@ export function Layout({ children, user }: LayoutProps) {
         </div>
         {user && (
           <>
-            <Link className={styles.nav_item} as={NextLink} href="/menu">
+            <Link className={styles.nav_item} as={NextLink} href="/createMenu">
               Create Menu
             </Link>
             <button

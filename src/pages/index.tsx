@@ -6,15 +6,21 @@ import styles from "@/styles/home.module.css";
 import { Divider } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/react";
 import { FaArrowRight } from "react-icons/fa";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const { user } = Auth.useUser();
+  const router = useRouter();
+
+  const navigateToCreateMenu = () => {
+    router.push("/createMenu");
+  };
 
   return (
     <Layout user={user}>
       <>
         <div className={styles.banner}>
-          <Heading className={styles.banner_header} as="h1">
+          <Heading size="2xl" className={styles.banner_header} as="h1">
             Create your{" "}
             <span className={styles.banner_header_coloured}>online menu</span>
           </Heading>
@@ -29,6 +35,7 @@ export default function Home() {
             colorScheme="teal"
             variant="solid"
             rightIcon={<FaArrowRight />}
+            onClick={navigateToCreateMenu}
           >
             Create Your Menu
           </Button>
