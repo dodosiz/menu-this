@@ -21,6 +21,23 @@ export async function getTokenFromCookie(
   return null;
 }
 
+export async function setTokenCookie(res: NextApiResponse, session: Session) {
+  const token = await Iron.seal(
+    session,
+    TEMP_TOKEN_SECRET as string,
+    Iron.defaults
+  );
+  const cookie = serialize(TEMP_COOKIE, token, {
+    maxAge: session.expires_in,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    sameSite: "lax",
+  });
+
+  res.setHeader("Set-Cookie", cookie);
+}
+
 export function removeTokenCookie(res: NextApiResponse) {
   const cookie = serialize(TEMP_COOKIE, "", {
     maxAge: -1,
