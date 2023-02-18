@@ -1,9 +1,19 @@
 import { Layout } from "@/components/layout";
 import {
+  Button,
+  ButtonGroup,
   Heading,
   IconButton,
   Input,
   Link,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverFooter,
+  PopoverHeader,
+  PopoverTrigger,
   Tab,
   TabList,
   Tabs,
@@ -71,14 +81,11 @@ export default function CreateMenu({
   const [isCreateMode, setCreate] = useState(false);
   const [newCategory, setNewCategory] = useState("");
   const [categories, setCategories] = useState<Category[]>(initialCategories);
+  const [toDelete, setToDelete] = useState<string | null>(null);
 
   function handleCancel() {
     setCreate(false);
     setNewCategory("");
-  }
-
-  function handleNew() {
-    setCreate(true);
   }
 
   async function handleSubmit(event: FormEvent, userId: string) {
@@ -95,7 +102,7 @@ export default function CreateMenu({
       },
       body: JSONdata,
     };
-    const response = await fetch("/api/category", options);
+    const response = await fetch("/api/create-category", options);
     const result = await response.json();
     if (response.status === 200) {
       setCategories([
@@ -104,6 +111,21 @@ export default function CreateMenu({
       ]);
       setNewCategory("");
       setCreate(false);
+    }
+  }
+
+  async function handleDelete(categoryId: string) {
+    const JSONdata = JSON.stringify({ id: categoryId });
+    const options = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSONdata,
+    };
+    const response = await fetch("/api/delete-category", options);
+    if (response.status === 200) {
+      setCategories(categories.filter((c) => c.id !== categoryId));
     }
   }
 
@@ -134,10 +156,52 @@ export default function CreateMenu({
                       </span>
                       <IconButton
                         variant="ghost"
-                        aria-label="Create new"
+                        aria-label="Delete category"
                         className={styles.delete_icon}
                         icon={<RiDeleteBin6Line />}
+                        onClick={() => setToDelete(category.id)}
                       />
+                      <Popover
+                        returnFocusOnClose={false}
+                        isOpen={category.id === toDelete}
+                        onClose={() => setToDelete(null)}
+                        placement="right"
+                        closeOnBlur={false}
+                      >
+                        <PopoverTrigger>
+                          <span></span>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                          <PopoverHeader fontWeight="semibold">
+                            Confirmation
+                          </PopoverHeader>
+                          <PopoverArrow />
+                          <PopoverCloseButton />
+                          <PopoverBody>
+                            Are you sure you want to delete the category &ldquo;
+                            {category.title}&ldquo;
+                          </PopoverBody>
+                          <PopoverFooter
+                            display="flex"
+                            justifyContent="flex-end"
+                          >
+                            <ButtonGroup size="sm">
+                              <Button
+                                onClick={() => setToDelete(null)}
+                                variant="outline"
+                              >
+                                Cancel
+                              </Button>
+                              <Button
+                                onClick={() => handleDelete(category.id)}
+                                colorScheme="red"
+                              >
+                                Delete
+                              </Button>
+                            </ButtonGroup>
+                          </PopoverFooter>
+                        </PopoverContent>
+                      </Popover>
                     </Tab>
                   );
                 })}
@@ -183,7 +247,7 @@ export default function CreateMenu({
                   aria-label="Create new"
                   icon={<IoMdAdd />}
                   isDisabled={isCreateMode}
-                  onClick={handleNew}
+                  onClick={() => setCreate(true)}
                   size="xs"
                 />
               </TabList>

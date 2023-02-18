@@ -19,3 +19,7 @@ export async function createCategory(data: CategoryData): Promise<string> {
   });
   return category.id;
 }
+
+export async function deleteCategory(id: string) {
+  await prisma.category.delete({ where: { id } });
+}
