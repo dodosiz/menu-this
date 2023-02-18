@@ -1,6 +1,5 @@
 import { Layout } from "@/components/layout";
 import {
-  Container,
   Heading,
   IconButton,
   Input,
@@ -9,7 +8,7 @@ import {
   TabList,
   Tabs,
 } from "@chakra-ui/react";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useRef } from "react";
 import styles from "@/styles/createMenu.module.css";
 import NextLink from "next/link";
 import { IoMdAdd } from "react-icons/io";
@@ -22,7 +21,6 @@ import { getCategories } from "@/lib/categories";
 import { User } from "@supabase/supabase-js";
 import { Category } from "@prisma/client";
 import { getTokenFromCookie } from "@/lib/cookies";
-import { NextRouter } from "next/router";
 
 export async function getServerSideProps({ req }: { req: NextApiRequest }) {
   const token = await getTokenFromCookie(req);
@@ -74,10 +72,14 @@ export default function CreateMenu({
   const [newCategory, setNewCategory] = useState("");
   const [categories, setCategories] = useState<Category[]>(initialCategories);
 
-  const handleCancel = () => {
+  function handleCancel() {
     setCreate(false);
     setNewCategory("");
-  };
+  }
+
+  function handleNew() {
+    setCreate(true);
+  }
 
   async function handleSubmit(event: FormEvent, userId: string) {
     event.preventDefault();
@@ -107,7 +109,7 @@ export default function CreateMenu({
 
   return (
     <Layout user={user}>
-      <Container className={styles.create_menu}>
+      <div className={styles.create_menu}>
         {!authorized && (
           <Heading size="xl" as="h1">
             You need to{" "}
@@ -181,14 +183,14 @@ export default function CreateMenu({
                   aria-label="Create new"
                   icon={<IoMdAdd />}
                   isDisabled={isCreateMode}
-                  onClick={() => setCreate(true)}
+                  onClick={handleNew}
                   size="xs"
                 />
               </TabList>
             </Tabs>
           </>
         )}
-      </Container>
+      </div>
     </Layout>
   );
 }
