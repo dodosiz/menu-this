@@ -4,6 +4,7 @@ import NextLink from "next/link";
 import { User } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import { Link } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 interface LayoutProps {
   children: React.ReactElement;
@@ -11,6 +12,11 @@ interface LayoutProps {
 }
 
 export function Layout({ children, user }: LayoutProps) {
+  const router = useRouter();
+  const handleLogout = () => {
+    supabase.auth.signOut();
+    router.push("/api/logout");
+  };
   return (
     <>
       <Head>
@@ -33,10 +39,7 @@ export function Layout({ children, user }: LayoutProps) {
             <Link className={styles.nav_item} as={NextLink} href="/createMenu">
               Create Menu
             </Link>
-            <button
-              className={styles.nav_item}
-              onClick={() => supabase.auth.signOut()}
-            >
+            <button className={styles.nav_item} onClick={handleLogout}>
               Sign Out
             </button>
           </>

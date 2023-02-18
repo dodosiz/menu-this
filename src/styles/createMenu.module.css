@@ -5,3 +5,19 @@
 .create_menu a {
   color: var(--logo-color) !important;
 }
+
+.category_label {
+  margin-right: 5px;
+}
+
+.delete_icon {
+  display: none !important;
+}
+
+.category:hover > .delete_icon {
+  display: contents !important;
+}
+
+.delete_icon:hover {
+  color: rgb(223, 61, 61);
+}

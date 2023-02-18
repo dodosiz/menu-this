@@ -3,6 +3,7 @@ import { Auth, ThemeSupa } from "@supabase/auth-ui-react";
 import { useRouter } from "next/router";
 import { Container } from "@chakra-ui/react";
 import { LOGO_COLOR, LOGO_COLOR_LIGHT } from "@/styles/constants";
+import { useEffect } from "react";
 
 export default function Login() {
   const { user } = Auth.useUser();
@@ -10,6 +11,22 @@ export default function Login() {
   if (user) {
     router.push("/");
   }
+  useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        fetch("/api/login", {
+          method: "POST",
+          headers: new Headers({ "Content-Type": "application/json" }),
+          credentials: "same-origin",
+          body: JSON.stringify({ event, session }),
+        }).then((res) => res.json());
+      }
+    );
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
   return (
     <Container>
       <Auth
