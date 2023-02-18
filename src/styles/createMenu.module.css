@@ -21,3 +21,16 @@
 .delete_icon:hover {
   color: rgb(223, 61, 61);
 }
+
+.tablist {
+  align-items: center;
+}
+
+.category_form {
+  align-items: center;
+  display: flex;
+}
+
+.category_input {
+  width: 200px !important;
+}

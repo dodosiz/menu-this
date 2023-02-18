@@ -1,3 +1,4 @@
+import { CategoryData } from "@/pages/createMenu";
 import { prisma } from "./prisma";
 
 export async function getCategories(userId: string) {
@@ -7,4 +8,14 @@ export async function getCategories(userId: string) {
     },
   });
   return categories;
+}
+
+export async function createCategory(data: CategoryData): Promise<string> {
+  const category = await prisma.category.create({
+    data: {
+      userId: data.userId,
+      title: data.title,
+    },
+  });
+  return category.id;
 }
