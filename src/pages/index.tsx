@@ -4,6 +4,8 @@ import { Heading } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
 import styles from "@/styles/home.module.css";
 import { Divider } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
+import { FaArrowRight } from "react-icons/fa";
 
 export default function Home() {
   const { user } = Auth.useUser();
@@ -22,6 +24,14 @@ export default function Home() {
             Everything else, like the URL and the QR code for the menu is done
             by us.
           </Text>
+          <Button
+            className={styles.banner_button}
+            colorScheme="teal"
+            variant="solid"
+            rightIcon={<FaArrowRight />}
+          >
+            Create Your Menu
+          </Button>
         </div>
         <Divider />
       </>

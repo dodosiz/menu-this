@@ -17,6 +17,10 @@
 .banner_text {
   color: var(--secondary-color);
   width: 40vw;
-  padding-top: 2rem;
+  margin-top: 2rem;
   text-align: center;
+}
+
+.banner_button {
+  margin-top: 2rem;
 }
