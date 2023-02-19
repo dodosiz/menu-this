@@ -13,7 +13,7 @@ interface LayoutProps {
 
 export function Layout({ children, user }: LayoutProps) {
   const router = useRouter();
-  const handleLogout = () => {
+  async function handleLogout() {
     await supabase.auth.signOut();
     router.push("/api/logout");
   };
