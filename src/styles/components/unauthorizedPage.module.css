@@ -1,0 +1,7 @@
+.unauthorized_page {
+  color: var(--main-color);
+}
+
+.unauthorized_page a {
+  color: var(--logo-color) !important;
+}

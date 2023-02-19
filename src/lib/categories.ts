@@ -1,4 +1,4 @@
-import { CategoryData } from "@/pages/createMenu";
+import { CategoryData } from "@/components/categoryForm";
 import { prisma } from "./prisma";
 
 export async function getCategories(userId: string) {

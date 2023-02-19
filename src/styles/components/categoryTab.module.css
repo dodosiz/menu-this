@@ -1,0 +1,15 @@
+.category_label {
+  margin-right: 5px;
+}
+
+.category:hover > .delete_icon {
+  display: contents !important;
+}
+
+.delete_icon {
+  display: none !important;
+}
+
+.delete_icon:hover {
+  color: rgb(223, 61, 61);
+}

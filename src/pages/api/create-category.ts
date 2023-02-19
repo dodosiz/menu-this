@@ -1,6 +1,6 @@
+import { CategoryData } from "@/components/categoryForm";
 import { createCategory } from "@/lib/categories";
 import { NextApiRequest, NextApiResponse } from "next";
-import { CategoryData } from "../createMenu";
 
 export default async function handler(
   req: NextApiRequest,
