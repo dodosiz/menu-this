@@ -5,6 +5,7 @@ import { FiCheck } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
 import { Category } from "@prisma/client";
 import { User } from "@supabase/supabase-js";
+import { ProductMap } from "@/pages/createMenu";
 
 export interface CategoryData {
   userId: string;
@@ -14,6 +15,8 @@ export interface CategoryData {
 interface CategoryFormProps {
   categories: Category[];
   user: User;
+  productMap: ProductMap;
+  setProductMap: (pm: ProductMap) => void;
   setCategories: (c: Category[]) => void;
   setCreate: (b: boolean) => void;
   handleCancel: () => void;
@@ -45,6 +48,10 @@ export function CategoryForm(props: CategoryFormProps) {
         ...props.categories,
         { id: result.id, title: data.title, userId: data.userId },
       ]);
+      props.setProductMap({
+        ...props.productMap,
+        [result.id]: [],
+      });
     }
   }
 

@@ -12,4 +12,14 @@ model Category {
   id        String     @default(cuid()) @id
   userId    String
   title     String
+  products  Product[]
+}
+
+model Product {
+  id            String     @default(cuid()) @id
+  name          String
+  description   String
+  price         Float
+  Category      Category  @relation(fields: [categoryId], references: [id])
+  categoryId    String
 }
