@@ -79,7 +79,7 @@ export function ProductForm({
     <Box className={styles.new_product}>
       <form onSubmit={handleSubmit}>
         <Grid templateColumns="repeat(5, 1fr)" gap={4}>
-          <GridItem colSpan={{ sm: 5, md: 4 }}>
+          <GridItem colSpan={{ base: 5, sm: 5, md: 4 }}>
             <Input
               name="name"
               required={true}
@@ -89,7 +89,7 @@ export function ProductForm({
               onChange={(e) => setName(e.target.value)}
             />
           </GridItem>
-          <GridItem colSpan={{ sm: 5, md: 1 }}>
+          <GridItem colSpan={{ base: 5, sm: 5, md: 1 }}>
             <NumberInput
               name="price"
               focusBorderColor="teal.200"
@@ -106,7 +106,7 @@ export function ProductForm({
               </NumberInputStepper>
             </NumberInput>
           </GridItem>
-          <GridItem colSpan={{ sm: 5, md: 4 }}>
+          <GridItem colSpan={{ base: 5, sm: 5, md: 4 }}>
             <Textarea
               name="description"
               value={description}
@@ -116,7 +116,7 @@ export function ProductForm({
               resize="vertical"
             />
           </GridItem>
-          <GridItem colSpan={{ sm: 5, md: 1 }}>
+          <GridItem colSpan={{ base: 5, sm: 5, md: 1 }}>
             <Button
               isDisabled={!name.length || !price.length}
               type="submit"
