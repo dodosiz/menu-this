@@ -36,6 +36,8 @@ export function CategoryForm(props: CategoryFormProps) {
       },
       body: JSONdata,
     };
+    setNewCategory("");
+    props.setCreate(false);
     const response = await fetch("/api/create-category", options);
     const result = await response.json();
     if (response.status === 200) {
@@ -43,8 +45,6 @@ export function CategoryForm(props: CategoryFormProps) {
         ...props.categories,
         { id: result.id, title: data.title, userId: data.userId },
       ]);
-      setNewCategory("");
-      props.setCreate(false);
     }
   }
 
