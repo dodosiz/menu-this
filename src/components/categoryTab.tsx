@@ -36,10 +36,8 @@ export function CategoryTab(props: CategoryTabProps) {
       body: JSONdata,
     };
     setToDelete(null);
-    const response = await fetch("/api/delete-category", options);
-    if (response.status === 200) {
-      props.setCategories(props.categories.filter((c) => c.id !== categoryId));
-    }
+    props.setCategories(props.categories.filter((c) => c.id !== categoryId));
+    await fetch("/api/delete-category", options);
   }
 
   return (
