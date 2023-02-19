@@ -21,5 +21,6 @@ export async function createCategory(data: CategoryData): Promise<string> {
 }
 
 export async function deleteCategory(id: string) {
+  await prisma.product.deleteMany({ where: { categoryId: id } });
   await prisma.category.delete({ where: { id } });
 }

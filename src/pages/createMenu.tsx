@@ -1,23 +1,12 @@
 import { Layout } from "@/components/layout";
 import {
-  Box,
-  Button,
   Divider,
-  Grid,
-  GridItem,
   Heading,
   IconButton,
-  Input,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
-  Textarea,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import styles from "@/styles/createMenu.module.css";
@@ -33,6 +22,7 @@ import { CategoryTab } from "@/components/categoryTab";
 import { UnauthorizedPage } from "@/components/unauthorizedPage";
 import { ProductForm } from "@/components/productForm";
 import { getProductsInCategories } from "@/lib/products";
+import { ProductsList } from "@/components/productsList";
 
 export async function getServerSideProps({ req }: { req: NextApiRequest }) {
   const token = await getTokenFromCookie(req);
@@ -144,15 +134,7 @@ export default function CreateMenu({
                         setProductMap={setProductMap}
                         categoryId={category.id}
                       />
-                      <ul>
-                        {productMap[category.id].map((product) => {
-                          return (
-                            <li key={"p-" + product.id}>
-                              {product.name} - {product.price}
-                            </li>
-                          );
-                        })}
-                      </ul>
+                      <ProductsList products={productMap[category.id]} />
                     </TabPanel>
                   );
                 })}

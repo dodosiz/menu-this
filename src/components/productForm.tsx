@@ -99,7 +99,7 @@ export function ProductForm({
               step={0.1}
               value={price}
             >
-              <NumberInputField />
+              <NumberInputField placeholder="€ 0.00" />
               <NumberInputStepper>
                 <NumberIncrementStepper />
                 <NumberDecrementStepper />
