@@ -8,6 +8,7 @@ interface CategoryTabProps {
   category: Category;
   categories: Category[];
   setCategories: (c: Category[]) => void;
+  setErrorMessage: (s: string) => void;
 }
 
 export function CategoryTab(props: CategoryTabProps) {
@@ -29,6 +30,9 @@ export function CategoryTab(props: CategoryTabProps) {
     if (response.status === 200) {
       setLoading(false);
       props.setCategories(props.categories.filter((c) => c.id !== categoryId));
+    } else if (response.status === 500) {
+      setLoading(false);
+      props.setErrorMessage("Internal server error");
     }
   }
 

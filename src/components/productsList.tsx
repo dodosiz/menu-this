@@ -8,9 +8,14 @@ import { LoadingPage } from "./loadingPage";
 interface ProductsListProps {
   products: Product[];
   setProducts: (p: Product[]) => void;
+  setErrorMessage: (s: string) => void;
 }
 
-export function ProductsList({ products, setProducts }: ProductsListProps) {
+export function ProductsList({
+  products,
+  setProducts,
+  setErrorMessage,
+}: ProductsListProps) {
   const [toDelete, setToDelete] = useState<string | null>(null);
   const [isLoading, setLoading] = useState(false);
 
@@ -29,6 +34,9 @@ export function ProductsList({ products, setProducts }: ProductsListProps) {
     if (response.status === 200) {
       setLoading(false);
       setProducts(products.filter((p) => p.id !== productId));
+    } else if (response.status === 500) {
+      setLoading(false);
+      setErrorMessage("Internal server error");
     }
   }
 

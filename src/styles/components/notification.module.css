@@ -1,0 +1,13 @@
+.notification {
+  display: flex;
+  padding: 10px;
+  position: fixed !important;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.message {
+  flex-grow: 1;
+}

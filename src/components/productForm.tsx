@@ -21,6 +21,7 @@ interface ProductFormProps {
   categoryId: string;
   productMap: ProductMap;
   setProductMap: (pm: ProductMap) => void;
+  setErrorMessage: (s: string) => void;
 }
 
 export interface ProductData {
@@ -34,6 +35,7 @@ export function ProductForm({
   categoryId,
   productMap,
   setProductMap,
+  setErrorMessage,
 }: ProductFormProps) {
   const [price, setPrice] = useState("");
   const [name, setName] = useState("");
@@ -61,20 +63,23 @@ export function ProductForm({
     setDescription("");
     setLoading(true);
     const response = await fetch("/api/create-product", options);
-    const id = await response.json();
-    const newProduct: Product = {
-      id,
-      categoryId,
-      description: data.description,
-      name: data.name,
-      price: parseFloat(data.price),
-    };
     if (response.status === 200) {
+      const result = (await response.json()) as { id: string };
+      const newProduct: Product = {
+        id: result.id,
+        categoryId,
+        description: data.description,
+        name: data.name,
+        price: parseFloat(data.price),
+      };
       setLoading(false);
       setProductMap({
         ...productMap,
         [categoryId]: [...productMap[categoryId], newProduct],
       });
+    } else if (response.status === 500) {
+      setLoading(false);
+      setErrorMessage("Internal server error");
     }
   }
 
@@ -96,9 +101,10 @@ export function ProductForm({
             <NumberInput
               name="price"
               focusBorderColor="teal.200"
-              onChange={(p) => setPrice(p)}
+              onChange={(p) => setPrice(p.replace(",", "."))}
               min={0}
               precision={2}
+              isValidCharacter={(v) => /^[Ee0-9+\-.,]$/.test(v)}
               step={0.1}
               value={price}
             >

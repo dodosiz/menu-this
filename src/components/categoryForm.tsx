@@ -20,6 +20,7 @@ interface CategoryFormProps {
   setCategories: (c: Category[]) => void;
   setCreate: (b: boolean) => void;
   handleCancel: () => void;
+  setErrorMessage: (s: string) => void;
 }
 
 export function CategoryForm(props: CategoryFormProps) {
@@ -43,8 +44,8 @@ export function CategoryForm(props: CategoryFormProps) {
     setNewCategory("");
     setLoading(true);
     const response = await fetch("/api/create-category", options);
-    const result = await response.json();
     if (response.status === 200) {
+      const result = await response.json();
       setLoading(false);
       props.setCreate(false); // close the form
       props.setCategories([
@@ -55,6 +56,10 @@ export function CategoryForm(props: CategoryFormProps) {
         ...props.productMap,
         [result.id]: [],
       });
+    } else if (response.status === 500) {
+      setLoading(false);
+      props.setCreate(false);
+      props.setErrorMessage("Internal server error");
     }
   }
 
