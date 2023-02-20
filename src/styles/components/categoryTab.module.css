@@ -1,15 +1,5 @@
-.category_label {
-  margin-right: 5px;
-}
-
-.category:hover > .delete_icon,
-.category:hover > .edit_icon {
-  display: contents !important;
-}
-
-.delete_icon,
-.edit_icon {
-  display: none !important;
+.category {
+  display: flex;
 }
 
 .delete_icon:hover {
