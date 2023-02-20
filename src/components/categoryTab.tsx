@@ -1,22 +1,8 @@
-import {
-  Button,
-  ButtonGroup,
-  IconButton,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverFooter,
-  PopoverHeader,
-  PopoverTrigger,
-  Spinner,
-  Tab,
-} from "@chakra-ui/react";
+import { Spinner, Tab } from "@chakra-ui/react";
 import styles from "@/styles/components/categoryTab.module.css";
-import { RiDeleteBin6Line } from "react-icons/ri";
 import { useState } from "react";
 import { Category } from "@prisma/client";
+import { DeleteIconWithConfirm } from "./deleteIconWithConfirm";
 
 interface CategoryTabProps {
   category: Category;
@@ -52,46 +38,15 @@ export function CategoryTab(props: CategoryTabProps) {
       {!isLoading && (
         <Tab key={props.category.id} className={styles.category}>
           <span className={styles.category_label}>{props.category.title} </span>
-          <IconButton
-            variant="ghost"
-            aria-label="Delete category"
+          <DeleteIconWithConfirm
             className={styles.delete_icon}
-            icon={<RiDeleteBin6Line />}
-            onClick={() => setToDelete(props.category.id)}
+            confirmMessage={`Are you sure you want to delete the category "${props.category.title}"?`}
+            isConfirmOpen={props.category.id === toDelete}
+            onOpenConfirm={() => setToDelete(props.category.id)}
+            onCloseConfirm={() => setToDelete(null)}
+            onDeleteConfirmed={() => handleDelete(props.category.id)}
+            title="Delete Category"
           />
-          <Popover
-            returnFocusOnClose={false}
-            isOpen={props.category.id === toDelete}
-            onClose={() => setToDelete(null)}
-            placement="right"
-            closeOnBlur={false}
-          >
-            <PopoverTrigger>
-              <span></span>
-            </PopoverTrigger>
-            <PopoverContent>
-              <PopoverHeader fontWeight="semibold">Confirmation</PopoverHeader>
-              <PopoverArrow />
-              <PopoverCloseButton />
-              <PopoverBody>
-                Are you sure you want to delete the category &ldquo;
-                {props.category.title}&ldquo;
-              </PopoverBody>
-              <PopoverFooter display="flex" justifyContent="flex-end">
-                <ButtonGroup size="sm">
-                  <Button onClick={() => setToDelete(null)} variant="outline">
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={() => handleDelete(props.category.id)}
-                    colorScheme="red"
-                  >
-                    Delete
-                  </Button>
-                </ButtonGroup>
-              </PopoverFooter>
-            </PopoverContent>
-          </Popover>
         </Tab>
       )}
     </>

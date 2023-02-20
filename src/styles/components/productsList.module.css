@@ -10,3 +10,7 @@
 .product_text {
   color: var(--secondary-color);
 }
+
+.delete_icon:hover {
+  color: rgb(223, 61, 61);
+}

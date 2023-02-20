@@ -46,7 +46,7 @@ export default function CreateMenu() {
   return (
     <Layout user={user}>
       <div className={styles.create_menu}>
-        {isLoading && <LoadingPage />}
+        {isLoading && <LoadingPage fullHeight={true} />}
         {!user && !isLoading && <UnauthorizedPage />}
         {user && !isLoading && (
           <>
@@ -98,7 +98,12 @@ export default function CreateMenu() {
                         setProductMap={setProductMap}
                         categoryId={category.id}
                       />
-                      <ProductsList products={productMap[category.id]} />
+                      <ProductsList
+                        products={productMap[category.id]}
+                        setProducts={(p) =>
+                          setProductMap({ ...productMap, [category.id]: p })
+                        }
+                      />
                     </TabPanel>
                   );
                 })}

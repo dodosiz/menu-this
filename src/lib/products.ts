@@ -21,3 +21,7 @@ export async function getProductsInCategories(categoryIds: string[]) {
   });
   return products;
 }
+
+export async function deleteProduct(id: string) {
+  await prisma.product.delete({ where: { id } });
+}

@@ -1,9 +1,16 @@
 import styles from "@/styles/components/loadingPage.module.css";
 import { Spinner } from "@chakra-ui/react";
 
-export function LoadingPage() {
+interface LoadingPageProps {
+  fullHeight?: boolean;
+}
+
+export function LoadingPage(props: LoadingPageProps) {
+  const className = props.fullHeight
+    ? styles.loading_page_full
+    : styles.loading_page;
   return (
-    <div className={styles.loading_page}>
+    <div className={className}>
       <Spinner
         thickness="4px"
         speed="0.65s"
