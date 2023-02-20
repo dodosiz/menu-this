@@ -1,7 +1,14 @@
 import { ProductData } from "@/components/productForm";
 import { prisma } from "./prisma";
 
-export async function createProduct(data: ProductData) {
+export interface CreateProductResult {
+  id: string;
+  created_at: Date;
+}
+
+export async function createProduct(
+  data: ProductData
+): Promise<CreateProductResult> {
   const newProduct = await prisma.product.create({
     data: {
       description: data.description,
@@ -10,7 +17,10 @@ export async function createProduct(data: ProductData) {
       categoryId: data.categoryId,
     },
   });
-  return newProduct.id;
+  return {
+    id: newProduct.id,
+    created_at: newProduct.created_at,
+  };
 }
 
 export async function getProductsInCategories(categoryIds: string[]) {

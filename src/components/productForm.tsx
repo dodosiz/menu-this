@@ -16,6 +16,7 @@ import styles from "@/styles/components/productForm.module.css";
 import { FormEvent, useState } from "react";
 import { Product } from "@prisma/client";
 import { ProductMap } from "@/pages/api/get-menu-data/[userId]";
+import { CreateProductResult } from "@/lib/products";
 
 interface ProductFormProps {
   categoryId: string;
@@ -64,13 +65,14 @@ export function ProductForm({
     setLoading(true);
     const response = await fetch("/api/create-product", options);
     if (response.status === 200) {
-      const result = (await response.json()) as { id: string };
+      const result = (await response.json()) as CreateProductResult;
       const newProduct: Product = {
         id: result.id,
         categoryId,
         description: data.description,
         name: data.name,
         price: parseFloat(data.price),
+        created_at: result.created_at,
       };
       setLoading(false);
       setProductMap({

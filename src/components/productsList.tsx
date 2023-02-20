@@ -44,41 +44,54 @@ export function ProductsList({
     <>
       {isLoading && <LoadingPage />}
       {!isLoading &&
-        products.map((product) => {
-          return (
-            <Box key={"pd-" + product.id} className={styles.product_box}>
-              <Divider />
-              <Grid templateColumns="repeat(6, 1fr)" gap={4}>
-                <GridItem colSpan={{ base: 3, md: 4 }}>
-                  <Heading size="md" as="h3" className={styles.product_heading}>
-                    {product.name}
-                  </Heading>
-                </GridItem>
-                <GridItem colSpan={{ base: 2, md: 1 }}>
-                  <Heading size="md" as="h3" className={styles.product_heading}>
-                    € {product.price.toFixed(2)}
-                  </Heading>
-                </GridItem>
-                <GridItem colSpan={{ base: 1, md: 1 }}>
-                  <DeleteIconWithConfirm
-                    className={styles.delete_icon}
-                    confirmMessage={`Are you sure you want to delete the product "${product.name}"?`}
-                    isConfirmOpen={product.id === toDelete}
-                    onOpenConfirm={() => setToDelete(product.id)}
-                    onCloseConfirm={() => setToDelete(null)}
-                    onDeleteConfirmed={() => handleDelete(product.id)}
-                    title="Delete Product"
-                  />
-                </GridItem>
-                <GridItem colSpan={{ base: 3, md: 4 }}>
-                  <Text fontSize="md" className={styles.product_text}>
-                    {product.description}
-                  </Text>
-                </GridItem>
-              </Grid>
-            </Box>
-          );
-        })}
+        products
+          .sort(
+            (p1, p2) =>
+              Date.parse(`${p2.created_at}`) - Date.parse(`${p1.created_at}`)
+          )
+          .map((product) => {
+            return (
+              <Box key={"pd-" + product.id} className={styles.product_box}>
+                <Divider />
+                <Grid templateColumns="repeat(6, 1fr)" gap={4}>
+                  <GridItem colSpan={{ base: 3, md: 4 }}>
+                    <Heading
+                      size="md"
+                      as="h3"
+                      className={styles.product_heading}
+                    >
+                      {product.name}
+                    </Heading>
+                  </GridItem>
+                  <GridItem colSpan={{ base: 2, md: 1 }}>
+                    <Heading
+                      size="md"
+                      as="h3"
+                      className={styles.product_heading}
+                    >
+                      € {product.price.toFixed(2)}
+                    </Heading>
+                  </GridItem>
+                  <GridItem colSpan={{ base: 1, md: 1 }}>
+                    <DeleteIconWithConfirm
+                      className={styles.delete_icon}
+                      confirmMessage={`Are you sure you want to delete the product "${product.name}"?`}
+                      isConfirmOpen={product.id === toDelete}
+                      onOpenConfirm={() => setToDelete(product.id)}
+                      onCloseConfirm={() => setToDelete(null)}
+                      onDeleteConfirmed={() => handleDelete(product.id)}
+                      title="Delete Product"
+                    />
+                  </GridItem>
+                  <GridItem colSpan={{ base: 3, md: 4 }}>
+                    <Text fontSize="md" className={styles.product_text}>
+                      {product.description}
+                    </Text>
+                  </GridItem>
+                </Grid>
+              </Box>
+            );
+          })}
     </>
   );
 }

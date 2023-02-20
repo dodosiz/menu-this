@@ -8,7 +8,7 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     const data = req.body as ProductData;
-    const id = await createProduct(data);
-    res.status(200).json({ id });
+    const result = await createProduct(data);
+    res.status(200).json(result);
   }
 }
