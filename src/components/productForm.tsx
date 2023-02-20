@@ -11,44 +11,110 @@ import {
   NumberInputStepper,
   Textarea,
 } from "@chakra-ui/react";
-import { IoMdAdd } from "react-icons/io";
+import { IoMdAdd, IoMdCheckmark } from "react-icons/io";
 import styles from "@/styles/components/productForm.module.css";
 import { FormEvent, useState } from "react";
 import { Product } from "@prisma/client";
 import { ProductMap } from "@/pages/api/get-menu-data/[userId]";
 import { CreateProductResult } from "@/lib/products";
+import { RxCross2 } from "react-icons/rx";
 
 interface ProductFormProps {
   categoryId: string;
   productMap: ProductMap;
+  editedProduct?: Product;
   setProductMap: (pm: ProductMap) => void;
   setErrorMessage: (s: string) => void;
+  setEditedProductId?: (p: string) => void;
 }
 
-export interface ProductData {
+export interface CreateProductData {
   name: string;
   price: string;
   description: string;
   categoryId: string;
 }
 
+export interface UpdateProductData {
+  name: string;
+  price: string;
+  description: string;
+  productId: string;
+}
+
 export function ProductForm({
   categoryId,
   productMap,
+  editedProduct,
   setProductMap,
   setErrorMessage,
+  setEditedProductId,
 }: ProductFormProps) {
-  const [price, setPrice] = useState("");
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState(
+    editedProduct ? editedProduct.price.toString() : ""
+  );
+  const [name, setName] = useState(editedProduct ? editedProduct.name : "");
+  const [description, setDescription] = useState(
+    editedProduct ? editedProduct.description : ""
+  );
   const [isLoading, setLoading] = useState(false);
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    const data: ProductData = {
-      name: (event.target as any).name.value,
-      description: (event.target as any).description.value,
-      price: (event.target as any).price.value,
+    if (!editedProduct) {
+      createProduct();
+    } else {
+      updateProduct(editedProduct);
+    }
+  }
+
+  async function updateProduct(editedProduct: Product) {
+    const data: UpdateProductData = {
+      name,
+      description,
+      price,
+      productId: editedProduct.id,
+    };
+    const JSONdata = JSON.stringify(data);
+    const options = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSONdata,
+    };
+    setPrice("");
+    setName("");
+    setDescription("");
+    setLoading(true);
+    const response = await fetch("/api/update-product", options);
+    if (response.status === 200) {
+      const updatedProduct: Product = {
+        ...editedProduct,
+        name,
+        description,
+        price: parseFloat(price),
+      };
+      const updatedProducts = productMap[categoryId].map((p) =>
+        p.id === updatedProduct.id ? updatedProduct : p
+      );
+      setLoading(false);
+      setEditedProductId?.("");
+      setProductMap({
+        ...productMap,
+        [categoryId]: updatedProducts,
+      });
+    } else if (response.status === 500) {
+      setLoading(false);
+      setErrorMessage("Internal server error");
+    }
+  }
+
+  async function createProduct() {
+    const data: CreateProductData = {
+      name: name,
+      description: description,
+      price: price,
       categoryId: categoryId,
     };
     const JSONdata = JSON.stringify(data);
@@ -131,13 +197,24 @@ export function ProductForm({
             <Button
               isDisabled={!name.length || !price.length}
               type="submit"
-              leftIcon={<IoMdAdd />}
+              leftIcon={editedProduct ? <IoMdCheckmark /> : <IoMdAdd />}
               colorScheme="teal"
               variant="outline"
               isLoading={isLoading}
             >
-              Add Product
+              {editedProduct ? "Update" : "Add Product"}
             </Button>
+            {editedProduct && setEditedProductId && (
+              <Button
+                leftIcon={<RxCross2 />}
+                colorScheme="gray"
+                variant="outline"
+                onClick={() => setEditedProductId("")}
+                marginLeft="2"
+              >
+                Cancel
+              </Button>
+            )}
           </GridItem>
         </Grid>
       </form>

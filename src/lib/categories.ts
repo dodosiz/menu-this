@@ -25,7 +25,7 @@ export async function createCategory(
   return category.id;
 }
 
-export async function editCategory(data: EditCategoryData) {
+export async function updateCategory(data: EditCategoryData) {
   await prisma.category.update({
     data: {
       title: data.title,

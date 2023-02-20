@@ -1,4 +1,4 @@
-import { ProductData } from "@/components/productForm";
+import { CreateProductData } from "@/components/productForm";
 import { createProduct } from "@/lib/products";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -7,7 +7,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const data = req.body as ProductData;
+    const data = req.body as CreateProductData;
     const result = await createProduct(data);
     res.status(200).json(result);
   }

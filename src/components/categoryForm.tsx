@@ -60,7 +60,7 @@ export function CategoryForm(props: CategoryFormProps) {
     };
     setNewCategory("");
     setLoading(true);
-    const response = await fetch("/api/edit-category", options);
+    const response = await fetch("/api/update-category", options);
     if (response.status === 200) {
       setLoading(false);
       props.setEditCategory(""); // close the form

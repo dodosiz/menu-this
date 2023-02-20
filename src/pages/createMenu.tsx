@@ -139,10 +139,10 @@ export default function CreateMenu() {
                           setErrorMessage={setErrorMessage}
                         />
                         <ProductsList
+                          productMap={productMap}
                           products={productMap[category.id]}
-                          setProducts={(p) =>
-                            setProductMap({ ...productMap, [category.id]: p })
-                          }
+                          categoryId={category.id}
+                          setProductMap={setProductMap}
                           setErrorMessage={setErrorMessage}
                         />
                       </TabPanel>
