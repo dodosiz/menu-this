@@ -8,83 +8,47 @@ import {
   TabPanels,
   Tabs,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "@/styles/createMenu.module.css";
 import { IoMdAdd } from "react-icons/io";
-import { NextApiRequest } from "next";
-import { supabase } from "@/lib/supabase";
-import { getCategories } from "@/lib/categories";
-import { User } from "@supabase/supabase-js";
-import { Category, Product } from "@prisma/client";
-import { getTokenFromCookie } from "@/lib/cookies";
+import { Category } from "@prisma/client";
 import { CategoryForm } from "@/components/categoryForm";
 import { CategoryTab } from "@/components/categoryTab";
 import { UnauthorizedPage } from "@/components/unauthorizedPage";
 import { ProductForm } from "@/components/productForm";
-import { getProductsInCategories } from "@/lib/products";
 import { ProductsList } from "@/components/productsList";
+import { Auth } from "@supabase/auth-ui-react";
+import { MenuData, ProductMap } from "./api/get-menu-data/[userId]";
+import { LoadingPage } from "@/components/loadingPage";
 
-export async function getServerSideProps({ req }: { req: NextApiRequest }) {
-  const token = await getTokenFromCookie(req);
-  const unauthenticatedProps = {
-    props: {
-      authorized: false,
-    },
-  };
-  if (!token) {
-    return unauthenticatedProps;
-  }
-
-  const { data } = await supabase.auth.getUser(token.access_token);
-  if (!data.user) {
-    return unauthenticatedProps;
-  }
-
-  const initialCategories = await getCategories(data.user.id);
-  const categoryIds = initialCategories.map((c) => c.id);
-  const products = await getProductsInCategories(categoryIds);
-  const initialProductMap: ProductMap = {};
-  for (const category of initialCategories) {
-    const productsInCategory = products.filter(
-      (p) => p.categoryId === category.id
-    );
-    initialProductMap[category.id] = productsInCategory;
-  }
-
-  return {
-    props: {
-      authorized: true,
-      user: data.user,
-      initialCategories,
-      initialProductMap,
-    },
-  };
-}
-
-export type ProductMap = { [categoryId: string]: Product[] };
-
-interface CreateMenuProps {
-  authorized: boolean;
-  user: User;
-  initialCategories: Category[];
-  initialProductMap: ProductMap;
-}
-
-export default function CreateMenu({
-  authorized,
-  user,
-  initialCategories,
-  initialProductMap,
-}: CreateMenuProps) {
+export default function CreateMenu() {
+  const [isLoading, setLoading] = useState(false);
   const [isCreateMode, setCreate] = useState(false);
-  const [categories, setCategories] = useState<Category[]>(initialCategories);
-  const [productMap, setProductMap] = useState<ProductMap>(initialProductMap);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [productMap, setProductMap] = useState<ProductMap>({});
+  const { user } = Auth.useUser();
+
+  useEffect(() => {
+    setLoading(true);
+    if (user) {
+      fetch(`/api/get-menu-data/${user.id}`)
+        .then((res) => res.json())
+        .then((data: MenuData) => {
+          setCategories(data.initialCategories);
+          setProductMap(data.initialProductMap);
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
+    }
+  }, [user]);
 
   return (
     <Layout user={user}>
       <div className={styles.create_menu}>
-        {!authorized && <UnauthorizedPage />}
-        {authorized && (
+        {isLoading && <LoadingPage />}
+        {!user && !isLoading && <UnauthorizedPage />}
+        {user && !isLoading && (
           <>
             <Heading size="xl" as="h1">
               Create Menu

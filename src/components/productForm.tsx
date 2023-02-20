@@ -14,8 +14,8 @@ import {
 import { IoMdAdd } from "react-icons/io";
 import styles from "@/styles/components/productForm.module.css";
 import { FormEvent, useState } from "react";
-import { ProductMap } from "@/pages/createMenu";
 import { Product } from "@prisma/client";
+import { ProductMap } from "@/pages/api/get-menu-data/[userId]";
 
 interface ProductFormProps {
   categoryId: string;
@@ -38,6 +38,7 @@ export function ProductForm({
   const [price, setPrice] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [isLoading, setLoading] = useState(false);
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -58,6 +59,7 @@ export function ProductForm({
     setPrice("");
     setName("");
     setDescription("");
+    setLoading(true);
     const response = await fetch("/api/create-product", options);
     const id = await response.json();
     const newProduct: Product = {
@@ -68,6 +70,7 @@ export function ProductForm({
       price: parseFloat(data.price),
     };
     if (response.status === 200) {
+      setLoading(false);
       setProductMap({
         ...productMap,
         [categoryId]: [...productMap[categoryId], newProduct],
@@ -123,6 +126,7 @@ export function ProductForm({
               leftIcon={<IoMdAdd />}
               colorScheme="teal"
               variant="outline"
+              isLoading={isLoading}
             >
               Add Product
             </Button>

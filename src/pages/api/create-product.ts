@@ -1,6 +1,4 @@
-import { CategoryData } from "@/components/categoryForm";
 import { ProductData } from "@/components/productForm";
-import { createCategory } from "@/lib/categories";
 import { createProduct } from "@/lib/products";
 import { NextApiRequest, NextApiResponse } from "next";
 

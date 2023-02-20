@@ -10,6 +10,7 @@ import {
   PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
+  Spinner,
   Tab,
 } from "@chakra-ui/react";
 import styles from "@/styles/components/categoryTab.module.css";
@@ -25,6 +26,7 @@ interface CategoryTabProps {
 
 export function CategoryTab(props: CategoryTabProps) {
   const [toDelete, setToDelete] = useState<string | null>(null);
+  const [isLoading, setLoading] = useState(false);
 
   async function handleDelete(categoryId: string) {
     const JSONdata = JSON.stringify({ id: categoryId });
@@ -35,54 +37,63 @@ export function CategoryTab(props: CategoryTabProps) {
       },
       body: JSONdata,
     };
+    setLoading(true);
     setToDelete(null);
-    props.setCategories(props.categories.filter((c) => c.id !== categoryId));
-    await fetch("/api/delete-category", options);
+    const response = await fetch("/api/delete-category", options);
+    if (response.status === 200) {
+      setLoading(false);
+      props.setCategories(props.categories.filter((c) => c.id !== categoryId));
+    }
   }
 
   return (
-    <Tab key={props.category.id} className={styles.category}>
-      <span className={styles.category_label}>{props.category.title} </span>
-      <IconButton
-        variant="ghost"
-        aria-label="Delete category"
-        className={styles.delete_icon}
-        icon={<RiDeleteBin6Line />}
-        onClick={() => setToDelete(props.category.id)}
-      />
-      <Popover
-        returnFocusOnClose={false}
-        isOpen={props.category.id === toDelete}
-        onClose={() => setToDelete(null)}
-        placement="right"
-        closeOnBlur={false}
-      >
-        <PopoverTrigger>
-          <span></span>
-        </PopoverTrigger>
-        <PopoverContent>
-          <PopoverHeader fontWeight="semibold">Confirmation</PopoverHeader>
-          <PopoverArrow />
-          <PopoverCloseButton />
-          <PopoverBody>
-            Are you sure you want to delete the category &ldquo;
-            {props.category.title}&ldquo;
-          </PopoverBody>
-          <PopoverFooter display="flex" justifyContent="flex-end">
-            <ButtonGroup size="sm">
-              <Button onClick={() => setToDelete(null)} variant="outline">
-                Cancel
-              </Button>
-              <Button
-                onClick={() => handleDelete(props.category.id)}
-                colorScheme="red"
-              >
-                Delete
-              </Button>
-            </ButtonGroup>
-          </PopoverFooter>
-        </PopoverContent>
-      </Popover>
-    </Tab>
+    <>
+      {isLoading && <Spinner color="teal.500" />}
+      {!isLoading && (
+        <Tab key={props.category.id} className={styles.category}>
+          <span className={styles.category_label}>{props.category.title} </span>
+          <IconButton
+            variant="ghost"
+            aria-label="Delete category"
+            className={styles.delete_icon}
+            icon={<RiDeleteBin6Line />}
+            onClick={() => setToDelete(props.category.id)}
+          />
+          <Popover
+            returnFocusOnClose={false}
+            isOpen={props.category.id === toDelete}
+            onClose={() => setToDelete(null)}
+            placement="right"
+            closeOnBlur={false}
+          >
+            <PopoverTrigger>
+              <span></span>
+            </PopoverTrigger>
+            <PopoverContent>
+              <PopoverHeader fontWeight="semibold">Confirmation</PopoverHeader>
+              <PopoverArrow />
+              <PopoverCloseButton />
+              <PopoverBody>
+                Are you sure you want to delete the category &ldquo;
+                {props.category.title}&ldquo;
+              </PopoverBody>
+              <PopoverFooter display="flex" justifyContent="flex-end">
+                <ButtonGroup size="sm">
+                  <Button onClick={() => setToDelete(null)} variant="outline">
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={() => handleDelete(props.category.id)}
+                    colorScheme="red"
+                  >
+                    Delete
+                  </Button>
+                </ButtonGroup>
+              </PopoverFooter>
+            </PopoverContent>
+          </Popover>
+        </Tab>
+      )}
+    </>
   );
 }

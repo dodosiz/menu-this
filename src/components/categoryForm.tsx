@@ -1,11 +1,11 @@
-import { IconButton, Input } from "@chakra-ui/react";
+import { IconButton, Input, Spinner } from "@chakra-ui/react";
 import styles from "@/styles/components/categoryForm.module.css";
 import { FormEvent, useState } from "react";
 import { FiCheck } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
 import { Category } from "@prisma/client";
 import { User } from "@supabase/supabase-js";
-import { ProductMap } from "@/pages/createMenu";
+import { ProductMap } from "@/pages/api/get-menu-data/[userId]";
 
 export interface CategoryData {
   userId: string;
@@ -24,6 +24,7 @@ interface CategoryFormProps {
 
 export function CategoryForm(props: CategoryFormProps) {
   const [newCategory, setNewCategory] = useState("");
+  const [isLoading, setLoading] = useState(false);
 
   async function handleSubmit(event: FormEvent, userId: string) {
     event.preventDefault();
@@ -40,10 +41,12 @@ export function CategoryForm(props: CategoryFormProps) {
       body: JSONdata,
     };
     setNewCategory("");
-    props.setCreate(false);
+    setLoading(true);
     const response = await fetch("/api/create-category", options);
     const result = await response.json();
     if (response.status === 200) {
+      setLoading(false);
+      props.setCreate(false); // close the form
       props.setCategories([
         ...props.categories,
         { id: result.id, title: data.title, userId: data.userId },
@@ -61,39 +64,44 @@ export function CategoryForm(props: CategoryFormProps) {
   }
 
   return (
-    <form
-      className={styles.category_form}
-      onSubmit={(e) => {
-        handleSubmit(e, props.user.id);
-      }}
-    >
-      <Input
-        value={newCategory}
-        onChange={(e) => setNewCategory(e.target.value)}
-        variant="flushed"
-        focusBorderColor="teal.200"
-        marginRight="2"
-        name="category"
-        className={styles.category_input}
-      />
-      <IconButton
-        type="submit"
-        aria-label="submit new category"
-        icon={<FiCheck />}
-        variant="ghost"
-        colorScheme="teal"
-        marginRight="2"
-        isDisabled={!newCategory.length}
-        size="xs"
-      />
-      <IconButton
-        aria-label="cancel edit"
-        icon={<RxCross2 />}
-        variant="ghost"
-        colorScheme="gray"
-        onClick={handleCancel}
-        size="xs"
-      />
-    </form>
+    <>
+      {isLoading && <Spinner color="teal.500" />}
+      {!isLoading && (
+        <form
+          className={styles.category_form}
+          onSubmit={(e) => {
+            handleSubmit(e, props.user.id);
+          }}
+        >
+          <Input
+            value={newCategory}
+            onChange={(e) => setNewCategory(e.target.value)}
+            variant="flushed"
+            focusBorderColor="teal.200"
+            marginRight="2"
+            name="category"
+            className={styles.category_input}
+          />
+          <IconButton
+            type="submit"
+            aria-label="submit new category"
+            icon={<FiCheck />}
+            variant="ghost"
+            colorScheme="teal"
+            marginRight="2"
+            isDisabled={!newCategory.length}
+            size="xs"
+          />
+          <IconButton
+            aria-label="cancel edit"
+            icon={<RxCross2 />}
+            variant="ghost"
+            colorScheme="gray"
+            onClick={handleCancel}
+            size="xs"
+          />
+        </form>
+      )}
+    </>
   );
 }
