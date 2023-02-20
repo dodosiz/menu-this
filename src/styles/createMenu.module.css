@@ -2,8 +2,18 @@
   color: var(--main-color);
 }
 
+.explanatory {
+  color: var(--secondary-color);
+  display: flex;
+  align-items: center;
+}
+
 .tablist {
   align-items: center;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.category_title {
+  color: var(--logo-color-light);
 }

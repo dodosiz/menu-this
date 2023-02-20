@@ -134,7 +134,7 @@ export function CategoryForm(props: CategoryFormProps) {
             colorScheme="teal"
             marginRight="2"
             isDisabled={!categoryTitle.length}
-            size="xs"
+            size="md"
           />
           <IconButton
             aria-label="cancel edit"
@@ -142,7 +142,7 @@ export function CategoryForm(props: CategoryFormProps) {
             variant="ghost"
             colorScheme="gray"
             onClick={handleCancel}
-            size="xs"
+            size="md"
           />
         </form>
       )}

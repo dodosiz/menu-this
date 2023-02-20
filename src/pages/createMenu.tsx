@@ -7,6 +7,7 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
+  Text,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import styles from "@/styles/createMenu.module.css";
@@ -21,6 +22,7 @@ import { Auth } from "@supabase/auth-ui-react";
 import { MenuData, ProductMap } from "./api/get-menu-data/[userId]";
 import { LoadingPage } from "@/components/loadingPage";
 import { ErrorNotification } from "@/components/error-notification";
+import { AiOutlineArrowRight, AiOutlineArrowUp } from "react-icons/ai";
 
 export default function CreateMenu() {
   const [isLoading, setLoading] = useState(false);
@@ -114,6 +116,12 @@ export default function CreateMenu() {
                       key="create-form"
                     />
                   )}
+                  {!categories.length && !isCreateNewCategory && (
+                    <Text className={styles.explanatory} fontSize="md">
+                      Click here to create your first product category{" "}
+                      <AiOutlineArrowRight />
+                    </Text>
+                  )}
                   <IconButton
                     colorScheme="teal"
                     variant="ghost"
@@ -121,7 +129,7 @@ export default function CreateMenu() {
                     icon={<IoMdAdd />}
                     isDisabled={isCreateNewCategory}
                     onClick={() => setCreateNewCategory(true)}
-                    size="xs"
+                    size="md"
                   />
                 </TabList>
                 <Divider />
@@ -129,15 +137,24 @@ export default function CreateMenu() {
                   {categories.map((category) => {
                     return (
                       <TabPanel key={"panel-" + category.id}>
-                        <Heading size="md" as="h3">
-                          Products of category &ldquo;{category.title}&ldquo;
-                        </Heading>
                         <ProductForm
                           productMap={productMap}
                           setProductMap={setProductMap}
                           categoryId={category.id}
                           setErrorMessage={setErrorMessage}
                         />
+                        <Heading size="md" as="h3">
+                          Products of category{" "}
+                          <span className={styles.category_title}>
+                            &ldquo;{category.title}&ldquo;
+                          </span>
+                        </Heading>
+                        {!productMap[category.id].length && (
+                          <Text className={styles.explanatory} fontSize="md">
+                            No products yet, use the above form to create your
+                            fist products for this category.
+                          </Text>
+                        )}
                         <ProductsList
                           productMap={productMap}
                           products={productMap[category.id]}
