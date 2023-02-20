@@ -1,5 +1,11 @@
 import { Layout } from "@/components/layout";
 import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
   Divider,
   Heading,
   IconButton,
@@ -23,6 +29,7 @@ import { MenuData, ProductMap } from "./api/get-menu-data/[userId]";
 import { LoadingPage } from "@/components/loadingPage";
 import { ErrorNotification } from "@/components/error-notification";
 import { AiOutlineArrowRight, AiOutlineArrowUp } from "react-icons/ai";
+import { SECONDARY_COLOR } from "@/styles/constants";
 
 export default function CreateMenu() {
   const [isLoading, setLoading] = useState(false);
@@ -67,7 +74,7 @@ export default function CreateMenu() {
           {user && !isLoading && (
             <>
               <Heading size="xl" as="h1">
-                Create Menu
+                Create your menu
               </Heading>
               <Tabs variant="soft-rounded" colorScheme="teal">
                 <TabList className={styles.tablist}>
@@ -137,12 +144,29 @@ export default function CreateMenu() {
                   {categories.map((category) => {
                     return (
                       <TabPanel key={"panel-" + category.id}>
-                        <ProductForm
-                          productMap={productMap}
-                          setProductMap={setProductMap}
-                          categoryId={category.id}
-                          setErrorMessage={setErrorMessage}
-                        />
+                        <Accordion defaultIndex={0} allowToggle>
+                          <AccordionItem>
+                            <h2>
+                              <AccordionButton
+                                paddingLeft={0}
+                                color={SECONDARY_COLOR}
+                              >
+                                <Box as="span" flex="1" textAlign="left">
+                                  Add a new product
+                                </Box>
+                                <AccordionIcon />
+                              </AccordionButton>
+                            </h2>
+                            <AccordionPanel paddingLeft={0} pb={4}>
+                              <ProductForm
+                                productMap={productMap}
+                                setProductMap={setProductMap}
+                                categoryId={category.id}
+                                setErrorMessage={setErrorMessage}
+                              />
+                            </AccordionPanel>
+                          </AccordionItem>
+                        </Accordion>
                         <Heading size="md" as="h3">
                           Products of category{" "}
                           <span className={styles.category_title}>

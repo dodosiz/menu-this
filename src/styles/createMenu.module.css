@@ -17,3 +17,9 @@
 .category_title {
   color: var(--logo-color-light);
 }
+
+@media (max-width: 700px) {
+  .tablist {
+    flex-direction: column !important;
+  }
+}

@@ -37,7 +37,7 @@ export default function Home() {
             rightIcon={<FaArrowRight />}
             onClick={navigateToCreateMenu}
           >
-            Create Your Menu
+            Create your menu
           </Button>
         </div>
         <Divider />
