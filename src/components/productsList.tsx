@@ -22,7 +22,9 @@ export function ProductsList({
   setProductMap,
   setErrorMessage,
 }: ProductsListProps) {
-  const [toDelete, setToDelete] = useState<string | null>(null);
+  const [productIdToDelete, setProductIdToDelete] = useState<string | null>(
+    null
+  );
   const [isLoading, setLoading] = useState(false);
   const [editedProductId, setEditedProductId] = useState("");
 
@@ -36,7 +38,7 @@ export function ProductsList({
       body: JSONdata,
     };
     setLoading(true);
-    setToDelete(null);
+    setProductIdToDelete(null);
     const response = await fetch("/api/delete-product", options);
     if (response.status === 200) {
       setLoading(false);
@@ -94,12 +96,12 @@ export function ProductsList({
                     <GridItem colSpan={{ base: 1, md: 1 }}>
                       <ContextMenu
                         confirmMessage={`Are you sure you want to delete the product "${product.name}"?`}
-                        isConfirmOpen={product.id === toDelete}
+                        isConfirmOpen={product.id === productIdToDelete}
                         editDisabled={false}
                         confirmTitle="Delete Product"
-                        onCloseConfirm={() => setToDelete(null)}
+                        onCloseConfirm={() => setProductIdToDelete(null)}
                         onDeleteConfirmed={() => handleDelete(product.id)}
-                        onOpenConfirm={() => setToDelete(product.id)}
+                        onOpenConfirm={() => setProductIdToDelete(product.id)}
                         onEditClick={() => setEditedProductId(product.id)}
                       />
                     </GridItem>

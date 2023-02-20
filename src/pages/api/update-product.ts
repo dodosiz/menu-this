@@ -1,5 +1,4 @@
-import { UpdateProductData } from "@/components/productForm";
-import { updateProduct } from "@/lib/products";
+import { updateProduct, UpdateProductData } from "@/lib/products";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(

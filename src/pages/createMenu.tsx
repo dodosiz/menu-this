@@ -24,10 +24,10 @@ import { ErrorNotification } from "@/components/error-notification";
 
 export default function CreateMenu() {
   const [isLoading, setLoading] = useState(false);
-  const [isCreateMode, setCreate] = useState(false);
+  const [isCreateNewCategory, setCreateNewCategory] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [productMap, setProductMap] = useState<ProductMap>({});
-  const [editCategory, setEditCategory] = useState("");
+  const [editedCategoryId, setEditedCategoryId] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const { user } = Auth.useUser();
 
@@ -70,19 +70,19 @@ export default function CreateMenu() {
               <Tabs variant="soft-rounded" colorScheme="teal">
                 <TabList className={styles.tablist}>
                   {categories.map((category) => {
-                    if (category.id === editCategory) {
+                    if (category.id === editedCategoryId) {
                       return (
                         <CategoryForm
                           categories={categories}
                           productMap={productMap}
                           setProductMap={setProductMap}
-                          handleCancel={() => setEditCategory("")}
+                          handleCancel={() => setEditedCategoryId("")}
                           setCategories={setCategories}
-                          setCreate={setCreate}
+                          setCreateNewCategory={setCreateNewCategory}
                           setErrorMessage={setErrorMessage}
                           user={user}
                           categoryInEdit={category}
-                          setEditCategory={setEditCategory}
+                          setEditedCategoryId={setEditedCategoryId}
                           key="create-form"
                         />
                       );
@@ -93,23 +93,23 @@ export default function CreateMenu() {
                           category={category}
                           setCategories={setCategories}
                           key={"tab-" + category.id}
-                          editCategory={editCategory}
+                          editedCategoryId={editedCategoryId}
                           setErrorMessage={setErrorMessage}
-                          setEditCategory={setEditCategory}
+                          setEditedCategoryId={setEditedCategoryId}
                         />
                       );
                     }
                   })}
-                  {isCreateMode && (
+                  {isCreateNewCategory && (
                     <CategoryForm
                       categories={categories}
                       productMap={productMap}
                       setProductMap={setProductMap}
-                      handleCancel={() => setCreate(false)}
+                      handleCancel={() => setCreateNewCategory(false)}
                       setCategories={setCategories}
-                      setCreate={setCreate}
+                      setCreateNewCategory={setCreateNewCategory}
                       setErrorMessage={setErrorMessage}
-                      setEditCategory={setEditCategory}
+                      setEditedCategoryId={setEditedCategoryId}
                       user={user}
                       key="create-form"
                     />
@@ -119,8 +119,8 @@ export default function CreateMenu() {
                     variant="ghost"
                     aria-label="Create new"
                     icon={<IoMdAdd />}
-                    isDisabled={isCreateMode}
-                    onClick={() => setCreate(true)}
+                    isDisabled={isCreateNewCategory}
+                    onClick={() => setCreateNewCategory(true)}
                     size="xs"
                   />
                 </TabList>

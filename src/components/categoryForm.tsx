@@ -6,16 +6,7 @@ import { RxCross2 } from "react-icons/rx";
 import { Category } from "@prisma/client";
 import { User } from "@supabase/supabase-js";
 import { ProductMap } from "@/pages/api/get-menu-data/[userId]";
-
-export interface CreateCategoryData {
-  userId: string;
-  title: string;
-}
-
-export interface EditCategoryData {
-  categoryId: string;
-  title: string;
-}
+import { CreateCategoryData, UpdateCategoryData } from "@/lib/categories";
 
 export interface CategoryFormProps {
   categories: Category[];
@@ -24,14 +15,14 @@ export interface CategoryFormProps {
   productMap: ProductMap;
   setProductMap: (pm: ProductMap) => void;
   setCategories: (c: Category[]) => void;
-  setCreate: (b: boolean) => void;
+  setCreateNewCategory: (b: boolean) => void;
   handleCancel: () => void;
   setErrorMessage: (s: string) => void;
-  setEditCategory: (id: string) => void;
+  setEditedCategoryId: (id: string) => void;
 }
 
 export function CategoryForm(props: CategoryFormProps) {
-  const [newCategory, setNewCategory] = useState(
+  const [categoryTitle, setCategoryTitle] = useState(
     props.categoryInEdit ? props.categoryInEdit.title : ""
   );
   const [isLoading, setLoading] = useState(false);
@@ -39,16 +30,16 @@ export function CategoryForm(props: CategoryFormProps) {
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     if (props.categoryInEdit) {
-      editCategory(props.categoryInEdit);
+      updateCategory(props.categoryInEdit);
     } else {
       createCategory();
     }
   }
 
-  async function editCategory(categoryInEdit: Category) {
-    const data: EditCategoryData = {
+  async function updateCategory(categoryInEdit: Category) {
+    const data: UpdateCategoryData = {
       categoryId: categoryInEdit.id,
-      title: newCategory,
+      title: categoryTitle,
     };
     const JSONdata = JSON.stringify(data);
     const options = {
@@ -58,13 +49,13 @@ export function CategoryForm(props: CategoryFormProps) {
       },
       body: JSONdata,
     };
-    setNewCategory("");
+    setCategoryTitle("");
     setLoading(true);
     const response = await fetch("/api/update-category", options);
     if (response.status === 200) {
       setLoading(false);
-      props.setEditCategory(""); // close the form
-      const newCategories = props.categories.map((c) => {
+      props.setEditedCategoryId(""); // close the form
+      const updatedCategories = props.categories.map((c) => {
         if (c.id === data.categoryId) {
           return {
             ...c,
@@ -73,17 +64,17 @@ export function CategoryForm(props: CategoryFormProps) {
         }
         return c;
       });
-      props.setCategories(newCategories);
+      props.setCategories(updatedCategories);
     } else if (response.status === 500) {
       setLoading(false);
-      props.setEditCategory("");
+      props.setEditedCategoryId("");
       props.setErrorMessage("Internal server error");
     }
   }
 
   async function createCategory() {
     const data: CreateCategoryData = {
-      title: newCategory,
+      title: categoryTitle,
       userId: props.user.id,
     };
     const JSONdata = JSON.stringify(data);
@@ -94,13 +85,13 @@ export function CategoryForm(props: CategoryFormProps) {
       },
       body: JSONdata,
     };
-    setNewCategory("");
+    setCategoryTitle("");
     setLoading(true);
     const response = await fetch("/api/create-category", options);
     if (response.status === 200) {
       const result = await response.json();
       setLoading(false);
-      props.setCreate(false); // close the form
+      props.setCreateNewCategory(false); // close the form
       props.setCategories([
         ...props.categories,
         { id: result.id, title: data.title, userId: data.userId },
@@ -111,13 +102,13 @@ export function CategoryForm(props: CategoryFormProps) {
       });
     } else if (response.status === 500) {
       setLoading(false);
-      props.setCreate(false);
+      props.setCreateNewCategory(false);
       props.setErrorMessage("Internal server error");
     }
   }
 
   function handleCancel() {
-    setNewCategory("");
+    setCategoryTitle("");
     props.handleCancel();
   }
 
@@ -127,8 +118,8 @@ export function CategoryForm(props: CategoryFormProps) {
       {!isLoading && (
         <form className={styles.category_form} onSubmit={handleSubmit}>
           <Input
-            value={newCategory}
-            onChange={(e) => setNewCategory(e.target.value)}
+            value={categoryTitle}
+            onChange={(e) => setCategoryTitle(e.target.value)}
             variant="flushed"
             focusBorderColor="teal.200"
             marginRight="2"
@@ -142,7 +133,7 @@ export function CategoryForm(props: CategoryFormProps) {
             variant="ghost"
             colorScheme="teal"
             marginRight="2"
-            isDisabled={!newCategory.length}
+            isDisabled={!categoryTitle.length}
             size="xs"
           />
           <IconButton

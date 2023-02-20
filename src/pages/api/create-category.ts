@@ -1,5 +1,4 @@
-import { CreateCategoryData } from "@/components/categoryForm";
-import { createCategory } from "@/lib/categories";
+import { createCategory, CreateCategoryData } from "@/lib/categories";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(

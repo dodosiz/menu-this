@@ -1,9 +1,15 @@
-import { CreateProductData, UpdateProductData } from "@/components/productForm";
 import { prisma } from "./prisma";
 
 export interface CreateProductResult {
   id: string;
   created_at: Date;
+}
+
+export interface CreateProductData {
+  name: string;
+  price: string;
+  description: string;
+  categoryId: string;
 }
 
 export async function createProduct(
@@ -21,6 +27,13 @@ export async function createProduct(
     id: newProduct.id,
     created_at: newProduct.created_at,
   };
+}
+
+export interface UpdateProductData {
+  name: string;
+  price: string;
+  description: string;
+  productId: string;
 }
 
 export async function updateProduct(data: UpdateProductData) {

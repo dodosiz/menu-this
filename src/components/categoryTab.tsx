@@ -7,14 +7,16 @@ import { ContextMenu } from "./contextMenu";
 interface CategoryTabProps {
   category: Category;
   categories: Category[];
-  editCategory: string;
+  editedCategoryId: string;
   setCategories: (c: Category[]) => void;
   setErrorMessage: (s: string) => void;
-  setEditCategory: (id: string) => void;
+  setEditedCategoryId: (id: string) => void;
 }
 
 export function CategoryTab(props: CategoryTabProps) {
-  const [toDelete, setToDelete] = useState<string | null>(null);
+  const [categoryIdToDelete, setCategoryIdToDelete] = useState<string | null>(
+    null
+  );
   const [isLoading, setLoading] = useState(false);
 
   async function handleDelete(categoryId: string) {
@@ -27,7 +29,7 @@ export function CategoryTab(props: CategoryTabProps) {
       body: JSONdata,
     };
     setLoading(true);
-    setToDelete(null);
+    setCategoryIdToDelete(null);
     const response = await fetch("/api/delete-category", options);
     if (response.status === 200) {
       setLoading(false);
@@ -46,13 +48,14 @@ export function CategoryTab(props: CategoryTabProps) {
           <Tab key={props.category.id}>{props.category.title}</Tab>
           <ContextMenu
             confirmMessage={`Are you sure you want to delete the category "${props.category.title}"?`}
-            isConfirmOpen={props.category.id === toDelete}
-            editDisabled={!!props.editCategory.length}
+            isConfirmOpen={props.category.id === categoryIdToDelete}
+            // disable the edit if we are currently editing another category
+            editDisabled={!!props.editedCategoryId.length}
             confirmTitle="Delete Category"
-            onCloseConfirm={() => setToDelete(null)}
+            onCloseConfirm={() => setCategoryIdToDelete(null)}
             onDeleteConfirmed={() => handleDelete(props.category.id)}
-            onOpenConfirm={() => setToDelete(props.category.id)}
-            onEditClick={() => props.setEditCategory(props.category.id)}
+            onOpenConfirm={() => setCategoryIdToDelete(props.category.id)}
+            onEditClick={() => props.setEditedCategoryId(props.category.id)}
           />
         </Box>
       )}

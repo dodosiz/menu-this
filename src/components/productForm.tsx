@@ -16,7 +16,11 @@ import styles from "@/styles/components/productForm.module.css";
 import { FormEvent, useState } from "react";
 import { Product } from "@prisma/client";
 import { ProductMap } from "@/pages/api/get-menu-data/[userId]";
-import { CreateProductResult } from "@/lib/products";
+import {
+  CreateProductData,
+  CreateProductResult,
+  UpdateProductData,
+} from "@/lib/products";
 import { RxCross2 } from "react-icons/rx";
 
 interface ProductFormProps {
@@ -26,20 +30,6 @@ interface ProductFormProps {
   setProductMap: (pm: ProductMap) => void;
   setErrorMessage: (s: string) => void;
   setEditedProductId?: (p: string) => void;
-}
-
-export interface CreateProductData {
-  name: string;
-  price: string;
-  description: string;
-  categoryId: string;
-}
-
-export interface UpdateProductData {
-  name: string;
-  price: string;
-  description: string;
-  productId: string;
 }
 
 export function ProductForm({
@@ -83,9 +73,6 @@ export function ProductForm({
       },
       body: JSONdata,
     };
-    setPrice("");
-    setName("");
-    setDescription("");
     setLoading(true);
     const response = await fetch("/api/update-product", options);
     if (response.status === 200) {
@@ -106,6 +93,7 @@ export function ProductForm({
       });
     } else if (response.status === 500) {
       setLoading(false);
+      setEditedProductId?.("");
       setErrorMessage("Internal server error");
     }
   }

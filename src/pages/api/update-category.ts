@@ -1,5 +1,4 @@
-import { EditCategoryData } from "@/components/categoryForm";
-import { updateCategory } from "@/lib/categories";
+import { updateCategory, UpdateCategoryData } from "@/lib/categories";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -7,7 +6,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "PUT") {
-    const data = req.body as EditCategoryData;
+    const data = req.body as UpdateCategoryData;
     await updateCategory(data);
     res.status(200).end();
   }

@@ -1,7 +1,3 @@
-import {
-  CreateCategoryData,
-  EditCategoryData,
-} from "@/components/categoryForm";
 import { prisma } from "./prisma";
 
 export async function getCategories(userId: string) {
@@ -11,6 +7,11 @@ export async function getCategories(userId: string) {
     },
   });
   return categories;
+}
+
+export interface CreateCategoryData {
+  userId: string;
+  title: string;
 }
 
 export async function createCategory(
@@ -25,7 +26,12 @@ export async function createCategory(
   return category.id;
 }
 
-export async function updateCategory(data: EditCategoryData) {
+export interface UpdateCategoryData {
+  categoryId: string;
+  title: string;
+}
+
+export async function updateCategory(data: UpdateCategoryData) {
   await prisma.category.update({
     data: {
       title: data.title,
