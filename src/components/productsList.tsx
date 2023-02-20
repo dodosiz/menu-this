@@ -1,9 +1,9 @@
 import { Box, Divider, Grid, GridItem, Heading, Text } from "@chakra-ui/react";
 import { Product } from "@prisma/client";
 import styles from "@/styles/components/productsList.module.css";
-import { DeleteIconWithConfirm } from "./deleteIconWithConfirm";
 import { useState } from "react";
 import { LoadingPage } from "./loadingPage";
+import { ContextMenu } from "./contextMenu";
 
 interface ProductsListProps {
   products: Product[];
@@ -73,14 +73,15 @@ export function ProductsList({
                     </Heading>
                   </GridItem>
                   <GridItem colSpan={{ base: 1, md: 1 }}>
-                    <DeleteIconWithConfirm
-                      className={styles.delete_icon}
+                    <ContextMenu
                       confirmMessage={`Are you sure you want to delete the product "${product.name}"?`}
                       isConfirmOpen={product.id === toDelete}
-                      onOpenConfirm={() => setToDelete(product.id)}
+                      editDisabled={true}
+                      confirmTitle="Delete Product"
                       onCloseConfirm={() => setToDelete(null)}
                       onDeleteConfirmed={() => handleDelete(product.id)}
-                      title="Delete Product"
+                      onOpenConfirm={() => setToDelete(product.id)}
+                      onEditClick={() => {}}
                     />
                   </GridItem>
                   <GridItem colSpan={{ base: 3, md: 4 }}>

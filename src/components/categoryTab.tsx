@@ -1,19 +1,16 @@
-import { Box, IconButton, Spinner, Tab } from "@chakra-ui/react";
+import { Box, Spinner, Tab } from "@chakra-ui/react";
 import styles from "@/styles/components/categoryTab.module.css";
 import { useState } from "react";
 import { Category } from "@prisma/client";
-import { DeleteIconWithConfirm } from "./deleteIconWithConfirm";
-import { RiEditLine } from "react-icons/ri";
+import { ContextMenu } from "./contextMenu";
 
 interface CategoryTabProps {
   category: Category;
   categories: Category[];
   editCategory: string;
-  focusedCategory: string;
   setCategories: (c: Category[]) => void;
   setErrorMessage: (s: string) => void;
   setEditCategory: (id: string) => void;
-  setFocusedCategory: (id: string) => void;
 }
 
 export function CategoryTab(props: CategoryTabProps) {
@@ -45,37 +42,18 @@ export function CategoryTab(props: CategoryTabProps) {
     <>
       {isLoading && <Spinner color="teal.500" />}
       {!isLoading && (
-        <Box
-          onClick={() => props.setFocusedCategory(props.category.id)}
-          className={styles.category}
-        >
-          <Tab key={props.category.id}>
-            <span className={styles.category_label}>
-              {props.category.title}{" "}
-            </span>
-          </Tab>
-          {props.focusedCategory === props.category.id && (
-            <Box className={styles.controls}>
-              {!props.editCategory.length && (
-                <IconButton
-                  variant="unstyled"
-                  aria-label="Edit category"
-                  className={styles.edit_icon}
-                  icon={<RiEditLine />}
-                  onClick={() => props.setEditCategory(props.category.id)}
-                />
-              )}
-              <DeleteIconWithConfirm
-                className={styles.delete_icon}
-                confirmMessage={`Are you sure you want to delete the category "${props.category.title}"?`}
-                isConfirmOpen={props.category.id === toDelete}
-                onOpenConfirm={() => setToDelete(props.category.id)}
-                onCloseConfirm={() => setToDelete(null)}
-                onDeleteConfirmed={() => handleDelete(props.category.id)}
-                title="Delete Category"
-              />
-            </Box>
-          )}
+        <Box className={styles.category}>
+          <Tab key={props.category.id}>{props.category.title}</Tab>
+          <ContextMenu
+            confirmMessage={`Are you sure you want to delete the category "${props.category.title}"?`}
+            isConfirmOpen={props.category.id === toDelete}
+            editDisabled={!!props.editCategory.length}
+            confirmTitle="Delete Category"
+            onCloseConfirm={() => setToDelete(null)}
+            onDeleteConfirmed={() => handleDelete(props.category.id)}
+            onOpenConfirm={() => setToDelete(props.category.id)}
+            onEditClick={() => props.setEditCategory(props.category.id)}
+          />
         </Box>
       )}
     </>

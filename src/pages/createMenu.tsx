@@ -29,7 +29,6 @@ export default function CreateMenu() {
   const [productMap, setProductMap] = useState<ProductMap>({});
   const [editCategory, setEditCategory] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [focusedCategory, setFocusedCategory] = useState("");
   const { user } = Auth.useUser();
 
   useEffect(() => {
@@ -95,10 +94,8 @@ export default function CreateMenu() {
                           setCategories={setCategories}
                           key={"tab-" + category.id}
                           editCategory={editCategory}
-                          focusedCategory={focusedCategory}
                           setErrorMessage={setErrorMessage}
                           setEditCategory={setEditCategory}
-                          setFocusedCategory={setFocusedCategory}
                         />
                       );
                     }
