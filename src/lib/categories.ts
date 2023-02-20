@@ -1,4 +1,7 @@
-import { CategoryData } from "@/components/categoryForm";
+import {
+  CreateCategoryData,
+  EditCategoryData,
+} from "@/components/categoryForm";
 import { prisma } from "./prisma";
 
 export async function getCategories(userId: string) {
@@ -10,7 +13,9 @@ export async function getCategories(userId: string) {
   return categories;
 }
 
-export async function createCategory(data: CategoryData): Promise<string> {
+export async function createCategory(
+  data: CreateCategoryData
+): Promise<string> {
   const category = await prisma.category.create({
     data: {
       userId: data.userId,
@@ -18,6 +23,15 @@ export async function createCategory(data: CategoryData): Promise<string> {
     },
   });
   return category.id;
+}
+
+export async function editCategory(data: EditCategoryData) {
+  await prisma.category.update({
+    data: {
+      title: data.title,
+    },
+    where: { id: data.categoryId },
+  });
 }
 
 export async function deleteCategory(id: string) {

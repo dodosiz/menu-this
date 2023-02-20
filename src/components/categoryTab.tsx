@@ -1,14 +1,17 @@
-import { Spinner, Tab } from "@chakra-ui/react";
+import { IconButton, Spinner, Tab } from "@chakra-ui/react";
 import styles from "@/styles/components/categoryTab.module.css";
 import { useState } from "react";
 import { Category } from "@prisma/client";
 import { DeleteIconWithConfirm } from "./deleteIconWithConfirm";
+import { RiEditLine } from "react-icons/ri";
 
 interface CategoryTabProps {
   category: Category;
   categories: Category[];
+  editCategory: string;
   setCategories: (c: Category[]) => void;
   setErrorMessage: (s: string) => void;
+  setEditCategory: (id: string) => void;
 }
 
 export function CategoryTab(props: CategoryTabProps) {
@@ -42,6 +45,15 @@ export function CategoryTab(props: CategoryTabProps) {
       {!isLoading && (
         <Tab key={props.category.id} className={styles.category}>
           <span className={styles.category_label}>{props.category.title} </span>
+          {!props.editCategory.length && (
+            <IconButton
+              variant="unstyled"
+              aria-label="Edit category"
+              className={styles.edit_icon}
+              icon={<RiEditLine />}
+              onClick={() => props.setEditCategory(props.category.id)}
+            />
+          )}
           <DeleteIconWithConfirm
             className={styles.delete_icon}
             confirmMessage={`Are you sure you want to delete the category "${props.category.title}"?`}

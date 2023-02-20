@@ -2,14 +2,20 @@
   margin-right: 5px;
 }
 
-.category:hover > .delete_icon {
+.category:hover > .delete_icon,
+.category:hover > .edit_icon {
   display: contents !important;
 }
 
-.delete_icon {
+.delete_icon,
+.edit_icon {
   display: none !important;
 }
 
 .delete_icon:hover {
   color: rgb(223, 61, 61);
+}
+
+.edit_icon:hover {
+  color: var(--logo-color);
 }

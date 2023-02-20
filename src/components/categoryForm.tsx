@@ -7,13 +7,19 @@ import { Category } from "@prisma/client";
 import { User } from "@supabase/supabase-js";
 import { ProductMap } from "@/pages/api/get-menu-data/[userId]";
 
-export interface CategoryData {
+export interface CreateCategoryData {
   userId: string;
   title: string;
 }
 
-interface CategoryFormProps {
+export interface EditCategoryData {
+  categoryId: string;
+  title: string;
+}
+
+export interface CategoryFormProps {
   categories: Category[];
+  categoryInEdit?: Category;
   user: User;
   productMap: ProductMap;
   setProductMap: (pm: ProductMap) => void;
@@ -21,17 +27,64 @@ interface CategoryFormProps {
   setCreate: (b: boolean) => void;
   handleCancel: () => void;
   setErrorMessage: (s: string) => void;
+  setEditCategory: (id: string) => void;
 }
 
 export function CategoryForm(props: CategoryFormProps) {
-  const [newCategory, setNewCategory] = useState("");
+  const [newCategory, setNewCategory] = useState(
+    props.categoryInEdit ? props.categoryInEdit.title : ""
+  );
   const [isLoading, setLoading] = useState(false);
 
-  async function handleSubmit(event: FormEvent, userId: string) {
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    const data: CategoryData = {
-      title: (event.target as any).category.value,
-      userId,
+    if (props.categoryInEdit) {
+      editCategory(props.categoryInEdit);
+    } else {
+      createCategory();
+    }
+  }
+
+  async function editCategory(categoryInEdit: Category) {
+    const data: EditCategoryData = {
+      categoryId: categoryInEdit.id,
+      title: newCategory,
+    };
+    const JSONdata = JSON.stringify(data);
+    const options = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSONdata,
+    };
+    setNewCategory("");
+    setLoading(true);
+    const response = await fetch("/api/edit-category", options);
+    if (response.status === 200) {
+      setLoading(false);
+      props.setEditCategory(""); // close the form
+      const newCategories = props.categories.map((c) => {
+        if (c.id === data.categoryId) {
+          return {
+            ...c,
+            title: data.title,
+          };
+        }
+        return c;
+      });
+      props.setCategories(newCategories);
+    } else if (response.status === 500) {
+      setLoading(false);
+      props.setEditCategory("");
+      props.setErrorMessage("Internal server error");
+    }
+  }
+
+  async function createCategory() {
+    const data: CreateCategoryData = {
+      title: newCategory,
+      userId: props.user.id,
     };
     const JSONdata = JSON.stringify(data);
     const options = {
@@ -72,12 +125,7 @@ export function CategoryForm(props: CategoryFormProps) {
     <>
       {isLoading && <Spinner color="teal.500" />}
       {!isLoading && (
-        <form
-          className={styles.category_form}
-          onSubmit={(e) => {
-            handleSubmit(e, props.user.id);
-          }}
-        >
+        <form className={styles.category_form} onSubmit={handleSubmit}>
           <Input
             value={newCategory}
             onChange={(e) => setNewCategory(e.target.value)}

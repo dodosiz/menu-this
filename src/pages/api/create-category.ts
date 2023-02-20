@@ -1,4 +1,4 @@
-import { CategoryData } from "@/components/categoryForm";
+import { CreateCategoryData } from "@/components/categoryForm";
 import { createCategory } from "@/lib/categories";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -7,7 +7,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const data = req.body as CategoryData;
+    const data = req.body as CreateCategoryData;
     const id = await createCategory(data);
     res.status(200).json({ id });
   }

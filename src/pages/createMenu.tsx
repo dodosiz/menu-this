@@ -27,6 +27,7 @@ export default function CreateMenu() {
   const [isCreateMode, setCreate] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [productMap, setProductMap] = useState<ProductMap>({});
+  const [editCategory, setEditCategory] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const { user } = Auth.useUser();
 
@@ -68,15 +69,37 @@ export default function CreateMenu() {
               </Heading>
               <Tabs variant="soft-rounded" colorScheme="teal">
                 <TabList className={styles.tablist}>
-                  {categories.map((category) => (
-                    <CategoryTab
-                      categories={categories}
-                      category={category}
-                      setCategories={setCategories}
-                      key={"tab-" + category.id}
-                      setErrorMessage={setErrorMessage}
-                    />
-                  ))}
+                  {categories.map((category) => {
+                    if (category.id === editCategory) {
+                      return (
+                        <CategoryForm
+                          categories={categories}
+                          productMap={productMap}
+                          setProductMap={setProductMap}
+                          handleCancel={() => setEditCategory("")}
+                          setCategories={setCategories}
+                          setCreate={setCreate}
+                          setErrorMessage={setErrorMessage}
+                          user={user}
+                          categoryInEdit={category}
+                          setEditCategory={setEditCategory}
+                          key="create-form"
+                        />
+                      );
+                    } else {
+                      return (
+                        <CategoryTab
+                          categories={categories}
+                          category={category}
+                          setCategories={setCategories}
+                          key={"tab-" + category.id}
+                          editCategory={editCategory}
+                          setErrorMessage={setErrorMessage}
+                          setEditCategory={setEditCategory}
+                        />
+                      );
+                    }
+                  })}
                   {isCreateMode && (
                     <CategoryForm
                       categories={categories}
@@ -86,6 +109,7 @@ export default function CreateMenu() {
                       setCategories={setCategories}
                       setCreate={setCreate}
                       setErrorMessage={setErrorMessage}
+                      setEditCategory={setEditCategory}
                       user={user}
                       key="create-form"
                     />
