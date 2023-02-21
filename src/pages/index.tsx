@@ -12,10 +12,6 @@ export default function Home() {
   const { user } = Auth.useUser();
   const router = useRouter();
 
-  const navigateToCreateMenu = () => {
-    router.push("/createMenu");
-  };
-
   return (
     <Layout user={user}>
       <>
@@ -35,7 +31,7 @@ export default function Home() {
             colorScheme="teal"
             variant="solid"
             rightIcon={<FaArrowRight />}
-            onClick={navigateToCreateMenu}
+            onClick={() => router.push("/createMenu")}
           >
             Create your menu
           </Button>

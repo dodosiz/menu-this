@@ -16,7 +16,7 @@ export function Layout({ children, user }: LayoutProps) {
   async function handleLogout() {
     await supabase.auth.signOut();
     router.push("/api/logout");
-  };
+  }
   return (
     <>
       <Head>
@@ -36,6 +36,9 @@ export function Layout({ children, user }: LayoutProps) {
         </div>
         {user && (
           <>
+            <Link className={styles.nav_item} as={NextLink} href="/designMenu">
+              Design Menu
+            </Link>
             <Link className={styles.nav_item} as={NextLink} href="/createMenu">
               Create Menu
             </Link>
