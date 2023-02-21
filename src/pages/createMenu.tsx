@@ -1,11 +1,5 @@
 import { Layout } from "@/components/layout";
 import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Box,
   Divider,
   Heading,
   IconButton,
@@ -22,14 +16,13 @@ import { Category } from "@prisma/client";
 import { CategoryForm } from "@/components/categoryForm";
 import { CategoryTab } from "@/components/categoryTab";
 import { UnauthorizedPage } from "@/components/unauthorizedPage";
-import { ProductForm } from "@/components/productForm";
 import { ProductsList } from "@/components/productsList";
 import { Auth } from "@supabase/auth-ui-react";
 import { MenuData, ProductMap } from "./api/get-menu-data/[userId]";
 import { LoadingPage } from "@/components/loadingPage";
 import { ErrorNotification } from "@/components/error-notification";
 import { AiOutlineArrowRight, AiOutlineArrowUp } from "react-icons/ai";
-import { SECONDARY_COLOR } from "@/styles/constants";
+import { AccordionWithProductForm } from "@/components/accordionWithProductForm";
 
 export default function CreateMenu() {
   const [isLoading, setLoading] = useState(false);
@@ -38,6 +31,7 @@ export default function CreateMenu() {
   const [productMap, setProductMap] = useState<ProductMap>({});
   const [editedCategoryId, setEditedCategoryId] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [expanded, setExpanded] = useState(0);
   const { user } = Auth.useUser();
 
   useEffect(() => {
@@ -144,29 +138,14 @@ export default function CreateMenu() {
                   {categories.map((category) => {
                     return (
                       <TabPanel key={"panel-" + category.id}>
-                        <Accordion defaultIndex={0} allowToggle>
-                          <AccordionItem>
-                            <h2>
-                              <AccordionButton
-                                paddingLeft={0}
-                                color={SECONDARY_COLOR}
-                              >
-                                <Box as="span" flex="1" textAlign="left">
-                                  Add a new product
-                                </Box>
-                                <AccordionIcon />
-                              </AccordionButton>
-                            </h2>
-                            <AccordionPanel paddingLeft={0} pb={4}>
-                              <ProductForm
-                                productMap={productMap}
-                                setProductMap={setProductMap}
-                                categoryId={category.id}
-                                setErrorMessage={setErrorMessage}
-                              />
-                            </AccordionPanel>
-                          </AccordionItem>
-                        </Accordion>
+                        <AccordionWithProductForm
+                          expanded={expanded}
+                          productMap={productMap}
+                          setProductMap={setProductMap}
+                          categoryId={category.id}
+                          setErrorMessage={setErrorMessage}
+                          setExpanded={setExpanded}
+                        />
                         <Heading size="md" as="h3">
                           Products of category{" "}
                           <span className={styles.category_title}>
