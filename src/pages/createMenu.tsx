@@ -75,11 +75,13 @@ export default function CreateMenu() {
                 Create your menu
               </Heading>
               <Box className={styles.mobile_categories}>
-                <CategoryMobileMenu
-                  categories={categories}
-                  tabIndex={tabIndex}
-                  setTabIndex={setTabIndex}
-                />
+                {!!categories.length && (
+                  <CategoryMobileMenu
+                    categories={categories}
+                    tabIndex={tabIndex}
+                    setTabIndex={setTabIndex}
+                  />
+                )}
                 <CategoryMobileForm
                   categories={categories}
                   productMap={productMap}
@@ -95,6 +97,8 @@ export default function CreateMenu() {
                   }
                   setEditedCategoryId={setEditedCategoryId}
                   currentCategory={categories[tabIndex]}
+                  tabIndex={tabIndex}
+                  setTabIndex={setTabIndex}
                   user={user}
                 />
               </Box>

@@ -29,5 +29,7 @@
   }
   .mobile_categories {
     display: flex;
+    justify-content: space-between;
+    gap: 10px;
   }
 }

@@ -39,6 +39,8 @@ import { Category } from "@prisma/client";
 
 interface CategoryMobileFormProps extends CategoryFormProps {
   currentCategory: Category | null;
+  tabIndex: number;
+  setTabIndex: (n: number) => void;
 }
 
 export function CategoryMobileForm(props: CategoryMobileFormProps) {
@@ -78,85 +80,107 @@ export function CategoryMobileForm(props: CategoryMobileFormProps) {
   }
 
   function handleCancel() {
-    setCategoryTitle("");
     setCategoryModalOpen(false);
     props.setEditedCategoryId("");
   }
+
   return (
-    <>
-      <Popover
-        returnFocusOnClose={false}
-        isOpen={isConfirmOpen}
-        onClose={() => setConfirmOpen(false)}
-        placement="bottom"
-        closeOnBlur={false}
-      >
-        <PopoverTrigger>
-          <span></span>
-        </PopoverTrigger>
-        <PopoverContent>
-          <PopoverHeader fontWeight="semibold">Delete Category</PopoverHeader>
-          <PopoverArrow />
-          <PopoverCloseButton />
-          <PopoverBody>{`Are you sure you want to delete the category "${props.currentCategory?.title}"?`}</PopoverBody>
-          <PopoverFooter display="flex" justifyContent="flex-end">
-            <ButtonGroup size="sm">
-              <Button onClick={() => setConfirmOpen(false)} variant="outline">
-                Cancel
-              </Button>
-              <Button
-                isLoading={isLoading}
-                onClick={async () => {
-                  await handleDelete({
-                    categories: props.categories,
-                    categoryId: props.currentCategory!.id,
-                    setCategories: props.setCategories,
-                    setCategoryIdToDelete: () => {},
-                    setErrorMessage: props.setErrorMessage,
-                    setLoading: setLoading,
-                  });
-                  setConfirmOpen(false);
+    <div>
+      {!!props.categories.length && (
+        <>
+          <Popover
+            returnFocusOnClose={false}
+            isOpen={isConfirmOpen}
+            onClose={() => setConfirmOpen(false)}
+            placement="bottom"
+            closeOnBlur={false}
+          >
+            <PopoverTrigger>
+              <span></span>
+            </PopoverTrigger>
+            <PopoverContent>
+              <PopoverHeader fontWeight="semibold">
+                Delete Category
+              </PopoverHeader>
+              <PopoverArrow />
+              <PopoverCloseButton />
+              <PopoverBody>{`Are you sure you want to delete the category "${props.currentCategory?.title}"?`}</PopoverBody>
+              <PopoverFooter display="flex" justifyContent="flex-end">
+                <ButtonGroup size="sm">
+                  <Button
+                    onClick={() => setConfirmOpen(false)}
+                    variant="outline"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    isLoading={isLoading}
+                    onClick={async () => {
+                      await handleDelete({
+                        categories: props.categories,
+                        categoryId: props.currentCategory!.id,
+                        setCategories: props.setCategories,
+                        setCategoryIdToDelete: () => {},
+                        setErrorMessage: props.setErrorMessage,
+                        setLoading: setLoading,
+                      });
+                      setConfirmOpen(false);
+                      if (props.tabIndex > 0) {
+                        props.setTabIndex(props.tabIndex - 1);
+                      }
+                    }}
+                    colorScheme="red"
+                  >
+                    Delete
+                  </Button>
+                </ButtonGroup>
+              </PopoverFooter>
+            </PopoverContent>
+          </Popover>
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              aria-label="Options"
+              icon={<BiDotsVerticalRounded />}
+              variant="outline"
+              color="teal"
+            />
+            <MenuList>
+              <MenuItem
+                onClick={() => setCategoryModalOpen(true)}
+                icon={<IoMdAdd />}
+              >
+                Create
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  props.setEditedCategoryId(props.currentCategory!.id);
+                  setCategoryModalOpen(true);
                 }}
-                colorScheme="red"
+                icon={<RiEditLine />}
+              >
+                Rename
+              </MenuItem>
+              <MenuItem
+                onClick={() => setConfirmOpen(true)}
+                icon={<RiDeleteBin6Line />}
               >
                 Delete
-              </Button>
-            </ButtonGroup>
-          </PopoverFooter>
-        </PopoverContent>
-      </Popover>
-      <Menu>
-        <MenuButton
-          as={IconButton}
-          aria-label="Options"
-          icon={<BiDotsVerticalRounded />}
-          variant="unstyled"
-        />
-        <MenuList>
-          <MenuItem
-            onClick={() => setCategoryModalOpen(true)}
-            icon={<IoMdAdd />}
-          >
-            Create
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              props.setEditedCategoryId(props.currentCategory!.id);
-              setCategoryModalOpen(true);
-            }}
-            icon={<RiEditLine />}
-          >
-            Rename
-          </MenuItem>
-          <MenuItem
-            onClick={() => setConfirmOpen(true)}
-            icon={<RiDeleteBin6Line />}
-          >
-            Delete
-          </MenuItem>
-        </MenuList>
-      </Menu>
-
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </>
+      )}
+      {!props.categories.length && (
+        <Button
+          leftIcon={<IoMdAdd />}
+          colorScheme="teal"
+          variant="outline"
+          onClick={() => setCategoryModalOpen(true)}
+        >
+          Add your first category
+        </Button>
+      )}
       <Modal
         isOpen={isCategoryModalOpen}
         onClose={() => setCategoryModalOpen(false)}
@@ -197,6 +221,6 @@ export function CategoryMobileForm(props: CategoryMobileFormProps) {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </>
+    </div>
   );
 }
