@@ -1,12 +1,12 @@
 import { IconButton, Input, Spinner } from "@chakra-ui/react";
 import styles from "@/styles/components/categoryForm.module.css";
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect } from "react";
 import { FiCheck } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
 import { Category } from "@prisma/client";
 import { User } from "@supabase/supabase-js";
 import { ProductMap } from "@/pages/api/get-menu-data/[userId]";
-import { CreateCategoryData, UpdateCategoryData } from "@/lib/categories";
+import { createCategory, updateCategory } from "./categoryFormUtils";
 
 export interface CategoryFormProps {
   categories: Category[];
@@ -22,88 +22,32 @@ export interface CategoryFormProps {
 }
 
 export function CategoryForm(props: CategoryFormProps) {
-  const [categoryTitle, setCategoryTitle] = useState(
-    props.categoryInEdit ? props.categoryInEdit.title : ""
-  );
+  const [categoryTitle, setCategoryTitle] = useState("");
   const [isLoading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setCategoryTitle(props.categoryInEdit ? props.categoryInEdit.title : "");
+  }, [props.categoryInEdit]);
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     if (props.categoryInEdit) {
-      updateCategory(props.categoryInEdit);
+      updateCategory({
+        ...props,
+        categoryInEdit: props.categoryInEdit,
+        loading: isLoading,
+        setLoading: setLoading,
+        categoryTitle,
+        setCategoryTitle,
+      });
     } else {
-      createCategory();
-    }
-  }
-
-  async function updateCategory(categoryInEdit: Category) {
-    const data: UpdateCategoryData = {
-      categoryId: categoryInEdit.id,
-      title: categoryTitle,
-    };
-    const JSONdata = JSON.stringify(data);
-    const options = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSONdata,
-    };
-    setCategoryTitle("");
-    setLoading(true);
-    const response = await fetch("/api/update-category", options);
-    if (response.status === 200) {
-      setLoading(false);
-      props.setEditedCategoryId(""); // close the form
-      const updatedCategories = props.categories.map((c) => {
-        if (c.id === data.categoryId) {
-          return {
-            ...c,
-            title: data.title,
-          };
-        }
-        return c;
+      createCategory({
+        ...props,
+        loading: isLoading,
+        setLoading: setLoading,
+        categoryTitle,
+        setCategoryTitle,
       });
-      props.setCategories(updatedCategories);
-    } else if (response.status === 500) {
-      setLoading(false);
-      props.setEditedCategoryId("");
-      props.setErrorMessage("Internal server error");
-    }
-  }
-
-  async function createCategory() {
-    const data: CreateCategoryData = {
-      title: categoryTitle,
-      userId: props.user.id,
-    };
-    const JSONdata = JSON.stringify(data);
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSONdata,
-    };
-    setCategoryTitle("");
-    setLoading(true);
-    const response = await fetch("/api/create-category", options);
-    if (response.status === 200) {
-      const result = await response.json();
-      setLoading(false);
-      props.setCreateNewCategory(false); // close the form
-      props.setCategories([
-        ...props.categories,
-        { id: result.id, title: data.title, userId: data.userId },
-      ]);
-      props.setProductMap({
-        ...props.productMap,
-        [result.id]: [],
-      });
-    } else if (response.status === 500) {
-      setLoading(false);
-      props.setCreateNewCategory(false);
-      props.setErrorMessage("Internal server error");
     }
   }
 

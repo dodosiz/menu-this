@@ -22,7 +22,6 @@ export interface CategoryContextMenuProps {
   confirmTitle: string;
   confirmMessage: string;
   isConfirmOpen: boolean;
-  editDisabled: boolean;
   onCloseConfirm: () => void;
   onDeleteConfirmed: () => void;
   onOpenConfirm: () => void;
@@ -69,11 +68,7 @@ export function ContextMenu(props: CategoryContextMenuProps) {
           variant="unstyled"
         />
         <MenuList>
-          <MenuItem
-            isDisabled={props.editDisabled}
-            onClick={props.onEditClick}
-            icon={<RiEditLine />}
-          >
+          <MenuItem onClick={props.onEditClick} icon={<RiEditLine />}>
             Edit
           </MenuItem>
           <MenuItem onClick={props.onOpenConfirm} icon={<RiDeleteBin6Line />}>

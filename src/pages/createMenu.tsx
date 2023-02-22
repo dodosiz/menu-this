@@ -1,5 +1,6 @@
 import { Layout } from "@/components/layout";
 import {
+  Box,
   Divider,
   Heading,
   IconButton,
@@ -23,6 +24,8 @@ import { LoadingPage } from "@/components/loadingPage";
 import { ErrorNotification } from "@/components/error-notification";
 import { AiOutlineArrowRight, AiOutlineArrowUp } from "react-icons/ai";
 import { AccordionWithProductForm } from "@/components/accordionWithProductForm";
+import { CategoryMobileForm } from "@/components/categoryMobileForm";
+import { CategoryMobileMenu } from "@/components/categoryMobileMenu";
 
 export default function CreateMenu() {
   const [isLoading, setLoading] = useState(false);
@@ -32,6 +35,7 @@ export default function CreateMenu() {
   const [editedCategoryId, setEditedCategoryId] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [expanded, setExpanded] = useState(0);
+  const [tabIndex, setTabIndex] = useState(0);
   const { user } = Auth.useUser();
 
   useEffect(() => {
@@ -70,7 +74,36 @@ export default function CreateMenu() {
               <Heading size="xl" as="h1">
                 Create your menu
               </Heading>
-              <Tabs variant="soft-rounded" colorScheme="teal">
+              <Box className={styles.mobile_categories}>
+                <CategoryMobileMenu
+                  categories={categories}
+                  tabIndex={tabIndex}
+                  setTabIndex={setTabIndex}
+                />
+                <CategoryMobileForm
+                  categories={categories}
+                  productMap={productMap}
+                  setProductMap={setProductMap}
+                  handleCancel={() => setCreateNewCategory(false)}
+                  setCategories={setCategories}
+                  setCreateNewCategory={setCreateNewCategory}
+                  setErrorMessage={setErrorMessage}
+                  categoryInEdit={
+                    editedCategoryId.length > 0
+                      ? categories.find((c) => c.id === editedCategoryId)
+                      : undefined
+                  }
+                  setEditedCategoryId={setEditedCategoryId}
+                  currentCategory={categories[tabIndex]}
+                  user={user}
+                />
+              </Box>
+              <Tabs
+                index={tabIndex}
+                onChange={(i) => setTabIndex(i)}
+                variant="soft-rounded"
+                colorScheme="teal"
+              >
                 <TabList className={styles.tablist}>
                   {categories.map((category) => {
                     if (category.id === editedCategoryId) {

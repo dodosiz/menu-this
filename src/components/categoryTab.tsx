@@ -3,6 +3,7 @@ import styles from "@/styles/components/categoryTab.module.css";
 import { useState } from "react";
 import { Category } from "@prisma/client";
 import { ContextMenu } from "./contextMenu";
+import { handleDelete } from "./categoryFormUtils";
 
 interface CategoryTabProps {
   category: Category;
@@ -19,27 +20,6 @@ export function CategoryTab(props: CategoryTabProps) {
   );
   const [isLoading, setLoading] = useState(false);
 
-  async function handleDelete(categoryId: string) {
-    const JSONdata = JSON.stringify({ id: categoryId });
-    const options = {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSONdata,
-    };
-    setLoading(true);
-    setCategoryIdToDelete(null);
-    const response = await fetch("/api/delete-category", options);
-    if (response.status === 200) {
-      setLoading(false);
-      props.setCategories(props.categories.filter((c) => c.id !== categoryId));
-    } else if (response.status === 500) {
-      setLoading(false);
-      props.setErrorMessage("Internal server error");
-    }
-  }
-
   return (
     <>
       {isLoading && <Spinner color="teal.500" />}
@@ -49,11 +29,16 @@ export function CategoryTab(props: CategoryTabProps) {
           <ContextMenu
             confirmMessage={`Are you sure you want to delete the category "${props.category.title}"?`}
             isConfirmOpen={props.category.id === categoryIdToDelete}
-            // disable the edit if we are currently editing another category
-            editDisabled={!!props.editedCategoryId.length}
             confirmTitle="Delete Category"
             onCloseConfirm={() => setCategoryIdToDelete(null)}
-            onDeleteConfirmed={() => handleDelete(props.category.id)}
+            onDeleteConfirmed={() =>
+              handleDelete({
+                ...props,
+                categoryId: props.category.id,
+                setCategoryIdToDelete,
+                setLoading,
+              })
+            }
             onOpenConfirm={() => setCategoryIdToDelete(props.category.id)}
             onEditClick={() => props.setEditedCategoryId(props.category.id)}
           />

@@ -97,7 +97,6 @@ export function ProductsList({
                       <ContextMenu
                         confirmMessage={`Are you sure you want to delete the product "${product.name}"?`}
                         isConfirmOpen={product.id === productIdToDelete}
-                        editDisabled={false}
                         confirmTitle="Delete Product"
                         onCloseConfirm={() => setProductIdToDelete(null)}
                         onDeleteConfirmed={() => handleDelete(product.id)}
