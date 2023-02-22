@@ -13,6 +13,7 @@ model Category {
   userId    String
   title     String
   products  Product[]
+  created_at    DateTime  @default(now())
 }
 
 model Product {
