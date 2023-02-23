@@ -9,6 +9,11 @@ export async function getCategories(userId: string) {
   return categories;
 }
 
+export interface CreateCategoryResult {
+  id: string;
+  created_at: Date;
+}
+
 export interface CreateCategoryData {
   userId: string;
   title: string;
@@ -16,14 +21,14 @@ export interface CreateCategoryData {
 
 export async function createCategory(
   data: CreateCategoryData
-): Promise<string> {
+): Promise<CreateCategoryResult> {
   const category = await prisma.category.create({
     data: {
       userId: data.userId,
       title: data.title,
     },
   });
-  return category.id;
+  return { id: category.id, created_at: category.created_at };
 }
 
 export interface UpdateCategoryData {

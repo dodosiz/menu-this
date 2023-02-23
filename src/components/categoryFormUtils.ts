@@ -71,7 +71,12 @@ export async function createCategory(props: CreateCategoryProps) {
     props.setCreateNewCategory(false); // close the form
     props.setCategories([
       ...props.categories,
-      { id: result.id, title: data.title, userId: data.userId },
+      {
+        id: result.id,
+        title: data.title,
+        userId: data.userId,
+        created_at: result.created_at,
+      },
     ]);
     props.setProductMap({
       ...props.productMap,

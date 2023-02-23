@@ -7,7 +7,7 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     const data = req.body as CreateCategoryData;
-    const id = await createCategory(data);
-    res.status(200).json({ id });
+    const result = await createCategory(data);
+    res.status(200).json(result);
   }
 }
