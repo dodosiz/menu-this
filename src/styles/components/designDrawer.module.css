@@ -1,5 +1,19 @@
 .design_button {
-  position: absolute !important;
+  background-color: white !important;
+  position: fixed !important;
   top: 60px;
   right: 10px;
+}
+
+.design_button_mobile {
+  display: none !important;
+}
+
+@media (max-width: 700px) {
+  .design_button_desktop {
+    display: none !important;
+  }
+  .design_button_mobile {
+    display: inline-flex !important;
+  }
 }

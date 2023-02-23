@@ -25,3 +25,20 @@ model Product {
   categoryId    String
   created_at    DateTime  @default(now())
 }
+
+model Menu {
+  id                       String     @default(cuid()) @id
+  userId                   String
+  title_color              String
+  name_color               String
+  description_color        String
+  title_margin             Int
+  name_margin              Int
+  name_title_margin        Int
+  title_size               String 
+  name_size                String
+  description_size         String
+  title_font               String
+  content_font             String 
+  background_color         String
+}

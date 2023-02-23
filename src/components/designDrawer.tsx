@@ -7,6 +7,7 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
+  IconButton,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { MdDesignServices } from "react-icons/md";
@@ -21,10 +22,19 @@ export function DesignDrawer() {
         colorScheme="teal"
         variant="outline"
         onClick={() => setDrawerOpen(true)}
-        className={styles.design_button}
+        className={`${styles.design_button} ${styles.design_button_desktop}`}
       >
         Design
       </Button>
+      <IconButton
+        icon={<MdDesignServices />}
+        colorScheme="teal"
+        aria-label="design"
+        variant="outline"
+        size="sm"
+        onClick={() => setDrawerOpen(true)}
+        className={`${styles.design_button} ${styles.design_button_mobile}`}
+      />
       <Drawer
         isOpen={isDrawerOpen}
         placement="right"
