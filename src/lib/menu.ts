@@ -34,12 +34,24 @@ export async function getMenuByUserId(userId: string): Promise<Menu> {
 export interface UpdateMenuData {
   menuId: string;
   titleColor: string;
+  nameColor: string;
+  descriptionColor: string;
+  backgroundColor: string;
+  titleMargin: number;
+  nameMargin: number;
+  nameTitleMargin: number;
 }
 
 export async function updateMenu(data: UpdateMenuData) {
   await prisma.menu.update({
     data: {
       title_color: data.titleColor,
+      name_color: data.nameColor,
+      description_color: data.descriptionColor,
+      background_color: data.backgroundColor,
+      title_margin: data.titleMargin,
+      name_margin: data.nameMargin,
+      name_title_margin: data.nameTitleMargin,
     },
     where: {
       id: data.menuId,

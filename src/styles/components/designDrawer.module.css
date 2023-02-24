@@ -9,6 +9,15 @@
   display: none !important;
 }
 
+.label {
+  color: var(--main-color);
+  margin-top: 5px;
+}
+
+.form_body {
+  max-height: 75vh;
+}
+
 @media (max-width: 700px) {
   .design_button_desktop {
     display: none !important;
