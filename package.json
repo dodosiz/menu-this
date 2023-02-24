@@ -33,6 +33,7 @@
     "framer-motion": "^9.0.4",
     "next": "13.1.6",
     "react": "18.2.0",
+    "react-color": "^2.19.3",
     "react-dom": "18.2.0",
     "react-icons": "^4.7.1",
     "swr": "^2.0.3",
@@ -40,6 +41,7 @@
   },
   "devDependencies": {
     "@types/cookie": "^0.5.1",
+    "@types/react-color": "^3.0.6",
     "prisma": "^4.10.1"
   }
 }

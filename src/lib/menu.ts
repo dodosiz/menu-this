@@ -11,9 +11,9 @@ export async function getMenuByUserId(userId: string): Promise<Menu> {
   if (!menu) {
     const newMenu = await prisma.menu.create({
       data: {
-        title_color: LOGO_COLOR,
-        name_color: MAIN_COLOR,
-        description_color: SECONDARY_COLOR,
+        title_color: "#319795",
+        name_color: "#2d3748",
+        description_color: "#718096",
         title_margin: 10,
         name_margin: 2,
         name_title_margin: 5,
@@ -29,4 +29,20 @@ export async function getMenuByUserId(userId: string): Promise<Menu> {
     return newMenu;
   }
   return menu;
+}
+
+export interface UpdateMenuData {
+  menuId: string;
+  titleColor: string;
+}
+
+export async function updateMenu(data: UpdateMenuData) {
+  await prisma.menu.update({
+    data: {
+      title_color: data.titleColor,
+    },
+    where: {
+      id: data.menuId,
+    },
+  });
 }

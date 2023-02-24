@@ -63,7 +63,14 @@ export default function DesignMenu() {
                 )}
               </GridItem>
               <GridItem colSpan={1}>
-                <DesignDrawer />
+                {menu && (
+                  <DesignDrawer
+                    setErrorMessage={setErrorMessage}
+                    menu={menu}
+                    setMenu={setMenu}
+                    setLoading={setLoading}
+                  />
+                )}
               </GridItem>
             </Grid>
           )}
