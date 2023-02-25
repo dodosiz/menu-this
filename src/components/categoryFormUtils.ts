@@ -47,6 +47,7 @@ interface CreateCategoryProps extends CategoryFormProps {
   setCategoryTitle: (t: string) => void;
   loading: boolean;
   setLoading: (l: boolean) => void;
+  setTabIndex: (i: number) => void;
 }
 
 export async function createCategory(props: CreateCategoryProps) {
@@ -82,6 +83,7 @@ export async function createCategory(props: CreateCategoryProps) {
       ...props.productMap,
       [result.id]: [],
     });
+    props.setTabIndex(props.categories.length);
   } else if (response.status === 500) {
     props.setLoading(false);
     props.setCreateNewCategory(false);

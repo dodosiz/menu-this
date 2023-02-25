@@ -19,6 +19,7 @@ export interface CategoryFormProps {
   handleCancel: () => void;
   setErrorMessage: (s: string) => void;
   setEditedCategoryId: (id: string) => void;
+  setTabIndex: (i: number) => void;
 }
 
 export function CategoryForm(props: CategoryFormProps) {

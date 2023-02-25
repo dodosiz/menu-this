@@ -21,15 +21,6 @@ export function DesignMenuViewer({
   productMap,
   menu,
 }: DesignMenuViewer) {
-  const availableFonts = [
-    "'Montserrat', sans-serif",
-    "'Open Sans', sans-serif",
-    "'Raleway', sans-serif",
-    "'Roboto', sans-serif",
-    "'Poppins', sans-serif",
-    "'Playfair Display', serif",
-  ];
-
   return (
     <Box className={styles.menu} backgroundColor={menu.background_color}>
       {categories

@@ -26,6 +26,15 @@ interface DesignDrawerProps {
   setLoading: (b: boolean) => void;
 }
 
+const FONTS = [
+  "'Montserrat', sans-serif",
+  "'Open Sans', sans-serif",
+  "'Raleway', sans-serif",
+  "'Roboto', sans-serif",
+  "'Poppins', sans-serif",
+  "'Playfair Display', serif",
+];
+
 export function DesignDrawer({
   menu,
   setMenu,
@@ -50,6 +59,9 @@ export function DesignDrawer({
   const [titleSize, setTitleSize] = useState(menu.title_size);
   const [nameSize, setNameSize] = useState(menu.name_size);
   const [descriptionSize, setDescriptionSize] = useState(menu.description_size);
+  // fonts
+  const [titleFont, setTitleFont] = useState(menu.title_font);
+  const [contentFont, setContentFont] = useState(menu.content_font);
 
   async function updateMenu() {
     const data: UpdateMenuData = {
@@ -64,6 +76,8 @@ export function DesignDrawer({
       titleSize,
       nameSize,
       descriptionSize,
+      titleFont,
+      contentFont,
     };
     const JSONdata = JSON.stringify(data);
     const options = {
@@ -88,6 +102,8 @@ export function DesignDrawer({
         title_size: titleSize,
         name_size: nameSize,
         description_size: descriptionSize,
+        title_font: titleFont,
+        content_font: contentFont,
       };
       setMenu(updatedMenu);
       setLoading(false);
@@ -107,7 +123,7 @@ export function DesignDrawer({
         onClick={() => setDrawerOpen(true)}
         className={`${styles.design_button} ${styles.design_button_desktop}`}
       >
-        Design
+        Customize
       </Button>
       <IconButton
         icon={<MdDesignServices />}
@@ -176,8 +192,26 @@ export function DesignDrawer({
               <Text className={styles.label}>Product description size</Text>
               <SelectInput
                 options={["1.4em", "1.2em", "1em", "0.8em"]}
+                displayOption={{
+                  "1.4em": "xl",
+                  "1.2em": "lg",
+                  "1em": "md",
+                  "0.8em": "sm",
+                }}
                 value={descriptionSize}
                 setValue={setDescriptionSize}
+              />
+              <Text className={styles.label}>Category title font</Text>
+              <SelectInput
+                options={FONTS}
+                value={titleFont}
+                setValue={setTitleFont}
+              />
+              <Text className={styles.label}>Products font</Text>
+              <SelectInput
+                options={FONTS}
+                value={contentFont}
+                setValue={setContentFont}
               />
             </DrawerBody>
             <DrawerFooter className={styles.form_footer}>
@@ -187,7 +221,7 @@ export function DesignDrawer({
                 mr={3}
                 onClick={() => setDrawerOpen(false)}
               >
-                Cancel
+                Close
               </Button>
               <Button
                 onClick={updateMenu}
@@ -195,7 +229,7 @@ export function DesignDrawer({
                 variant="outline"
                 colorScheme="teal"
               >
-                Save
+                Apply
               </Button>
             </DrawerFooter>
           </form>

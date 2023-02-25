@@ -43,6 +43,8 @@ export interface UpdateMenuData {
   titleSize: string;
   nameSize: string;
   descriptionSize: string;
+  titleFont: string;
+  contentFont: string;
 }
 
 export async function updateMenu(data: UpdateMenuData) {

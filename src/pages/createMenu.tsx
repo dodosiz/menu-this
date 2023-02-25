@@ -126,6 +126,7 @@ export default function CreateMenu() {
                             setCategories={setCategories}
                             setCreateNewCategory={setCreateNewCategory}
                             setErrorMessage={setErrorMessage}
+                            setTabIndex={setTabIndex}
                             user={user}
                             categoryInEdit={category}
                             setEditedCategoryId={setEditedCategoryId}
@@ -156,6 +157,7 @@ export default function CreateMenu() {
                       setCreateNewCategory={setCreateNewCategory}
                       setErrorMessage={setErrorMessage}
                       setEditedCategoryId={setEditedCategoryId}
+                      setTabIndex={setTabIndex}
                       user={user}
                       key="create-form"
                     />
