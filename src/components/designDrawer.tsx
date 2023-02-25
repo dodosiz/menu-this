@@ -146,48 +146,108 @@ export function DesignDrawer({
           <form onSubmit={updateMenu} className={styles.form}>
             <DrawerBody className={styles.form_body}>
               <Text className={styles.label}>Category name color</Text>
-              <ColorPicker value={titleColor} setValue={setTitleColor} />
+              <ColorPicker
+                value={titleColor}
+                setValue={(c) => {
+                  setTitleColor(c);
+                  setMenu({
+                    ...menu,
+                    title_color: c,
+                  });
+                }}
+              />
               <Text className={styles.label}>Product name and price color</Text>
-              <ColorPicker value={nameColor} setValue={setNameColor} />
+              <ColorPicker
+                value={nameColor}
+                setValue={(c) => {
+                  setNameColor(c);
+                  setMenu({
+                    ...menu,
+                    name_color: c,
+                  });
+                }}
+              />
               <Text className={styles.label}>Description color</Text>
               <ColorPicker
                 value={descriptionColor}
-                setValue={setDescriptionColor}
+                setValue={(dc) => {
+                  setDescriptionColor(dc);
+                  setMenu({
+                    ...menu,
+                    description_color: dc,
+                  });
+                }}
               />
               <Text className={styles.label}>Background color</Text>
               <ColorPicker
                 value={backgroundColor}
-                setValue={setBackgroundColor}
+                setValue={(c) => {
+                  setBackgroundColor(c);
+                  setMenu({
+                    ...menu,
+                    background_color: c,
+                  });
+                }}
               />
               <Text className={styles.label}>Category name top margin</Text>
               <SliderInput
                 maxValue={400}
                 value={titleMargin}
-                setValue={setTitleMargin}
+                setValue={(m) => {
+                  setTitleMargin(m);
+                  setMenu({
+                    ...menu,
+                    title_margin: m,
+                  });
+                }}
               />
               <Text className={styles.label}>Product name top margin</Text>
               <SliderInput
                 maxValue={20}
                 value={nameMargin}
-                setValue={setNameMargin}
+                setValue={(m) => {
+                  setNameMargin(m);
+                  setMenu({
+                    ...menu,
+                    name_margin: m,
+                  });
+                }}
               />
               <Text className={styles.label}>Product to category margin</Text>
               <SliderInput
                 maxValue={200}
                 value={nameTitleMargin}
-                setValue={setNameTitleMargin}
+                setValue={(m) => {
+                  setNameTitleMargin(m);
+                  setMenu({
+                    ...menu,
+                    name_title_margin: m,
+                  });
+                }}
               />
               <Text className={styles.label}>Category name size</Text>
               <SelectInput
                 options={["xl", "lg", "md", "sm"]}
                 value={titleSize}
-                setValue={setTitleSize}
+                setValue={(s) => {
+                  setTitleSize(s);
+                  setMenu({
+                    ...menu,
+                    title_size: s,
+                  });
+                }}
               />
               <Text className={styles.label}>Product name and price size</Text>
               <SelectInput
                 options={["xl", "lg", "md", "sm"]}
                 value={nameSize}
-                setValue={setNameSize}
+                setValue={(s) => {
+                  setNameSize(s);
+                  setMenu({
+                    ...menu,
+                    name_size: s,
+                  });
+                }}
               />
               <Text className={styles.label}>Product description size</Text>
               <SelectInput
@@ -199,19 +259,37 @@ export function DesignDrawer({
                   "0.8em": "sm",
                 }}
                 value={descriptionSize}
-                setValue={setDescriptionSize}
+                setValue={(s) => {
+                  setDescriptionSize(s);
+                  setMenu({
+                    ...menu,
+                    description_size: s,
+                  });
+                }}
               />
               <Text className={styles.label}>Category title font</Text>
               <SelectInput
                 options={FONTS}
                 value={titleFont}
-                setValue={setTitleFont}
+                setValue={(f) => {
+                  setTitleFont(f);
+                  setMenu({
+                    ...menu,
+                    title_font: f,
+                  });
+                }}
               />
               <Text className={styles.label}>Products font</Text>
               <SelectInput
                 options={FONTS}
                 value={contentFont}
-                setValue={setContentFont}
+                setValue={(f) => {
+                  setContentFont(f);
+                  setMenu({
+                    ...menu,
+                    content_font: f,
+                  });
+                }}
               />
             </DrawerBody>
             <DrawerFooter className={styles.form_footer}>
