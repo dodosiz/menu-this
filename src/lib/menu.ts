@@ -60,6 +60,8 @@ export async function updateMenu(data: UpdateMenuData) {
       title_size: data.titleSize,
       name_size: data.nameSize,
       description_size: data.descriptionSize,
+      title_font: data.titleFont,
+      content_font: data.contentFont,
     },
     where: {
       id: data.menuId,
