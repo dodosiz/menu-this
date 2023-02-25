@@ -10,9 +10,10 @@ import {
 interface SliderProps {
   value: number;
   setValue: (n: number) => void;
+  maxValue: number;
 }
 
-export function SliderInput({ value, setValue }: SliderProps) {
+export function SliderInput({ value, setValue, maxValue }: SliderProps) {
   const labelStyles = {
     mt: "2",
     ml: "-2.5",
@@ -21,15 +22,20 @@ export function SliderInput({ value, setValue }: SliderProps) {
 
   return (
     <Box pt={6} pb={2}>
-      <Slider colorScheme="teal" value={value} max={200} onChange={setValue}>
-        <SliderMark value={50} {...labelStyles}>
-          50
+      <Slider
+        colorScheme="teal"
+        value={value}
+        max={maxValue}
+        onChange={setValue}
+      >
+        <SliderMark value={Math.floor(maxValue / 4)} {...labelStyles}>
+          {Math.floor(maxValue / 4)}
         </SliderMark>
-        <SliderMark value={100} {...labelStyles}>
-          100
+        <SliderMark value={2 * Math.floor(maxValue / 4)} {...labelStyles}>
+          {2 * Math.floor(maxValue / 4)}
         </SliderMark>
-        <SliderMark value={150} {...labelStyles}>
-          150
+        <SliderMark value={3 * Math.floor(maxValue / 4)} {...labelStyles}>
+          {3 * Math.floor(maxValue / 4)}
         </SliderMark>
         <SliderMark
           value={value}

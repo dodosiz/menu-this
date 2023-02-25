@@ -17,6 +17,7 @@ import { Menu } from "@prisma/client";
 import { UpdateMenuData } from "@/lib/menu";
 import { ColorPicker } from "./form/color-picker";
 import { SliderInput } from "./form/slider-input";
+import { SelectInput } from "./form/select-input";
 
 interface DesignDrawerProps {
   menu: Menu;
@@ -32,18 +33,23 @@ export function DesignDrawer({
   setLoading,
 }: DesignDrawerProps) {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
-  // color
+  // colors
   const [titleColor, setTitleColor] = useState(menu.title_color);
   const [nameColor, setNameColor] = useState(menu.name_color);
   const [descriptionColor, setDescriptionColor] = useState(
     menu.description_color
   );
   const [backgroundColor, setBackgroundColor] = useState(menu.background_color);
+  // margins
   const [titleMargin, setTitleMargin] = useState(menu.title_margin);
   const [nameMargin, setNameMargin] = useState(menu.name_margin);
   const [nameTitleMargin, setNameTitleMargin] = useState(
     menu.name_title_margin
   );
+  // sizes
+  const [titleSize, setTitleSize] = useState(menu.title_size);
+  const [nameSize, setNameSize] = useState(menu.name_size);
+  const [descriptionSize, setDescriptionSize] = useState(menu.description_size);
 
   async function updateMenu() {
     const data: UpdateMenuData = {
@@ -55,6 +61,9 @@ export function DesignDrawer({
       titleMargin,
       nameMargin,
       nameTitleMargin,
+      titleSize,
+      nameSize,
+      descriptionSize,
     };
     const JSONdata = JSON.stringify(data);
     const options = {
@@ -76,6 +85,9 @@ export function DesignDrawer({
         title_margin: titleMargin,
         name_margin: nameMargin,
         name_title_margin: nameTitleMargin,
+        title_size: titleSize,
+        name_size: nameSize,
+        description_size: descriptionSize,
       };
       setMenu(updatedMenu);
       setLoading(false);
@@ -132,13 +144,40 @@ export function DesignDrawer({
                 setValue={setBackgroundColor}
               />
               <Text className={styles.label}>Category name top margin</Text>
-              <SliderInput value={titleMargin} setValue={setTitleMargin} />
+              <SliderInput
+                maxValue={400}
+                value={titleMargin}
+                setValue={setTitleMargin}
+              />
               <Text className={styles.label}>Product name top margin</Text>
-              <SliderInput value={nameMargin} setValue={setNameMargin} />
+              <SliderInput
+                maxValue={20}
+                value={nameMargin}
+                setValue={setNameMargin}
+              />
               <Text className={styles.label}>Product to category margin</Text>
               <SliderInput
+                maxValue={200}
                 value={nameTitleMargin}
                 setValue={setNameTitleMargin}
+              />
+              <Text className={styles.label}>Category name size</Text>
+              <SelectInput
+                options={["xl", "lg", "md", "sm"]}
+                value={titleSize}
+                setValue={setTitleSize}
+              />
+              <Text className={styles.label}>Product name and price size</Text>
+              <SelectInput
+                options={["xl", "lg", "md", "sm"]}
+                value={nameSize}
+                setValue={setNameSize}
+              />
+              <Text className={styles.label}>Product description size</Text>
+              <SelectInput
+                options={["1.4em", "1.2em", "1em", "0.8em"]}
+                value={descriptionSize}
+                setValue={setDescriptionSize}
               />
             </DrawerBody>
             <DrawerFooter className={styles.form_footer}>

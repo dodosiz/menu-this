@@ -40,6 +40,9 @@ export interface UpdateMenuData {
   titleMargin: number;
   nameMargin: number;
   nameTitleMargin: number;
+  titleSize: string;
+  nameSize: string;
+  descriptionSize: string;
 }
 
 export async function updateMenu(data: UpdateMenuData) {
@@ -52,6 +55,9 @@ export async function updateMenu(data: UpdateMenuData) {
       title_margin: data.titleMargin,
       name_margin: data.nameMargin,
       name_title_margin: data.nameTitleMargin,
+      title_size: data.titleSize,
+      name_size: data.nameSize,
+      description_size: data.descriptionSize,
     },
     where: {
       id: data.menuId,
