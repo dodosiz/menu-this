@@ -27,7 +27,10 @@ export default async function handler(
     const productsInCategory = products.filter(
       (p) => p.categoryId === category.id
     );
-    productMap[category.id] = productsInCategory;
+    productMap[category.id] = productsInCategory.sort(
+      (p1, p2) =>
+        Date.parse(`${p2.created_at}`) - Date.parse(`${p1.created_at}`)
+    );
   }
   res.status(200).json({ menu, categories, productMap });
 }

@@ -109,44 +109,38 @@ export default function CreateMenu() {
                 colorScheme="teal"
               >
                 <TabList className={styles.tablist}>
-                  {categories
-                    .sort(
-                      (c1, c2) =>
-                        Date.parse(`${c1.created_at}`) -
-                        Date.parse(`${c2.created_at}`)
-                    )
-                    .map((category) => {
-                      if (category.id === editedCategoryId) {
-                        return (
-                          <CategoryForm
-                            categories={categories}
-                            productMap={productMap}
-                            setProductMap={setProductMap}
-                            handleCancel={() => setEditedCategoryId("")}
-                            setCategories={setCategories}
-                            setCreateNewCategory={setCreateNewCategory}
-                            setErrorMessage={setErrorMessage}
-                            setTabIndex={setTabIndex}
-                            user={user}
-                            categoryInEdit={category}
-                            setEditedCategoryId={setEditedCategoryId}
-                            key="create-form"
-                          />
-                        );
-                      } else {
-                        return (
-                          <CategoryTab
-                            categories={categories}
-                            category={category}
-                            setCategories={setCategories}
-                            key={"tab-" + category.id}
-                            editedCategoryId={editedCategoryId}
-                            setErrorMessage={setErrorMessage}
-                            setEditedCategoryId={setEditedCategoryId}
-                          />
-                        );
-                      }
-                    })}
+                  {categories.map((category) => {
+                    if (category.id === editedCategoryId) {
+                      return (
+                        <CategoryForm
+                          categories={categories}
+                          productMap={productMap}
+                          setProductMap={setProductMap}
+                          handleCancel={() => setEditedCategoryId("")}
+                          setCategories={setCategories}
+                          setCreateNewCategory={setCreateNewCategory}
+                          setErrorMessage={setErrorMessage}
+                          setTabIndex={setTabIndex}
+                          user={user}
+                          categoryInEdit={category}
+                          setEditedCategoryId={setEditedCategoryId}
+                          key="create-form"
+                        />
+                      );
+                    } else {
+                      return (
+                        <CategoryTab
+                          categories={categories}
+                          category={category}
+                          setCategories={setCategories}
+                          key={"tab-" + category.id}
+                          editedCategoryId={editedCategoryId}
+                          setErrorMessage={setErrorMessage}
+                          setEditedCategoryId={setEditedCategoryId}
+                        />
+                      );
+                    }
+                  })}
                   {isCreateNewCategory && (
                     <CategoryForm
                       categories={categories}
@@ -180,45 +174,39 @@ export default function CreateMenu() {
                 </TabList>
                 <Divider />
                 <TabPanels>
-                  {categories
-                    .sort(
-                      (c1, c2) =>
-                        Date.parse(`${c1.created_at}`) -
-                        Date.parse(`${c2.created_at}`)
-                    )
-                    .map((category) => {
-                      return (
-                        <TabPanel key={"panel-" + category.id}>
-                          <AccordionWithProductForm
-                            expanded={expanded}
-                            productMap={productMap}
-                            setProductMap={setProductMap}
-                            categoryId={category.id}
-                            setErrorMessage={setErrorMessage}
-                            setExpanded={setExpanded}
-                          />
-                          <Heading size="md" as="h3">
-                            Products of category{" "}
-                            <span className={styles.category_title}>
-                              &ldquo;{category.title}&ldquo;
-                            </span>
-                          </Heading>
-                          {!productMap[category.id].length && (
-                            <Text className={styles.explanatory} fontSize="md">
-                              No products yet, use the above form to create your
-                              fist products for this category.
-                            </Text>
-                          )}
-                          <ProductsList
-                            productMap={productMap}
-                            products={productMap[category.id]}
-                            categoryId={category.id}
-                            setProductMap={setProductMap}
-                            setErrorMessage={setErrorMessage}
-                          />
-                        </TabPanel>
-                      );
-                    })}
+                  {categories.map((category) => {
+                    return (
+                      <TabPanel key={"panel-" + category.id}>
+                        <AccordionWithProductForm
+                          expanded={expanded}
+                          productMap={productMap}
+                          setProductMap={setProductMap}
+                          categoryId={category.id}
+                          setErrorMessage={setErrorMessage}
+                          setExpanded={setExpanded}
+                        />
+                        <Heading size="md" as="h3">
+                          Products of category{" "}
+                          <span className={styles.category_title}>
+                            &ldquo;{category.title}&ldquo;
+                          </span>
+                        </Heading>
+                        {!productMap[category.id].length && (
+                          <Text className={styles.explanatory} fontSize="md">
+                            No products yet, use the above form to create your
+                            fist products for this category.
+                          </Text>
+                        )}
+                        <ProductsList
+                          productMap={productMap}
+                          products={productMap[category.id]}
+                          categoryId={category.id}
+                          setProductMap={setProductMap}
+                          setErrorMessage={setErrorMessage}
+                        />
+                      </TabPanel>
+                    );
+                  })}
                 </TabPanels>
               </Tabs>
             </>

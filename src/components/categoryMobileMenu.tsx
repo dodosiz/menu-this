@@ -18,20 +18,15 @@ export function CategoryMobileMenu(props: CategoryMobileMenuProps) {
       }}
       value={props.tabIndex.toString()}
     >
-      {props.categories
-        .sort(
-          (c1, c2) =>
-            Date.parse(`${c1.created_at}`) - Date.parse(`${c2.created_at}`)
-        )
-        .map((c, i) => (
-          <option
-            style={{ color: "teal" }}
-            key={`mcm-${c.id}`}
-            value={i.toString()}
-          >
-            {c.title}
-          </option>
-        ))}
+      {props.categories.map((c, i) => (
+        <option
+          style={{ color: "teal" }}
+          key={`mcm-${c.id}`}
+          value={i.toString()}
+        >
+          {c.title}
+        </option>
+      ))}
     </Select>
   );
 }

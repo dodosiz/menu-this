@@ -6,7 +6,9 @@ export async function getCategories(userId: string) {
       userId,
     },
   });
-  return categories;
+  return categories.sort(
+    (c1, c2) => Date.parse(`${c1.created_at}`) - Date.parse(`${c2.created_at}`)
+  );
 }
 
 export interface CreateCategoryResult {
