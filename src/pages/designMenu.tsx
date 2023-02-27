@@ -11,6 +11,7 @@ import { DesignDrawer } from "@/components/designDrawer";
 import { DesignMenuViewer } from "@/components/designMenuViewer";
 import { DesignMenuData } from "./api/get-menu-design/[userId]";
 import { TemplateDrawer } from "@/components/templateDrawer";
+import { ViewMenuButtons } from "@/components/viewMenuButtons";
 
 export default function DesignMenu() {
   const { user } = Auth.useUser();
@@ -80,6 +81,7 @@ export default function DesignMenu() {
                     setLoading={setLoading}
                   />
                 )}
+                {menu && <ViewMenuButtons menuId={menu.id} />}
               </GridItem>
             </Grid>
           )}

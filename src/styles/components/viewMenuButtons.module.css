@@ -1,0 +1,23 @@
+.view_button {
+  background-color: white !important;
+  position: fixed !important;
+  top: 160px;
+  right: 10px;
+}
+
+.view_button_desktop {
+  width: 150px;
+}
+
+.view_button_mobile {
+  display: none !important;
+}
+
+@media (max-width: 700px) {
+  .view_button_desktop {
+    display: none !important;
+  }
+  .view_button_mobile {
+    display: inline-flex !important;
+  }
+}

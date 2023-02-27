@@ -5,6 +5,10 @@
   right: 10px;
 }
 
+.design_button_desktop {
+  width: 150px;
+}
+
 .design_button_mobile {
   display: none !important;
 }

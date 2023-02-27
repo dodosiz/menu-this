@@ -5,6 +5,10 @@
   right: 10px;
 }
 
+.template_button_desktop {
+  width: 150px;
+}
+
 .template_button_mobile {
   display: none !important;
 }
