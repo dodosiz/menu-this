@@ -41,4 +41,5 @@ model Menu {
   title_font               String
   content_font             String 
   background_color         String
+  template                 String?
 }

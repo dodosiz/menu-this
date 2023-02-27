@@ -9,6 +9,7 @@ import { ProductMap } from "@/pages/api/get-menu-data/[userId]";
 import { Box, Grid, GridItem, Heading, Text } from "@chakra-ui/react";
 import { Category, Menu } from "@prisma/client";
 import styles from "@/styles/components/designMenuViewer.module.css";
+import { templateToMenu } from "@/lib/template-data";
 
 interface DesignMenuViewer {
   categories: Category[];
@@ -21,8 +22,22 @@ export function DesignMenuViewer({
   productMap,
   menu,
 }: DesignMenuViewer) {
+  const {
+    background_color,
+    content_font,
+    description_color,
+    description_size,
+    name_color,
+    name_margin,
+    name_size,
+    name_title_margin,
+    title_color,
+    title_font,
+    title_margin,
+    title_size,
+  } = menu.template ? { ...templateToMenu[menu.template], ...menu } : menu;
   return (
-    <Box className={styles.menu} backgroundColor={menu.background_color}>
+    <Box className={styles.menu} backgroundColor={background_color}>
       {categories
         .sort(
           (c1, c2) =>
@@ -31,11 +46,11 @@ export function DesignMenuViewer({
         .map((category, i) => (
           <Box key={`cb-${category.id}`}>
             <Heading
-              marginTop={i > 0 ? menu.title_margin : 0}
-              color={menu.title_color}
-              size={menu.title_size}
+              marginTop={i > 0 ? title_margin : 0}
+              color={title_color}
+              size={title_size}
               as="h1"
-              fontFamily={menu.title_font}
+              fontFamily={title_font}
             >
               {category.title}
             </Heading>
@@ -49,42 +64,38 @@ export function DesignMenuViewer({
                 .map((product, i) => (
                   <>
                     <GridItem
-                      marginTop={
-                        i > 0 ? menu.name_margin : menu.name_title_margin
-                      }
+                      marginTop={i > 0 ? name_margin : name_title_margin}
                       colSpan={{ base: 3, md: 4 }}
                     >
                       <Heading
-                        fontFamily={menu.content_font}
-                        color={menu.name_color}
+                        fontFamily={content_font}
+                        color={name_color}
                         as="h2"
-                        size={menu.name_size}
+                        size={name_size}
                       >
                         {product.name}
                       </Heading>
                     </GridItem>
                     <GridItem
-                      marginTop={
-                        i > 0 ? menu.name_margin : menu.name_title_margin
-                      }
+                      marginTop={i > 0 ? name_margin : name_title_margin}
                       colSpan={{ base: 2, md: 1 }}
                     >
                       <Heading
                         display="flex"
-                        fontFamily={menu.content_font}
+                        fontFamily={content_font}
                         justifyContent="flex-end"
-                        color={menu.name_color}
+                        color={name_color}
                         as="h2"
-                        size={menu.name_size}
+                        size={name_size}
                       >
                         € {product.price.toFixed(2)}
                       </Heading>
                     </GridItem>
                     <GridItem colSpan={{ base: 3, md: 4 }}>
                       <Text
-                        fontFamily={menu.content_font}
-                        fontSize={menu.description_size}
-                        color={menu.description_color}
+                        fontFamily={content_font}
+                        fontSize={description_size}
+                        color={description_color}
                       >
                         {product.description}
                       </Text>

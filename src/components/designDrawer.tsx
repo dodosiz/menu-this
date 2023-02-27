@@ -96,22 +96,6 @@ export function DesignDrawer({
     setLoading(true);
     const response = await fetch("/api/update-menu", options);
     if (response.status === 200) {
-      const updatedMenu: Menu = {
-        ...menu,
-        title_color: titleColor,
-        name_color: nameColor,
-        description_color: descriptionColor,
-        background_color: backgroundColor,
-        title_margin: titleMargin,
-        name_margin: nameMargin,
-        name_title_margin: nameTitleMargin,
-        title_size: titleSize,
-        name_size: nameSize,
-        description_size: descriptionSize,
-        title_font: titleFont,
-        content_font: contentFont,
-      };
-      setMenu(updatedMenu);
       setLoading(false);
       setDrawerOpen(false);
     } else if (response.status === 500) {

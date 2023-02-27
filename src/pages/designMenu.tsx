@@ -10,6 +10,7 @@ import { Grid, GridItem } from "@chakra-ui/react";
 import { DesignDrawer } from "@/components/designDrawer";
 import { DesignMenuViewer } from "@/components/designMenuViewer";
 import { DesignMenuData } from "./api/get-menu-design/[userId]";
+import { TemplateDrawer } from "@/components/templateDrawer";
 
 export default function DesignMenu() {
   const { user } = Auth.useUser();
@@ -63,6 +64,14 @@ export default function DesignMenu() {
                 )}
               </GridItem>
               <GridItem colSpan={1}>
+                {menu && (
+                  <TemplateDrawer
+                    setErrorMessage={setErrorMessage}
+                    menu={menu}
+                    setMenu={setMenu}
+                    setLoading={setLoading}
+                  />
+                )}
                 {menu && (
                   <DesignDrawer
                     setErrorMessage={setErrorMessage}

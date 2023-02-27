@@ -1,6 +1,6 @@
-import { LOGO_COLOR, MAIN_COLOR, SECONDARY_COLOR } from "@/styles/constants";
 import { Menu } from "@prisma/client";
 import { prisma } from "./prisma";
+import { templateToMenu } from "./template-data";
 
 export async function getMenuByUserId(userId: string): Promise<Menu> {
   const menu = await prisma.menu.findFirst({
@@ -62,6 +62,24 @@ export async function updateMenu(data: UpdateMenuData) {
       description_size: data.descriptionSize,
       title_font: data.titleFont,
       content_font: data.contentFont,
+    },
+    where: {
+      id: data.menuId,
+    },
+  });
+}
+
+export interface UpdateTemplateData {
+  menuId: string;
+  template: string | null;
+}
+
+export async function updateTemplate(data: UpdateTemplateData) {
+  const menu = data.template ? templateToMenu[data.template] : {};
+  await prisma.menu.update({
+    data: {
+      ...menu,
+      template: data.template,
     },
     where: {
       id: data.menuId,
