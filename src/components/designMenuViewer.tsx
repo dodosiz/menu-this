@@ -5,9 +5,9 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/poppins/400.css";
 import "@fontsource/playfair-display/400.css";
 
-import { ProductMap } from "@/pages/api/get-menu-data/[userId]";
+import { Fragment } from "react";
 import { Box, Grid, GridItem, Heading, Text } from "@chakra-ui/react";
-import { Category, Menu } from "@prisma/client";
+import { Menu } from "@prisma/client";
 import styles from "@/styles/components/designMenuViewer.module.css";
 import { templateToMenu } from "@/lib/template-data";
 import { CategoryView, ProductMapView } from "@/lib/menu-view";
@@ -23,9 +23,6 @@ export function DesignMenuViewer({
   productMap,
   menu,
 }: DesignMenuViewer) {
-  if (!menu) {
-    return <div>No data to display.</div>;
-  }
   const {
     background_color,
     content_font,
@@ -55,7 +52,7 @@ export function DesignMenuViewer({
           </Heading>
           <Grid templateColumns="repeat(5, 1fr)">
             {productMap[category.id].map((product, i) => (
-              <>
+              <Fragment key={`gi-${product.id}`}>
                 <GridItem
                   marginTop={i > 0 ? name_margin : name_title_margin}
                   colSpan={{ base: 3, md: 4 }}
@@ -94,7 +91,7 @@ export function DesignMenuViewer({
                   </Text>
                 </GridItem>
                 <GridItem colSpan={{ base: 2, md: 1 }}></GridItem>
-              </>
+              </Fragment>
             ))}
           </Grid>
         </Box>

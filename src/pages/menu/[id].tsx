@@ -1,23 +1,21 @@
 import { DesignMenuViewer } from "@/components/designMenuViewer";
-import { getMenuIds } from "@/lib/menu";
 import { getMenuViewData, MenuViewData } from "@/lib/menu-view";
 import { Container } from "@chakra-ui/react";
+import { GetServerSideProps } from "next";
 import Head from "next/head";
 
-export async function getStaticPaths() {
-  const ids = await getMenuIds();
-  return {
-    paths: ids.map((id) => ({ params: { id } })),
-    fallback: true,
-  };
-}
-
-export async function getStaticProps({ params }: { params: { id: string } }) {
-  const data = await getMenuViewData(params.id);
+export const getServerSideProps: GetServerSideProps<
+  MenuViewData,
+  { id: string }
+> = async (context) => {
+  if (!context.params) {
+    throw new Error("Invalid request");
+  }
+  const data = await getMenuViewData(context.params.id);
   return {
     props: data,
   };
-}
+};
 
 export default function MenuView({
   menu,

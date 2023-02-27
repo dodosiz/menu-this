@@ -86,8 +86,3 @@ export async function updateTemplate(data: UpdateTemplateData) {
     },
   });
 }
-
-export async function getMenuIds(): Promise<string[]> {
-  const menus = await prisma.menu.findMany();
-  return menus.map((m) => m.id);
-}
