@@ -1,7 +1,6 @@
 import { Input } from "@chakra-ui/react";
-import { ChromePicker } from "react-color";
+import { ChromePicker, SwatchesPicker } from "react-color";
 import { useState } from "react";
-import Twitter from "react-color/lib/components/twitter/Twitter";
 import styles from "@/styles/components/form/color-picker.module.css";
 
 interface ColorPickerProps {
@@ -35,7 +34,10 @@ export function ColorPicker({ value, setValue }: ColorPickerProps) {
           onClick={() => setShowTitleColorPicker(!showTitleColorPicker)}
         />
         {showTitleColorPicker && (
-          <Twitter color={value} onChangeComplete={(c) => setValue(c.hex)} />
+          <SwatchesPicker
+            color={value}
+            onChangeComplete={(c) => setValue(c.hex)}
+          />
         )}
       </div>
     </>
