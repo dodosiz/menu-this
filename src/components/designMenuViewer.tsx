@@ -23,6 +23,9 @@ export function DesignMenuViewer({
   productMap,
   menu,
 }: DesignMenuViewer) {
+  if (!menu) {
+    return <div>No data to display.</div>;
+  }
   const {
     background_color,
     content_font,
