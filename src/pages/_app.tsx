@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/core/supabase";
 import "@/styles/globals.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Auth } from "@supabase/auth-ui-react";

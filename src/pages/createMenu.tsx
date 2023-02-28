@@ -1,4 +1,4 @@
-import { Layout } from "@/components/layout";
+import { Layout } from "@/components/commons/layout";
 import {
   Box,
   Divider,
@@ -14,18 +14,18 @@ import { useState, useEffect } from "react";
 import styles from "@/styles/createMenu.module.css";
 import { IoMdAdd } from "react-icons/io";
 import { Category } from "@prisma/client";
-import { CategoryForm } from "@/components/categoryForm";
-import { CategoryTab } from "@/components/categoryTab";
-import { UnauthorizedPage } from "@/components/unauthorizedPage";
-import { ProductsList } from "@/components/productsList";
+import { CategoryForm } from "@/components/create-menu/category/categoryForm";
+import { CategoryTab } from "@/components/create-menu/category/categoryTab";
+import { UnauthorizedPage } from "@/components/commons/unauthorizedPage";
+import { ProductsList } from "@/components/create-menu/product/productsList";
 import { Auth } from "@supabase/auth-ui-react";
-import { MenuData, ProductMap } from "./api/get-menu-data/[userId]";
-import { LoadingPage } from "@/components/loadingPage";
-import { ErrorNotification } from "@/components/error-notification";
+import { MenuData, ProductMap } from "./api/menu/get-menu-data/[userId]";
+import { LoadingPage } from "@/components/commons/loadingPage";
+import { ErrorNotification } from "@/components/commons/error-notification";
 import { AiOutlineArrowRight, AiOutlineArrowUp } from "react-icons/ai";
-import { AccordionWithProductForm } from "@/components/accordionWithProductForm";
-import { CategoryMobileForm } from "@/components/categoryMobileForm";
-import { CategoryMobileMenu } from "@/components/categoryMobileMenu";
+import { AccordionWithProductForm } from "@/components/create-menu/product/accordionWithProductForm";
+import { CategoryMobileForm } from "@/components/create-menu/category/categoryMobileForm";
+import { CategoryMobileMenu } from "@/components/create-menu/category/categoryMobileMenu";
 
 export default function CreateMenu() {
   const [isLoading, setLoading] = useState(false);
@@ -41,7 +41,7 @@ export default function CreateMenu() {
   useEffect(() => {
     setLoading(true);
     if (user) {
-      fetch(`/api/get-menu-data/${user.id}`)
+      fetch(`/api/menu/get-menu-data/${user.id}`)
         .then((res) => res.json())
         .then((data: MenuData) => {
           setCategories(data.initialCategories);

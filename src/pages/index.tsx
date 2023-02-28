@@ -1,4 +1,4 @@
-import { Layout } from "@/components/layout";
+import { Layout } from "@/components/commons/layout";
 import { Auth } from "@supabase/auth-ui-react";
 import { Heading } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
