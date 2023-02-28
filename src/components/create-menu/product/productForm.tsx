@@ -49,6 +49,15 @@ export function ProductForm({
   );
   const [isLoading, setLoading] = useState(false);
 
+  function scrollToBottom() {
+    setTimeout(() => {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: "smooth",
+      });
+    }, 100);
+  }
+
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     if (!editedProduct) {
@@ -133,6 +142,7 @@ export function ProductForm({
         ...productMap,
         [categoryId]: [...productMap[categoryId], newProduct],
       });
+      scrollToBottom();
     } else if (response.status === 500) {
       setLoading(false);
       setErrorMessage("Internal server error");

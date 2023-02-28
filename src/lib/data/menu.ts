@@ -2,7 +2,9 @@ import { Menu } from "@prisma/client";
 import { prisma } from "../core/prisma";
 import { templateToMenu } from "./template-data";
 
-export async function getMenuByUserId(userId: string): Promise<Menu> {
+export async function getMenuByUserIdOrCreateDefault(
+  userId: string
+): Promise<Menu> {
   const menu = await prisma.menu.findFirst({
     where: {
       userId,

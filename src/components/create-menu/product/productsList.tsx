@@ -54,66 +54,61 @@ export function ProductsList({
     <>
       {isLoading && <LoadingPage />}
       {!isLoading &&
-        products
-          .sort(
-            (p1, p2) =>
-              Date.parse(`${p2.created_at}`) - Date.parse(`${p1.created_at}`)
-          )
-          .map((product) => {
-            return (
-              <Box key={"pd-" + product.id} className={styles.product_box}>
-                <Divider />
-                {editedProductId === product.id && (
-                  <ProductForm
-                    categoryId={categoryId}
-                    productMap={productMap}
-                    setErrorMessage={setErrorMessage}
-                    setProductMap={setProductMap}
-                    editedProduct={product}
-                    setEditedProductId={setEditedProductId}
-                  />
-                )}
-                {editedProductId !== product.id && (
-                  <Grid templateColumns="repeat(6, 1fr)" gap={4}>
-                    <GridItem colSpan={{ base: 3, md: 4 }}>
-                      <Heading
-                        size="md"
-                        as="h3"
-                        className={styles.product_heading}
-                      >
-                        {product.name}
-                      </Heading>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 2, md: 1 }}>
-                      <Heading
-                        size="md"
-                        as="h3"
-                        className={styles.product_heading}
-                      >
-                        € {product.price.toFixed(2)}
-                      </Heading>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 1, md: 1 }}>
-                      <ContextMenu
-                        confirmMessage={`Are you sure you want to delete the product "${product.name}"?`}
-                        isConfirmOpen={product.id === productIdToDelete}
-                        confirmTitle="Delete Product"
-                        onCloseConfirm={() => setProductIdToDelete(null)}
-                        onDeleteConfirmed={() => handleDelete(product.id)}
-                        onOpenConfirm={() => setProductIdToDelete(product.id)}
-                        onEditClick={() => setEditedProductId(product.id)}
-                      />
-                    </GridItem>
-                    <GridItem colSpan={{ base: 3, md: 4 }}>
-                      <Text fontSize="md" className={styles.product_text}>
-                        {product.description}
-                      </Text>
-                    </GridItem>
-                  </Grid>
-                )}
-              </Box>
-            );
-          })}
+        products.map((product) => {
+          return (
+            <Box key={"pd-" + product.id} className={styles.product_box}>
+              <Divider />
+              {editedProductId === product.id && (
+                <ProductForm
+                  categoryId={categoryId}
+                  productMap={productMap}
+                  setErrorMessage={setErrorMessage}
+                  setProductMap={setProductMap}
+                  editedProduct={product}
+                  setEditedProductId={setEditedProductId}
+                />
+              )}
+              {editedProductId !== product.id && (
+                <Grid templateColumns="repeat(6, 1fr)" gap={4}>
+                  <GridItem colSpan={{ base: 3, md: 4 }}>
+                    <Heading
+                      size="md"
+                      as="h3"
+                      className={styles.product_heading}
+                    >
+                      {product.name}
+                    </Heading>
+                  </GridItem>
+                  <GridItem colSpan={{ base: 2, md: 1 }}>
+                    <Heading
+                      size="md"
+                      as="h3"
+                      className={styles.product_heading}
+                    >
+                      € {product.price.toFixed(2)}
+                    </Heading>
+                  </GridItem>
+                  <GridItem colSpan={{ base: 1, md: 1 }}>
+                    <ContextMenu
+                      confirmMessage={`Are you sure you want to delete the product "${product.name}"?`}
+                      isConfirmOpen={product.id === productIdToDelete}
+                      confirmTitle="Delete Product"
+                      onCloseConfirm={() => setProductIdToDelete(null)}
+                      onDeleteConfirmed={() => handleDelete(product.id)}
+                      onOpenConfirm={() => setProductIdToDelete(product.id)}
+                      onEditClick={() => setEditedProductId(product.id)}
+                    />
+                  </GridItem>
+                  <GridItem colSpan={{ base: 3, md: 4 }}>
+                    <Text fontSize="md" className={styles.product_text}>
+                      {product.description}
+                    </Text>
+                  </GridItem>
+                </Grid>
+              )}
+            </Box>
+          );
+        })}
     </>
   );
 }

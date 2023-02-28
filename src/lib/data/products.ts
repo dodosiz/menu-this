@@ -55,7 +55,9 @@ export async function getProductsInCategories(categoryIds: string[]) {
       categoryId: { in: categoryIds },
     },
   });
-  return products;
+  return products.sort(
+    (p1, p2) => Date.parse(`${p1.created_at}`) - Date.parse(`${p2.created_at}`)
+  );
 }
 
 export async function deleteProduct(id: string) {

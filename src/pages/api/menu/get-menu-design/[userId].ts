@@ -1,5 +1,5 @@
 import { getCategories } from "@/lib/data/categories";
-import { getMenuByUserId } from "@/lib/data/menu";
+import { getMenuByUserIdOrCreateDefault } from "@/lib/data/menu";
 import { getProductsInCategories } from "@/lib/data/products";
 import { Category, Menu } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -17,7 +17,7 @@ export default async function handler(
 ) {
   const { userId } = req.query;
   // design part
-  const menu = await getMenuByUserId(userId as string);
+  const menu = await getMenuByUserIdOrCreateDefault(userId as string);
   // data part
   const categories = await getCategories(userId as string);
   const categoryIds = categories.map((c) => c.id);
@@ -27,10 +27,7 @@ export default async function handler(
     const productsInCategory = products.filter(
       (p) => p.categoryId === category.id
     );
-    productMap[category.id] = productsInCategory.sort(
-      (p1, p2) =>
-        Date.parse(`${p2.created_at}`) - Date.parse(`${p1.created_at}`)
-    );
+    productMap[category.id] = productsInCategory;
   }
   res.status(200).json({ menu, categories, productMap });
 }

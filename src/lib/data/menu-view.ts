@@ -24,12 +24,10 @@ export async function getMenuViewData(menuId: string): Promise<MenuViewData> {
     const productsInCategory = products.filter(
       (p) => p.categoryId === category.id
     );
-    productMap[category.id] = productsInCategory
-      .sort(
-        (p1, p2) =>
-          Date.parse(`${p2.created_at}`) - Date.parse(`${p1.created_at}`)
-      )
-      .map((p) => ({ ...p, created_at: null }));
+    productMap[category.id] = productsInCategory.map((p) => ({
+      ...p,
+      created_at: null,
+    }));
   }
   return {
     menu,
