@@ -145,7 +145,7 @@ export function CategoryMobileForm(props: CategoryMobileFormProps) {
               variant="outline"
               color="teal"
             />
-            <MenuList>
+            <MenuList zIndex={3}>
               <MenuItem
                 onClick={() => setCategoryModalOpen(true)}
                 icon={<IoMdAdd />}
