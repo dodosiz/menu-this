@@ -63,3 +63,29 @@ export async function getProductsInCategories(categoryIds: string[]) {
 export async function deleteProduct(id: string) {
   await prisma.product.delete({ where: { id } });
 }
+
+export interface SwapData {
+  id1: string;
+  id2: string;
+}
+
+export async function swap(data: SwapData) {
+  const product1 = await prisma.product.findFirstOrThrow({
+    where: { id: data.id1 },
+  });
+  const product2 = await prisma.product.findFirstOrThrow({
+    where: { id: data.id2 },
+  });
+  await prisma.product.update({
+    data: {
+      created_at: product2.created_at,
+    },
+    where: { id: data.id1 },
+  });
+  await prisma.product.update({
+    data: {
+      created_at: product1.created_at,
+    },
+    where: { id: data.id2 },
+  });
+}

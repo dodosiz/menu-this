@@ -25,7 +25,6 @@ export function ProductsList({
   const [productIdToDelete, setProductIdToDelete] = useState<string | null>(
     null
   );
-  const [isLoading, setLoading] = useState(false);
   const [editedProductId, setEditedProductId] = useState("");
 
   async function handleDelete(productId: string) {
@@ -37,24 +36,59 @@ export function ProductsList({
       },
       body: JSONdata,
     };
-    setLoading(true);
     setProductIdToDelete(null);
     const response = await fetch("/api/product/delete", options);
     if (response.status === 200) {
-      setLoading(false);
       const newProducts = products.filter((p) => p.id !== productId);
       setProductMap({ ...productMap, [categoryId]: newProducts });
     } else if (response.status === 500) {
-      setLoading(false);
+      setErrorMessage("Internal server error");
+    }
+  }
+
+  async function swapDates(id1: string, id2: string) {
+    const JSONdata = JSON.stringify({ id1, id2 });
+    const options = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSONdata,
+    };
+    const response = await fetch("/api/product/swap", options);
+    if (response.status === 200) {
+      const p1 = products.find((p) => p.id === id1);
+      const p2 = products.find((p) => p.id === id2);
+      setProductMap({
+        ...productMap,
+        [categoryId]: products.map((p) => {
+          if (p.id === id1 && p2 && p1) {
+            return {
+              ...p1,
+              created_at: p2?.created_at,
+            };
+          } else if (p.id === id2 && p2 && p1) {
+            return {
+              ...p2,
+              created_at: p1?.created_at,
+            };
+          }
+          return p;
+        }),
+      });
+    } else if (response.status === 500) {
       setErrorMessage("Internal server error");
     }
   }
 
   return (
     <>
-      {isLoading && <LoadingPage />}
-      {!isLoading &&
-        products.map((product) => {
+      {products
+        .sort(
+          (p1, p2) =>
+            Date.parse(`${p1.created_at}`) - Date.parse(`${p2.created_at}`)
+        )
+        .map((product, index) => {
           return (
             <Box key={"pd-" + product.id} className={styles.product_box}>
               <Divider />
@@ -97,6 +131,16 @@ export function ProductsList({
                       onDeleteConfirmed={() => handleDelete(product.id)}
                       onOpenConfirm={() => setProductIdToDelete(product.id)}
                       onEditClick={() => setEditedProductId(product.id)}
+                      onMoveUp={
+                        products[index - 1]
+                          ? () => swapDates(product.id, products[index - 1].id)
+                          : undefined
+                      }
+                      onMoveDown={
+                        products[index + 1]
+                          ? () => swapDates(product.id, products[index + 1].id)
+                          : undefined
+                      }
                     />
                   </GridItem>
                   <GridItem colSpan={{ base: 3, md: 4 }}>

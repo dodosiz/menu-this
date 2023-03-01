@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { RiDeleteBin6Line, RiEditLine } from "react-icons/ri";
-import styles from "@/styles/components/create-menu/product/contextMenu.module.css";
+import { AiOutlineArrowDown, AiOutlineArrowUp } from "react-icons/ai";
 
 export interface CategoryContextMenuProps {
   confirmTitle: string;
@@ -28,11 +28,13 @@ export interface CategoryContextMenuProps {
   onDeleteConfirmed: () => void;
   onOpenConfirm: () => void;
   onEditClick: () => void;
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
 }
 
 export function ContextMenu(props: CategoryContextMenuProps) {
   return (
-    <Box className={styles.context_menu}>
+    <>
       <Popover
         returnFocusOnClose={false}
         isOpen={props.isConfirmOpen}
@@ -69,7 +71,17 @@ export function ContextMenu(props: CategoryContextMenuProps) {
           icon={<BiDotsVerticalRounded />}
           variant="unstyled"
         />
-        <MenuList>
+        <MenuList zIndex={3}>
+          {props.onMoveUp && (
+            <MenuItem onClick={props.onMoveUp} icon={<AiOutlineArrowUp />}>
+              Move Up
+            </MenuItem>
+          )}
+          {props.onMoveDown && (
+            <MenuItem onClick={props.onMoveDown} icon={<AiOutlineArrowDown />}>
+              Move Down
+            </MenuItem>
+          )}
           <MenuItem onClick={props.onEditClick} icon={<RiEditLine />}>
             Edit
           </MenuItem>
@@ -78,6 +90,6 @@ export function ContextMenu(props: CategoryContextMenuProps) {
           </MenuItem>
         </MenuList>
       </Menu>
-    </Box>
+    </>
   );
 }
