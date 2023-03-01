@@ -2,7 +2,7 @@ import { Box, Divider, Grid, GridItem, Heading, Text } from "@chakra-ui/react";
 import { Product } from "@prisma/client";
 import styles from "@/styles/components/create-menu/product/productsList.module.css";
 import { useState } from "react";
-import { ContextMenu } from "./contextMenu";
+import { ContextMenu } from "../contextMenu";
 import { ProductForm } from "./productForm";
 import { ProductMap } from "@/pages/api/menu/get-menu-data/[userId]";
 import { LoadingPage } from "@/components/commons/loadingPage";

@@ -2,7 +2,7 @@ import { Box, Spinner, Tab } from "@chakra-ui/react";
 import styles from "@/styles/components/create-menu/category/categoryTab.module.css";
 import { useState } from "react";
 import { Category } from "@prisma/client";
-import { ContextMenu } from "../product/contextMenu";
+import { ContextMenu } from "../contextMenu";
 import { handleDelete } from "./categoryFormHandler";
 
 interface CategoryTabProps {
