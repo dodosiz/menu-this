@@ -1,5 +1,5 @@
 import { ProductMap } from "@/pages/api/menu/get-menu-data/[userId]";
-import { SECONDARY_COLOR } from "@/styles/constants";
+import { SECONDARY_COLOR, MAIN_COLOR } from "@/styles/constants";
 import {
   Accordion,
   AccordionButton,
@@ -9,6 +9,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { ProductForm } from "./productForm";
+import styles from "@/styles/components/create-menu/product/accordionWithProductForm.module.css";
 
 interface AccordionWithProductFormProps {
   categoryId: string;
@@ -25,10 +26,15 @@ export function AccordionWithProductForm(props: AccordionWithProductFormProps) {
       index={props.expanded}
       onChange={() => props.setExpanded(props.expanded === 1 ? 0 : 1)}
       allowToggle
+      className={styles.accordion_with_product_form}
     >
       <AccordionItem>
         <h2>
-          <AccordionButton paddingLeft={0} color={SECONDARY_COLOR}>
+          <AccordionButton
+            paddingLeft={0}
+            color={SECONDARY_COLOR}
+            _expanded={{ bg: "teal.100", color: MAIN_COLOR }}
+          >
             <Box as="span" flex="1" textAlign="left">
               Add a new product
             </Box>

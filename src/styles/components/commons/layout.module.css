@@ -3,13 +3,13 @@
   border-bottom: 1px solid rgba(211, 211, 211, 0.5);
   display: flex;
   padding: 10px;
-  position: fixed;
+  position: sticky;
+  top: 0;
   width: 100%;
   z-index: 100;
 }
 
 .main {
-  padding-top: 50px;
   padding-right: 10px;
   padding-left: 10px;
 }
