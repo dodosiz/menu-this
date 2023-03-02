@@ -51,3 +51,29 @@ export async function deleteCategory(id: string) {
   await prisma.product.deleteMany({ where: { categoryId: id } });
   await prisma.category.delete({ where: { id } });
 }
+
+export interface SwapData {
+  id1: string;
+  id2: string;
+}
+
+export async function swap(data: SwapData) {
+  const category1 = await prisma.category.findFirstOrThrow({
+    where: { id: data.id1 },
+  });
+  const category2 = await prisma.category.findFirstOrThrow({
+    where: { id: data.id2 },
+  });
+  await prisma.category.update({
+    data: {
+      created_at: category2.created_at,
+    },
+    where: { id: data.id1 },
+  });
+  await prisma.category.update({
+    data: {
+      created_at: category1.created_at,
+    },
+    where: { id: data.id2 },
+  });
+}

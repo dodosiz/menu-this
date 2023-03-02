@@ -36,10 +36,13 @@ import {
 import { RiDeleteBin6Line, RiEditLine } from "react-icons/ri";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { Category } from "@prisma/client";
+import { AiOutlineArrowDown, AiOutlineArrowUp } from "react-icons/ai";
 
 interface CategoryMobileFormProps extends CategoryFormProps {
   currentCategory: Category | null;
   tabIndex: number;
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
   setTabIndex: (n: number) => void;
 }
 
@@ -146,6 +149,19 @@ export function CategoryMobileForm(props: CategoryMobileFormProps) {
               color="teal"
             />
             <MenuList zIndex={3}>
+              {props.onMoveUp && (
+                <MenuItem onClick={props.onMoveUp} icon={<AiOutlineArrowUp />}>
+                  Move Up
+                </MenuItem>
+              )}
+              {props.onMoveDown && (
+                <MenuItem
+                  onClick={props.onMoveDown}
+                  icon={<AiOutlineArrowDown />}
+                >
+                  Move Down
+                </MenuItem>
+              )}
               <MenuItem
                 onClick={() => setCategoryModalOpen(true)}
                 icon={<IoMdAdd />}

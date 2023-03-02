@@ -3,10 +3,11 @@ import styles from "@/styles/components/create-menu/category/categoryTab.module.
 import { useState } from "react";
 import { Category } from "@prisma/client";
 import { ContextMenu } from "../contextMenu";
-import { handleDelete } from "./categoryFormHandler";
+import { handleDelete, swapDates } from "./categoryFormHandler";
 
 interface CategoryTabProps {
   category: Category;
+  index: number;
   categories: Category[];
   editedCategoryId: string;
   setCategories: (c: Category[]) => void;
@@ -38,6 +39,32 @@ export function CategoryTab(props: CategoryTabProps) {
                 setCategoryIdToDelete,
                 setLoading,
               })
+            }
+            onMoveLeft={
+              props.categories[props.index - 1]
+                ? () =>
+                    swapDates({
+                      id1: props.category.id,
+                      id2: props.categories[props.index - 1].id,
+                      categories: props.categories,
+                      setCategories: props.setCategories,
+                      setErrorMessage: props.setErrorMessage,
+                      setLoading: setLoading,
+                    })
+                : undefined
+            }
+            onMoveRight={
+              props.categories[props.index + 1]
+                ? () =>
+                    swapDates({
+                      id1: props.category.id,
+                      id2: props.categories[props.index + 1].id,
+                      categories: props.categories,
+                      setCategories: props.setCategories,
+                      setErrorMessage: props.setErrorMessage,
+                      setLoading: setLoading,
+                    })
+                : undefined
             }
             onOpenConfirm={() => setCategoryIdToDelete(props.category.id)}
             onEditClick={() => props.setEditedCategoryId(props.category.id)}

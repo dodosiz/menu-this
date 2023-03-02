@@ -122,3 +122,53 @@ export async function handleDelete(props: DeleteProps) {
     props.setErrorMessage("Internal server error");
   }
 }
+
+interface SwapProps {
+  id1: string;
+  id2: string;
+  categories: Category[];
+  updateTabIndex?: () => void;
+  setCategories: (c: Category[]) => void;
+  setErrorMessage: (s: string) => void;
+  setLoading: (b: boolean) => void;
+}
+
+export async function swapDates(props: SwapProps) {
+  const JSONdata = JSON.stringify({ id1: props.id1, id2: props.id2 });
+  const options = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSONdata,
+  };
+  props.setLoading(true);
+  const response = await fetch("/api/category/swap", options);
+  if (response.status === 200) {
+    const c1 = props.categories.find((c) => c.id === props.id1);
+    const c2 = props.categories.find((c) => c.id === props.id2);
+    props.setLoading(false);
+    props.setCategories(
+      props.categories.map((c) => {
+        if (c1 && c2 && c.id === c1.id) {
+          return {
+            ...c,
+            created_at: c2.created_at,
+          };
+        } else if (c1 && c2 && c.id === c2.id) {
+          return {
+            ...c,
+            created_at: c1.created_at,
+          };
+        }
+        return c;
+      })
+    );
+    if (props.updateTabIndex) {
+      props.updateTabIndex();
+    }
+  } else if (response.status === 500) {
+    props.setLoading(false);
+    props.setErrorMessage("Internal server error");
+  }
+}

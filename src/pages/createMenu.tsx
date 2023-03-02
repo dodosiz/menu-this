@@ -26,6 +26,7 @@ import { AiOutlineArrowRight, AiOutlineArrowUp } from "react-icons/ai";
 import { AccordionWithProductForm } from "@/components/create-menu/product/accordionWithProductForm";
 import { CategoryMobileForm } from "@/components/create-menu/category/categoryMobileForm";
 import { CategoryMobileMenu } from "@/components/create-menu/category/categoryMobileMenu";
+import { swapDates } from "@/components/create-menu/category/categoryFormHandler";
 
 export default function CreateMenu() {
   const [isLoading, setLoading] = useState(false);
@@ -100,6 +101,34 @@ export default function CreateMenu() {
                   tabIndex={tabIndex}
                   setTabIndex={setTabIndex}
                   user={user}
+                  onMoveUp={
+                    categories[tabIndex - 1]
+                      ? () =>
+                          swapDates({
+                            id1: categories[tabIndex].id,
+                            id2: categories[tabIndex - 1].id,
+                            categories: categories,
+                            setCategories: setCategories,
+                            setErrorMessage: setErrorMessage,
+                            setLoading: setLoading,
+                            updateTabIndex: () => setTabIndex(tabIndex - 1),
+                          })
+                      : undefined
+                  }
+                  onMoveDown={
+                    categories[tabIndex + 1]
+                      ? () =>
+                          swapDates({
+                            id1: categories[tabIndex].id,
+                            id2: categories[tabIndex + 1].id,
+                            categories: categories,
+                            setCategories: setCategories,
+                            setErrorMessage: setErrorMessage,
+                            setLoading: setLoading,
+                            updateTabIndex: () => setTabIndex(tabIndex + 1),
+                          })
+                      : undefined
+                  }
                 />
               </Box>
               <Tabs
@@ -109,38 +138,45 @@ export default function CreateMenu() {
                 colorScheme="teal"
               >
                 <TabList className={styles.tablist}>
-                  {categories.map((category) => {
-                    if (category.id === editedCategoryId) {
-                      return (
-                        <CategoryForm
-                          categories={categories}
-                          productMap={productMap}
-                          setProductMap={setProductMap}
-                          handleCancel={() => setEditedCategoryId("")}
-                          setCategories={setCategories}
-                          setCreateNewCategory={setCreateNewCategory}
-                          setErrorMessage={setErrorMessage}
-                          setTabIndex={setTabIndex}
-                          user={user}
-                          categoryInEdit={category}
-                          setEditedCategoryId={setEditedCategoryId}
-                          key="create-form"
-                        />
-                      );
-                    } else {
-                      return (
-                        <CategoryTab
-                          categories={categories}
-                          category={category}
-                          setCategories={setCategories}
-                          key={"tab-" + category.id}
-                          editedCategoryId={editedCategoryId}
-                          setErrorMessage={setErrorMessage}
-                          setEditedCategoryId={setEditedCategoryId}
-                        />
-                      );
-                    }
-                  })}
+                  {categories
+                    .sort(
+                      (c1, c2) =>
+                        Date.parse(`${c1.created_at}`) -
+                        Date.parse(`${c2.created_at}`)
+                    )
+                    .map((category, index) => {
+                      if (category.id === editedCategoryId) {
+                        return (
+                          <CategoryForm
+                            categories={categories}
+                            productMap={productMap}
+                            setProductMap={setProductMap}
+                            handleCancel={() => setEditedCategoryId("")}
+                            setCategories={setCategories}
+                            setCreateNewCategory={setCreateNewCategory}
+                            setErrorMessage={setErrorMessage}
+                            setTabIndex={setTabIndex}
+                            user={user}
+                            categoryInEdit={category}
+                            setEditedCategoryId={setEditedCategoryId}
+                            key="create-form"
+                          />
+                        );
+                      } else {
+                        return (
+                          <CategoryTab
+                            categories={categories}
+                            category={category}
+                            index={index}
+                            setCategories={setCategories}
+                            key={"tab-" + category.id}
+                            editedCategoryId={editedCategoryId}
+                            setErrorMessage={setErrorMessage}
+                            setEditedCategoryId={setEditedCategoryId}
+                          />
+                        );
+                      }
+                    })}
                   {isCreateNewCategory && (
                     <CategoryForm
                       categories={categories}

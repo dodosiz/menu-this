@@ -17,7 +17,12 @@ import {
 } from "@chakra-ui/react";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { RiDeleteBin6Line, RiEditLine } from "react-icons/ri";
-import { AiOutlineArrowDown, AiOutlineArrowUp } from "react-icons/ai";
+import {
+  AiOutlineArrowDown,
+  AiOutlineArrowLeft,
+  AiOutlineArrowRight,
+  AiOutlineArrowUp,
+} from "react-icons/ai";
 
 export interface CategoryContextMenuProps {
   confirmTitle: string;
@@ -29,6 +34,8 @@ export interface CategoryContextMenuProps {
   onEditClick: () => void;
   onMoveUp?: () => void;
   onMoveDown?: () => void;
+  onMoveRight?: () => void;
+  onMoveLeft?: () => void;
 }
 
 export function ContextMenu(props: CategoryContextMenuProps) {
@@ -79,6 +86,19 @@ export function ContextMenu(props: CategoryContextMenuProps) {
           {props.onMoveDown && (
             <MenuItem onClick={props.onMoveDown} icon={<AiOutlineArrowDown />}>
               Move Down
+            </MenuItem>
+          )}
+          {props.onMoveLeft && (
+            <MenuItem onClick={props.onMoveLeft} icon={<AiOutlineArrowLeft />}>
+              Move Left
+            </MenuItem>
+          )}
+          {props.onMoveRight && (
+            <MenuItem
+              onClick={props.onMoveRight}
+              icon={<AiOutlineArrowRight />}
+            >
+              Move Right
             </MenuItem>
           )}
           <MenuItem onClick={props.onEditClick} icon={<RiEditLine />}>
