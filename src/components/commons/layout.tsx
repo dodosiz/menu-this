@@ -130,6 +130,16 @@ function MenuItems({ user, handleLogout, setOpen }: MenuItemsProps) {
           Sign In
         </Link>
       )}
+      {!user && (
+        <Link
+          onClick={() => setOpen?.(false)}
+          className={styles.nav_item}
+          as={NextLink}
+          href="/signup"
+        >
+          Sign Up
+        </Link>
+      )}
     </>
   );
 }

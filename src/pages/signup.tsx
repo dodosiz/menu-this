@@ -13,10 +13,10 @@ export default function Login() {
   }
   return (
     <Layout user={user}>
-      <Container>
+      <Container alignContent="center">
         <Auth
           supabaseClient={supabase}
-          view="sign_in"
+          view="sign_up"
           socialLayout="horizontal"
           appearance={{
             theme: ThemeSupa,
