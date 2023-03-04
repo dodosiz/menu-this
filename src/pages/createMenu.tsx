@@ -110,7 +110,6 @@ export default function CreateMenu() {
                             categories: categories,
                             setCategories: setCategories,
                             setErrorMessage: setErrorMessage,
-                            setLoading: setLoading,
                             updateTabIndex: () => setTabIndex(tabIndex - 1),
                           })
                       : undefined
@@ -124,7 +123,6 @@ export default function CreateMenu() {
                             categories: categories,
                             setCategories: setCategories,
                             setErrorMessage: setErrorMessage,
-                            setLoading: setLoading,
                             updateTabIndex: () => setTabIndex(tabIndex + 1),
                           })
                       : undefined
@@ -173,6 +171,7 @@ export default function CreateMenu() {
                             editedCategoryId={editedCategoryId}
                             setErrorMessage={setErrorMessage}
                             setEditedCategoryId={setEditedCategoryId}
+                            setTabIndex={setTabIndex}
                           />
                         );
                       }

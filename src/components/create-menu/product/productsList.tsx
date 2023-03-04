@@ -55,28 +55,27 @@ export function ProductsList({
       },
       body: JSONdata,
     };
+    const p1 = products.find((p) => p.id === id1);
+    const p2 = products.find((p) => p.id === id2);
+    setProductMap({
+      ...productMap,
+      [categoryId]: products.map((p) => {
+        if (p.id === id1 && p2 && p1) {
+          return {
+            ...p1,
+            created_at: p2?.created_at,
+          };
+        } else if (p.id === id2 && p2 && p1) {
+          return {
+            ...p2,
+            created_at: p1?.created_at,
+          };
+        }
+        return p;
+      }),
+    });
     const response = await fetch("/api/product/swap", options);
-    if (response.status === 200) {
-      const p1 = products.find((p) => p.id === id1);
-      const p2 = products.find((p) => p.id === id2);
-      setProductMap({
-        ...productMap,
-        [categoryId]: products.map((p) => {
-          if (p.id === id1 && p2 && p1) {
-            return {
-              ...p1,
-              created_at: p2?.created_at,
-            };
-          } else if (p.id === id2 && p2 && p1) {
-            return {
-              ...p2,
-              created_at: p1?.created_at,
-            };
-          }
-          return p;
-        }),
-      });
-    } else if (response.status === 500) {
+    if (response.status === 500) {
       setErrorMessage("Internal server error");
     }
   }

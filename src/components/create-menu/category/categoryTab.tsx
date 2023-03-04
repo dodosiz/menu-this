@@ -13,6 +13,7 @@ interface CategoryTabProps {
   setCategories: (c: Category[]) => void;
   setErrorMessage: (s: string) => void;
   setEditedCategoryId: (id: string) => void;
+  setTabIndex: (i: number) => void;
 }
 
 export function CategoryTab(props: CategoryTabProps) {
@@ -49,7 +50,7 @@ export function CategoryTab(props: CategoryTabProps) {
                       categories: props.categories,
                       setCategories: props.setCategories,
                       setErrorMessage: props.setErrorMessage,
-                      setLoading: setLoading,
+                      updateTabIndex: () => props.setTabIndex(props.index - 1),
                     })
                 : undefined
             }
@@ -62,7 +63,7 @@ export function CategoryTab(props: CategoryTabProps) {
                       categories: props.categories,
                       setCategories: props.setCategories,
                       setErrorMessage: props.setErrorMessage,
-                      setLoading: setLoading,
+                      updateTabIndex: () => props.setTabIndex(props.index + 1),
                     })
                 : undefined
             }
