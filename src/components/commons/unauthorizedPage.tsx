@@ -1,17 +1,11 @@
-import { Heading, Link } from "@chakra-ui/react";
-import NextLink from "next/link";
-import styles from "@/styles/components/commons/unauthorizedPage.module.css";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { LoadingPage } from "./loadingPage";
 
 export function UnauthorizedPage() {
-  return (
-    <div className={styles.unauthorized_page}>
-      <Heading size="xl" as="h1">
-        You need to{" "}
-        <Link href="/login" as={NextLink}>
-          log in
-        </Link>{" "}
-        first
-      </Heading>
-    </div>
-  );
+  const router = useRouter();
+  useEffect(() => {
+    router.push("/login");
+  });
+  return <LoadingPage fullHeight={true} />;
 }
