@@ -13,6 +13,7 @@ import { DesignMenuData } from "./api/menu/get-menu-design/[userId]";
 import { TemplateDrawer } from "@/components/design-menu/templateDrawer";
 import { ViewMenuButtons } from "@/components/design-menu/viewMenuButtons";
 import { UpdateMenuData, UpdateTemplateData } from "@/lib/data/menu";
+import { Router } from "next/router";
 
 export default function DesignMenu() {
   const { user } = Auth.useUser();
@@ -72,6 +73,20 @@ export default function DesignMenu() {
       window.removeEventListener("beforeunload", beforeUnloadHandler);
     };
   }, [isCustomDirty, isTemplateDirty]);
+
+  useEffect(() => {
+    Router.events.on("routeChangeStart", () => {
+      setLoading(true);
+    });
+
+    Router.events.on("routeChangeComplete", () => {
+      setLoading(false);
+    });
+
+    Router.events.on("routeChangeError", () => {
+      setLoading(false);
+    });
+  });
 
   async function updateCustomization() {
     if (!menu) {

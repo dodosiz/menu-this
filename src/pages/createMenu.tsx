@@ -27,6 +27,7 @@ import { AccordionWithProductForm } from "@/components/create-menu/product/accor
 import { CategoryMobileForm } from "@/components/create-menu/category/categoryMobileForm";
 import { CategoryMobileMenu } from "@/components/create-menu/category/categoryMobileMenu";
 import { swapDates } from "@/components/create-menu/category/categoryFormHandler";
+import { Router } from "next/router";
 
 export default function CreateMenu() {
   const [isLoading, setLoading] = useState(false);
@@ -57,6 +58,20 @@ export default function CreateMenu() {
       setLoading(false);
     }
   }, [user]);
+
+  useEffect(() => {
+    Router.events.on("routeChangeStart", () => {
+      setLoading(true);
+    });
+
+    Router.events.on("routeChangeComplete", () => {
+      setLoading(false);
+    });
+
+    Router.events.on("routeChangeError", () => {
+      setLoading(false);
+    });
+  });
 
   return (
     <Layout user={user}>
