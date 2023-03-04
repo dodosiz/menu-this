@@ -29,6 +29,7 @@ interface DesignDrawerProps {
   setCustomDrawerOpen: (b: boolean) => void;
   setMenu: (m: Menu) => void;
   onUpdateCustomization: () => void;
+  setCustomDirty: (b: boolean) => void;
 }
 
 const FONTS = [
@@ -46,6 +47,7 @@ export function CustomizeDrawer({
   setCustomDrawerOpen,
   setMenu,
   onUpdateCustomization,
+  setCustomDirty,
 }: DesignDrawerProps) {
   return (
     <>
@@ -78,7 +80,7 @@ export function CustomizeDrawer({
           <DrawerHeader>Customize Menu</DrawerHeader>
           <form onSubmit={onUpdateCustomization} className={styles.form}>
             <DrawerBody className={styles.form_body}>
-              <Accordion allowToggle allowMultiple>
+              <Accordion allowMultiple>
                 <AccordionItem>
                   <h2>
                     <AccordionButton
@@ -100,6 +102,7 @@ export function CustomizeDrawer({
                           ...menu,
                           title_color: c,
                         });
+                        setCustomDirty(true);
                       }}
                     />
                     <Text className={styles.label}>
@@ -112,6 +115,7 @@ export function CustomizeDrawer({
                           ...menu,
                           name_color: c,
                         });
+                        setCustomDirty(true);
                       }}
                     />
                     <Text className={styles.label}>Description color</Text>
@@ -122,6 +126,7 @@ export function CustomizeDrawer({
                           ...menu,
                           description_color: dc,
                         });
+                        setCustomDirty(true);
                       }}
                     />
                     <Text className={styles.label}>Background color</Text>
@@ -132,6 +137,7 @@ export function CustomizeDrawer({
                           ...menu,
                           background_color: c,
                         });
+                        setCustomDirty(true);
                       }}
                     />
                   </AccordionPanel>
@@ -160,6 +166,7 @@ export function CustomizeDrawer({
                           ...menu,
                           title_margin: m,
                         });
+                        setCustomDirty(true);
                       }}
                     />
                     <Text className={styles.label}>
@@ -173,6 +180,7 @@ export function CustomizeDrawer({
                           ...menu,
                           name_margin: m,
                         });
+                        setCustomDirty(true);
                       }}
                     />
                     <Text className={styles.label}>
@@ -186,6 +194,7 @@ export function CustomizeDrawer({
                           ...menu,
                           name_title_margin: m,
                         });
+                        setCustomDirty(true);
                       }}
                     />
                   </AccordionPanel>
@@ -212,6 +221,7 @@ export function CustomizeDrawer({
                           ...menu,
                           title_size: s,
                         });
+                        setCustomDirty(true);
                       }}
                     />
                     <Text className={styles.label}>
@@ -225,6 +235,7 @@ export function CustomizeDrawer({
                           ...menu,
                           name_size: s,
                         });
+                        setCustomDirty(true);
                       }}
                     />
                     <Text className={styles.label}>
@@ -244,6 +255,7 @@ export function CustomizeDrawer({
                           ...menu,
                           description_size: s,
                         });
+                        setCustomDirty(true);
                       }}
                     />
                   </AccordionPanel>
@@ -270,6 +282,7 @@ export function CustomizeDrawer({
                           ...menu,
                           title_font: f,
                         });
+                        setCustomDirty(true);
                       }}
                     />
                     <Text className={styles.label}>Products font</Text>
@@ -281,6 +294,7 @@ export function CustomizeDrawer({
                           ...menu,
                           content_font: f,
                         });
+                        setCustomDirty(true);
                       }}
                     />
                   </AccordionPanel>

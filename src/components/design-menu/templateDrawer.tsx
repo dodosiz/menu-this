@@ -21,6 +21,7 @@ interface TemplateDrawerProps {
   setTemplateDrawerOpen: (b: boolean) => void;
   setMenu: (m: Menu) => void;
   onUpdateTemplate: () => void;
+  setTemplateDirty: (b: boolean) => void;
 }
 
 export function TemplateDrawer({
@@ -29,6 +30,7 @@ export function TemplateDrawer({
   isTemplateDrawerOpen,
   setTemplateDrawerOpen,
   onUpdateTemplate,
+  setTemplateDirty,
 }: TemplateDrawerProps) {
   return (
     <>
@@ -66,6 +68,7 @@ export function TemplateDrawer({
                 value={menu.template}
                 setValue={(v) => {
                   const updatedMenu = templateToMenu[v];
+                  setTemplateDirty(true);
                   setMenu({
                     ...menu,
                     ...updatedMenu,

@@ -13,6 +13,7 @@ import { DesignMenuData } from "./api/menu/get-menu-design/[userId]";
 import { TemplateDrawer } from "@/components/design-menu/templateDrawer";
 import { ViewMenuButtons } from "@/components/design-menu/viewMenuButtons";
 import { UpdateMenuData, UpdateTemplateData } from "@/lib/data/menu";
+import { Router } from "next/router";
 
 export default function DesignMenu() {
   const { user } = Auth.useUser();
@@ -23,6 +24,8 @@ export default function DesignMenu() {
   const [menu, setMenu] = useState<Menu | null>(null);
   const [isCustomDrawerOpen, setCustomDrawerOpen] = useState(false);
   const [isTemplateDrawerOpen, setTemplateDrawerOpen] = useState(false);
+  const [isCustomDirty, setCustomDirty] = useState(false);
+  const [isTemplateDirty, setTemplateDirty] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -43,6 +46,36 @@ export default function DesignMenu() {
       setLoading(false);
     }
   }, [user]);
+
+  useEffect(() => {
+    const confirmationMessage =
+      isCustomDirty && !isTemplateDirty
+        ? 'Leave without applying the changes in "Customize"?'
+        : !isCustomDirty && isTemplateDirty
+        ? 'Leave without applying the changes in "Template"?'
+        : 'Leave without applying the changes in "Customize" and "Template"?';
+    const beforeUnloadHandler = (e: BeforeUnloadEvent) => {
+      (e || window.event).returnValue = confirmationMessage;
+      return confirmationMessage;
+    };
+    const beforeRouteHandler = (url: string) => {
+      if (url !== window.location.pathname && !confirm(confirmationMessage)) {
+        Router.events.emit("routeChangeError");
+        throw `Route change to "${url}" was aborted.`;
+      }
+    };
+    if (isCustomDirty || isTemplateDirty) {
+      window.addEventListener("beforeunload", beforeUnloadHandler);
+      Router.events.on("routeChangeStart", beforeRouteHandler);
+    } else {
+      window.removeEventListener("beforeunload", beforeUnloadHandler);
+      Router.events.off("routeChangeStart", beforeRouteHandler);
+    }
+    return () => {
+      window.removeEventListener("beforeunload", beforeUnloadHandler);
+      Router.events.off("routeChangeStart", beforeRouteHandler);
+    };
+  }, [isCustomDirty, isTemplateDirty]);
 
   async function updateCustomization() {
     if (!menu) {
@@ -76,6 +109,7 @@ export default function DesignMenu() {
     if (response.status === 200) {
       setLoading(false);
       setCustomDrawerOpen(false);
+      setCustomDirty(false);
     } else if (response.status === 500) {
       setErrorMessage("Internal server error");
       setLoading(false);
@@ -103,6 +137,7 @@ export default function DesignMenu() {
     if (response.status === 200) {
       setLoading(false);
       setTemplateDrawerOpen(false);
+      setTemplateDirty(false);
     } else if (response.status === 500) {
       setErrorMessage("Internal server error");
       setLoading(false);
@@ -140,6 +175,7 @@ export default function DesignMenu() {
                     isTemplateDrawerOpen={isTemplateDrawerOpen}
                     setTemplateDrawerOpen={setTemplateDrawerOpen}
                     onUpdateTemplate={updateTemplate}
+                    setTemplateDirty={setTemplateDirty}
                   />
                 )}
                 {menu && (
@@ -149,6 +185,7 @@ export default function DesignMenu() {
                     menu={menu}
                     setMenu={setMenu}
                     onUpdateCustomization={updateCustomization}
+                    setCustomDirty={setCustomDirty}
                   />
                 )}
                 {menu && <ViewMenuButtons menuId={menu.id} />}

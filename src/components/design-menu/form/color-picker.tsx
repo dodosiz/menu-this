@@ -17,6 +17,7 @@ export function ColorPicker({ value, setValue }: ColorPickerProps) {
           backgroundColor={value}
           value={value}
           focusBorderColor={value}
+          onChange={(e) => setValue(e.target.value)}
           onClick={() => setShowTitleColorPicker(!showTitleColorPicker)}
         />
         {showTitleColorPicker && (
@@ -30,6 +31,7 @@ export function ColorPicker({ value, setValue }: ColorPickerProps) {
         <Input
           backgroundColor={value}
           value={value}
+          onChange={(e) => setValue(e.target.value)}
           focusBorderColor={value}
           onClick={() => setShowTitleColorPicker(!showTitleColorPicker)}
         />
