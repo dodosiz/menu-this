@@ -12,6 +12,7 @@ import { MenuViewer } from "@/components/design-menu/menuViewer";
 import { DesignMenuData } from "./api/menu/get-menu-design/[userId]";
 import { TemplateDrawer } from "@/components/design-menu/templateDrawer";
 import { ViewMenuButtons } from "@/components/design-menu/viewMenuButtons";
+import { UpdateMenuData, UpdateTemplateData } from "@/lib/data/menu";
 
 export default function DesignMenu() {
   const { user } = Auth.useUser();
@@ -20,6 +21,8 @@ export default function DesignMenu() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [productMap, setProductMap] = useState<ProductMap>({});
   const [menu, setMenu] = useState<Menu | null>(null);
+  const [isCustomDrawerOpen, setCustomDrawerOpen] = useState(false);
+  const [isTemplateDrawerOpen, setTemplateDrawerOpen] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -40,6 +43,71 @@ export default function DesignMenu() {
       setLoading(false);
     }
   }, [user]);
+
+  async function updateCustomization() {
+    if (!menu) {
+      return;
+    }
+    const data: UpdateMenuData = {
+      menuId: menu.id,
+      titleColor: menu.title_color,
+      nameColor: menu.name_color,
+      descriptionColor: menu.description_color,
+      backgroundColor: menu.background_color,
+      titleMargin: menu.title_margin,
+      nameMargin: menu.name_margin,
+      nameTitleMargin: menu.name_title_margin,
+      titleSize: menu.title_size,
+      nameSize: menu.name_size,
+      descriptionSize: menu.description_size,
+      titleFont: menu.title_font,
+      contentFont: menu.content_font,
+    };
+    const JSONdata = JSON.stringify(data);
+    const options = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSONdata,
+    };
+    setLoading(true);
+    const response = await fetch("/api/menu/update-menu", options);
+    if (response.status === 200) {
+      setLoading(false);
+      setCustomDrawerOpen(false);
+    } else if (response.status === 500) {
+      setErrorMessage("Internal server error");
+      setLoading(false);
+    }
+  }
+
+  async function updateTemplate() {
+    if (!menu) {
+      return;
+    }
+    const data: UpdateTemplateData = {
+      menuId: menu.id,
+      template: menu.template,
+    };
+    const JSONdata = JSON.stringify(data);
+    const options = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSONdata,
+    };
+    setLoading(true);
+    const response = await fetch("/api/menu/update-template", options);
+    if (response.status === 200) {
+      setLoading(false);
+      setTemplateDrawerOpen(false);
+    } else if (response.status === 500) {
+      setErrorMessage("Internal server error");
+      setLoading(false);
+    }
+  }
 
   return (
     <Layout user={user}>
@@ -67,18 +135,20 @@ export default function DesignMenu() {
               <GridItem colSpan={1}>
                 {menu && (
                   <TemplateDrawer
-                    setErrorMessage={setErrorMessage}
                     menu={menu}
                     setMenu={setMenu}
-                    setLoading={setLoading}
+                    isTemplateDrawerOpen={isTemplateDrawerOpen}
+                    setTemplateDrawerOpen={setTemplateDrawerOpen}
+                    onUpdateTemplate={updateTemplate}
                   />
                 )}
                 {menu && (
                   <CustomizeDrawer
-                    setErrorMessage={setErrorMessage}
+                    isCustomDrawerOpen={isCustomDrawerOpen}
+                    setCustomDrawerOpen={setCustomDrawerOpen}
                     menu={menu}
                     setMenu={setMenu}
-                    setLoading={setLoading}
+                    onUpdateCustomization={updateCustomization}
                   />
                 )}
                 {menu && <ViewMenuButtons menuId={menu.id} />}

@@ -16,20 +16,19 @@ import {
   IconButton,
   Text,
 } from "@chakra-ui/react";
-import { useState } from "react";
 import { MdDesignServices } from "react-icons/md";
 import styles from "@/styles/components/design-menu/customizeDrawer.module.css";
 import { Menu } from "@prisma/client";
-import { UpdateMenuData } from "@/lib/data/menu";
 import { ColorPicker } from "./form/color-picker";
 import { SliderInput } from "./form/slider-input";
 import { SelectInput } from "./form/select-input";
 
 interface DesignDrawerProps {
   menu: Menu;
+  isCustomDrawerOpen: boolean;
+  setCustomDrawerOpen: (b: boolean) => void;
   setMenu: (m: Menu) => void;
-  setErrorMessage: (m: string) => void;
-  setLoading: (b: boolean) => void;
+  onUpdateCustomization: () => void;
 }
 
 const FONTS = [
@@ -43,74 +42,18 @@ const FONTS = [
 
 export function CustomizeDrawer({
   menu,
+  isCustomDrawerOpen,
+  setCustomDrawerOpen,
   setMenu,
-  setErrorMessage,
-  setLoading,
+  onUpdateCustomization,
 }: DesignDrawerProps) {
-  const [isDrawerOpen, setDrawerOpen] = useState(false);
-  // colors
-  const [titleColor, setTitleColor] = useState(menu.title_color);
-  const [nameColor, setNameColor] = useState(menu.name_color);
-  const [descriptionColor, setDescriptionColor] = useState(
-    menu.description_color
-  );
-  const [backgroundColor, setBackgroundColor] = useState(menu.background_color);
-  // margins
-  const [titleMargin, setTitleMargin] = useState(menu.title_margin);
-  const [nameMargin, setNameMargin] = useState(menu.name_margin);
-  const [nameTitleMargin, setNameTitleMargin] = useState(
-    menu.name_title_margin
-  );
-  // sizes
-  const [titleSize, setTitleSize] = useState(menu.title_size);
-  const [nameSize, setNameSize] = useState(menu.name_size);
-  const [descriptionSize, setDescriptionSize] = useState(menu.description_size);
-  // fonts
-  const [titleFont, setTitleFont] = useState(menu.title_font);
-  const [contentFont, setContentFont] = useState(menu.content_font);
-
-  async function updateMenu() {
-    const data: UpdateMenuData = {
-      menuId: menu.id,
-      titleColor,
-      nameColor,
-      descriptionColor,
-      backgroundColor,
-      titleMargin,
-      nameMargin,
-      nameTitleMargin,
-      titleSize,
-      nameSize,
-      descriptionSize,
-      titleFont,
-      contentFont,
-    };
-    const JSONdata = JSON.stringify(data);
-    const options = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSONdata,
-    };
-    setLoading(true);
-    const response = await fetch("/api/menu/update-menu", options);
-    if (response.status === 200) {
-      setLoading(false);
-      setDrawerOpen(false);
-    } else if (response.status === 500) {
-      setErrorMessage("Internal server error");
-      setLoading(false);
-    }
-  }
-
   return (
     <>
       <Button
         leftIcon={<MdDesignServices />}
         colorScheme="teal"
         variant="outline"
-        onClick={() => setDrawerOpen(true)}
+        onClick={() => setCustomDrawerOpen(true)}
         className={`${styles.design_button} ${styles.design_button_desktop}`}
       >
         Customize
@@ -121,19 +64,19 @@ export function CustomizeDrawer({
         aria-label="design"
         variant="outline"
         size="sm"
-        onClick={() => setDrawerOpen(true)}
+        onClick={() => setCustomDrawerOpen(true)}
         className={`${styles.design_button} ${styles.design_button_mobile}`}
       />
       <Drawer
-        isOpen={isDrawerOpen}
+        isOpen={isCustomDrawerOpen}
         placement="right"
-        onClose={() => setDrawerOpen(false)}
+        onClose={() => setCustomDrawerOpen(false)}
       >
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>Customize Menu</DrawerHeader>
-          <form onSubmit={updateMenu} className={styles.form}>
+          <form onSubmit={onUpdateCustomization} className={styles.form}>
             <DrawerBody className={styles.form_body}>
               <Accordion allowToggle allowMultiple>
                 <AccordionItem>
@@ -151,9 +94,8 @@ export function CustomizeDrawer({
                   <AccordionPanel paddingLeft={0} pb={4}>
                     <Text className={styles.label}>Category name color</Text>
                     <ColorPicker
-                      value={titleColor}
+                      value={menu.title_color}
                       setValue={(c) => {
-                        setTitleColor(c);
                         setMenu({
                           ...menu,
                           title_color: c,
@@ -164,9 +106,8 @@ export function CustomizeDrawer({
                       Product name and price color
                     </Text>
                     <ColorPicker
-                      value={nameColor}
+                      value={menu.name_color}
                       setValue={(c) => {
-                        setNameColor(c);
                         setMenu({
                           ...menu,
                           name_color: c,
@@ -175,9 +116,8 @@ export function CustomizeDrawer({
                     />
                     <Text className={styles.label}>Description color</Text>
                     <ColorPicker
-                      value={descriptionColor}
+                      value={menu.description_color}
                       setValue={(dc) => {
-                        setDescriptionColor(dc);
                         setMenu({
                           ...menu,
                           description_color: dc,
@@ -186,9 +126,8 @@ export function CustomizeDrawer({
                     />
                     <Text className={styles.label}>Background color</Text>
                     <ColorPicker
-                      value={backgroundColor}
+                      value={menu.background_color}
                       setValue={(c) => {
-                        setBackgroundColor(c);
                         setMenu({
                           ...menu,
                           background_color: c,
@@ -215,9 +154,8 @@ export function CustomizeDrawer({
                     </Text>
                     <SliderInput
                       maxValue={400}
-                      value={titleMargin}
+                      value={menu.title_margin}
                       setValue={(m) => {
-                        setTitleMargin(m);
                         setMenu({
                           ...menu,
                           title_margin: m,
@@ -229,9 +167,8 @@ export function CustomizeDrawer({
                     </Text>
                     <SliderInput
                       maxValue={20}
-                      value={nameMargin}
+                      value={menu.name_margin}
                       setValue={(m) => {
-                        setNameMargin(m);
                         setMenu({
                           ...menu,
                           name_margin: m,
@@ -243,9 +180,8 @@ export function CustomizeDrawer({
                     </Text>
                     <SliderInput
                       maxValue={200}
-                      value={nameTitleMargin}
+                      value={menu.name_title_margin}
                       setValue={(m) => {
-                        setNameTitleMargin(m);
                         setMenu({
                           ...menu,
                           name_title_margin: m,
@@ -270,9 +206,8 @@ export function CustomizeDrawer({
                     <Text className={styles.label}>Category name size</Text>
                     <SelectInput
                       options={["xl", "lg", "md", "sm"]}
-                      value={titleSize}
+                      value={menu.title_size}
                       setValue={(s) => {
-                        setTitleSize(s);
                         setMenu({
                           ...menu,
                           title_size: s,
@@ -284,9 +219,8 @@ export function CustomizeDrawer({
                     </Text>
                     <SelectInput
                       options={["xl", "lg", "md", "sm"]}
-                      value={nameSize}
+                      value={menu.name_size}
                       setValue={(s) => {
-                        setNameSize(s);
                         setMenu({
                           ...menu,
                           name_size: s,
@@ -304,9 +238,8 @@ export function CustomizeDrawer({
                         "1em": "md",
                         "0.8em": "sm",
                       }}
-                      value={descriptionSize}
+                      value={menu.description_size}
                       setValue={(s) => {
-                        setDescriptionSize(s);
                         setMenu({
                           ...menu,
                           description_size: s,
@@ -331,9 +264,8 @@ export function CustomizeDrawer({
                     <Text className={styles.label}>Category title font</Text>
                     <SelectInput
                       options={FONTS}
-                      value={titleFont}
+                      value={menu.title_font}
                       setValue={(f) => {
-                        setTitleFont(f);
                         setMenu({
                           ...menu,
                           title_font: f,
@@ -343,9 +275,8 @@ export function CustomizeDrawer({
                     <Text className={styles.label}>Products font</Text>
                     <SelectInput
                       options={FONTS}
-                      value={contentFont}
+                      value={menu.content_font}
                       setValue={(f) => {
-                        setContentFont(f);
                         setMenu({
                           ...menu,
                           content_font: f,
@@ -361,12 +292,12 @@ export function CustomizeDrawer({
                 colorScheme="gray"
                 variant="outline"
                 mr={3}
-                onClick={() => setDrawerOpen(false)}
+                onClick={() => setCustomDrawerOpen(false)}
               >
                 Close
               </Button>
               <Button
-                onClick={updateMenu}
+                onClick={onUpdateCustomization}
                 type="submit"
                 variant="outline"
                 colorScheme="teal"

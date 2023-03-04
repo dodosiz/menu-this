@@ -9,60 +9,34 @@ import {
   DrawerOverlay,
   IconButton,
 } from "@chakra-ui/react";
-import { useState } from "react";
 import { HiTemplate } from "react-icons/hi";
 import styles from "@/styles/components/design-menu/templateDrawer.module.css";
 import { Menu } from "@prisma/client";
 import { RadioCard } from "./form/radio-card";
 import { templateToMenu } from "@/lib/data/template-data";
-import { UpdateTemplateData } from "@/lib/data/menu";
 
 interface TemplateDrawerProps {
   menu: Menu;
+  isTemplateDrawerOpen: boolean;
+  setTemplateDrawerOpen: (b: boolean) => void;
   setMenu: (m: Menu) => void;
-  setErrorMessage: (m: string) => void;
-  setLoading: (b: boolean) => void;
+  onUpdateTemplate: () => void;
 }
 
 export function TemplateDrawer({
   menu,
   setMenu,
-  setErrorMessage,
-  setLoading,
+  isTemplateDrawerOpen,
+  setTemplateDrawerOpen,
+  onUpdateTemplate,
 }: TemplateDrawerProps) {
-  const [isDrawerOpen, setDrawerOpen] = useState(false);
-
-  async function updateMenu() {
-    const data: UpdateTemplateData = {
-      menuId: menu.id,
-      template: menu.template,
-    };
-    const JSONdata = JSON.stringify(data);
-    const options = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSONdata,
-    };
-    setLoading(true);
-    const response = await fetch("/api/menu/update-template", options);
-    if (response.status === 200) {
-      setLoading(false);
-      setDrawerOpen(false);
-    } else if (response.status === 500) {
-      setErrorMessage("Internal server error");
-      setLoading(false);
-    }
-  }
-
   return (
     <>
       <Button
         leftIcon={<HiTemplate />}
         colorScheme="teal"
         variant="outline"
-        onClick={() => setDrawerOpen(true)}
+        onClick={() => setTemplateDrawerOpen(true)}
         className={`${styles.template_button} ${styles.template_button_desktop}`}
       >
         Template
@@ -73,19 +47,19 @@ export function TemplateDrawer({
         aria-label="template"
         variant="outline"
         size="sm"
-        onClick={() => setDrawerOpen(true)}
+        onClick={() => setTemplateDrawerOpen(true)}
         className={`${styles.template_button} ${styles.template_button_mobile}`}
       />
       <Drawer
-        isOpen={isDrawerOpen}
+        isOpen={isTemplateDrawerOpen}
         placement="right"
-        onClose={() => setDrawerOpen(false)}
+        onClose={() => setTemplateDrawerOpen(false)}
       >
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>Apply a template</DrawerHeader>
-          <form onSubmit={updateMenu} className={styles.form}>
+          <form onSubmit={onUpdateTemplate} className={styles.form}>
             <DrawerBody className={styles.form_body}>
               <RadioCard
                 options={Object.keys(templateToMenu)}
@@ -105,12 +79,12 @@ export function TemplateDrawer({
                 colorScheme="gray"
                 variant="outline"
                 mr={3}
-                onClick={() => setDrawerOpen(false)}
+                onClick={() => setTemplateDrawerOpen(false)}
               >
                 Close
               </Button>
               <Button
-                onClick={updateMenu}
+                onClick={onUpdateTemplate}
                 type="submit"
                 variant="outline"
                 colorScheme="teal"
