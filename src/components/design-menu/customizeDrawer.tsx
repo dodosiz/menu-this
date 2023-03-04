@@ -41,6 +41,15 @@ const FONTS = [
   "'Playfair Display', serif",
 ];
 
+const FONT_DISPLAY_OPTIONS = {
+  "'Montserrat', sans-serif": "Montserrat",
+  "'Open Sans', sans-serif": "Open Sans",
+  "'Raleway', sans-serif": "Raleway",
+  "'Roboto', sans-serif": "Roboto",
+  "'Poppins', sans-serif": "Poppins",
+  "'Playfair Display', serif": "Playfair Display",
+};
+
 export function CustomizeDrawer({
   menu,
   isCustomDrawerOpen,
@@ -276,6 +285,7 @@ export function CustomizeDrawer({
                     <Text className={styles.label}>Category title font</Text>
                     <SelectInput
                       options={FONTS}
+                      displayOption={FONT_DISPLAY_OPTIONS}
                       value={menu.title_font}
                       setValue={(f) => {
                         setMenu({
@@ -288,6 +298,7 @@ export function CustomizeDrawer({
                     <Text className={styles.label}>Products font</Text>
                     <SelectInput
                       options={FONTS}
+                      displayOption={FONT_DISPLAY_OPTIONS}
                       value={menu.content_font}
                       setValue={(f) => {
                         setMenu({
