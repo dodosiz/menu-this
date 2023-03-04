@@ -13,7 +13,6 @@ import { DesignMenuData } from "./api/menu/get-menu-design/[userId]";
 import { TemplateDrawer } from "@/components/design-menu/templateDrawer";
 import { ViewMenuButtons } from "@/components/design-menu/viewMenuButtons";
 import { UpdateMenuData, UpdateTemplateData } from "@/lib/data/menu";
-import { Router } from "next/router";
 
 export default function DesignMenu() {
   const { user } = Auth.useUser();
@@ -47,33 +46,30 @@ export default function DesignMenu() {
     }
   }, [user]);
 
+  function getConfirmMessage(isCustomDirty: boolean, isTemplateDirty: boolean) {
+    return isCustomDirty && !isTemplateDirty
+      ? 'Leave without applying the changes in "Customize"?'
+      : !isCustomDirty && isTemplateDirty
+      ? 'Leave without applying the changes in "Template"?'
+      : 'Leave without applying the changes in "Customize" and "Template"?';
+  }
+
   useEffect(() => {
-    const confirmationMessage =
-      isCustomDirty && !isTemplateDirty
-        ? 'Leave without applying the changes in "Customize"?'
-        : !isCustomDirty && isTemplateDirty
-        ? 'Leave without applying the changes in "Template"?'
-        : 'Leave without applying the changes in "Customize" and "Template"?';
     const beforeUnloadHandler = (e: BeforeUnloadEvent) => {
+      const confirmationMessage = getConfirmMessage(
+        isCustomDirty,
+        isTemplateDirty
+      );
       (e || window.event).returnValue = confirmationMessage;
       return confirmationMessage;
     };
-    const beforeRouteHandler = (url: string) => {
-      if (url !== window.location.pathname && !confirm(confirmationMessage)) {
-        Router.events.emit("routeChangeError");
-        throw `Route change to "${url}" was aborted.`;
-      }
-    };
     if (isCustomDirty || isTemplateDirty) {
       window.addEventListener("beforeunload", beforeUnloadHandler);
-      Router.events.on("routeChangeStart", beforeRouteHandler);
     } else {
       window.removeEventListener("beforeunload", beforeUnloadHandler);
-      Router.events.off("routeChangeStart", beforeRouteHandler);
     }
     return () => {
       window.removeEventListener("beforeunload", beforeUnloadHandler);
-      Router.events.off("routeChangeStart", beforeRouteHandler);
     };
   }, [isCustomDirty, isTemplateDirty]);
 
@@ -145,7 +141,15 @@ export default function DesignMenu() {
   }
 
   return (
-    <Layout user={user}>
+    <Layout
+      user={user}
+      unsavedChanges={isTemplateDirty || isCustomDirty}
+      confirmMessage={getConfirmMessage(isCustomDirty, isTemplateDirty)}
+      discardUnsavedChanges={() => {
+        setTemplateDirty(false);
+        setCustomDirty(false);
+      }}
+    >
       <>
         {!!errorMessage.length && (
           <ErrorNotification

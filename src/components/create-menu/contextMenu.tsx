@@ -63,7 +63,11 @@ export function ContextMenu(props: CategoryContextMenuProps) {
               <Button onClick={props.onCloseConfirm} variant="outline">
                 Cancel
               </Button>
-              <Button onClick={props.onDeleteConfirmed} colorScheme="red">
+              <Button
+                variant="outline"
+                onClick={props.onDeleteConfirmed}
+                colorScheme="red"
+              >
                 Delete
               </Button>
             </ButtonGroup>

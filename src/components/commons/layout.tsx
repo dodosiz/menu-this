@@ -16,19 +16,39 @@ import {
 import { useRouter } from "next/router";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { useState } from "react";
+import { LeaveAlert } from "./leave-alert";
 
 interface LayoutProps {
   children: React.ReactElement;
   user: User | null;
+  unsavedChanges?: boolean;
+  discardUnsavedChanges?: () => void;
+  confirmMessage?: string;
 }
 
-export function Layout({ children, user }: LayoutProps) {
+export function Layout({
+  children,
+  user,
+  confirmMessage,
+  unsavedChanges,
+  discardUnsavedChanges,
+}: LayoutProps) {
   const router = useRouter();
   const [isOpen, setOpen] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [nextRoute, setNextRoute] = useState("");
   async function handleLogout() {
     setOpen(false);
     await supabase.auth.signOut();
     router.push("/api/logout");
+  }
+  function routeWithConfirm(route: string) {
+    if (unsavedChanges) {
+      setShowConfirm(true);
+      setNextRoute(route);
+    } else {
+      router.push(route);
+    }
   }
   return (
     <>
@@ -43,12 +63,23 @@ export function Layout({ children, user }: LayoutProps) {
       </Head>
       <nav className={styles.navigation}>
         <div className={styles.logo}>
-          <Link as={NextLink} href="/">
+          <Link
+            as={NextLink}
+            onClick={(e) => {
+              e.preventDefault();
+              routeWithConfirm("/");
+            }}
+            href="/"
+          >
             MENU THIS
           </Link>
         </div>
         <div className={styles.desktop_menu}>
-          <MenuItems user={user} handleLogout={handleLogout} />
+          <MenuItems
+            user={user}
+            handleLogout={handleLogout}
+            routeWithConfirm={routeWithConfirm}
+          />
         </div>
         <div className={styles.mobile_menu}>
           <IconButton
@@ -77,12 +108,24 @@ export function Layout({ children, user }: LayoutProps) {
                   setOpen={setOpen}
                   user={user}
                   handleLogout={handleLogout}
+                  routeWithConfirm={routeWithConfirm}
                 />
               </DrawerBody>
             </DrawerContent>
           </Drawer>
         </div>
       </nav>
+      {showConfirm && (
+        <LeaveAlert
+          confirmMessage={confirmMessage ?? ""}
+          isOpen={showConfirm}
+          onClose={() => setShowConfirm(false)}
+          onConfirm={() => {
+            discardUnsavedChanges?.();
+            router.push(nextRoute);
+          }}
+        />
+      )}
       <main className={styles.main}>{children}</main>
     </>
   );
@@ -92,26 +135,40 @@ interface MenuItemsProps {
   user: User | null;
   handleLogout: () => void;
   setOpen?: (b: boolean) => void;
+  routeWithConfirm: (r: string) => void;
 }
 
-function MenuItems({ user, handleLogout, setOpen }: MenuItemsProps) {
+function MenuItems({
+  user,
+  handleLogout,
+  setOpen,
+  routeWithConfirm,
+}: MenuItemsProps) {
   return (
     <>
       {user && (
         <>
           <Link
-            onClick={() => setOpen?.(false)}
+            onClick={(e) => {
+              e.preventDefault();
+              setOpen?.(false);
+              routeWithConfirm("/designMenu");
+            }}
+            href="/"
             className={styles.nav_item}
             as={NextLink}
-            href="/designMenu"
           >
             Design Menu
           </Link>
           <Link
-            onClick={() => setOpen?.(false)}
+            onClick={(e) => {
+              e.preventDefault();
+              setOpen?.(false);
+              routeWithConfirm("/createMenu");
+            }}
+            href="/"
             className={styles.nav_item}
             as={NextLink}
-            href="/createMenu"
           >
             Create Menu
           </Link>
