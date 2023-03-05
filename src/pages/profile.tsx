@@ -82,8 +82,8 @@ export default function Profile() {
   return (
     <Layout user={user}>
       <>
+        {isLoading && <LoadingPage fullHeight={true} />}
         <Container>
-          {isLoading && <LoadingPage fullHeight={true} />}
           {!user && !isLoading && <UnauthorizedPage />}
           {user && !isLoading && (
             <Box className={styles.profile_page}>
