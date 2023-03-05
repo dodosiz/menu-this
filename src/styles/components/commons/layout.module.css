@@ -12,6 +12,7 @@
 .main {
   padding-right: 10px;
   padding-left: 10px;
+  min-height: 100vh;
 }
 
 .logo {
@@ -32,6 +33,16 @@
 
 .mobile_menu {
   display: none;
+}
+
+.footer {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: white;
+  border-top: 1px solid rgba(211, 211, 211, 0.5);
+  color: var(--main-color);
+  text-align: center;
 }
 
 @media (max-width: 700px) {

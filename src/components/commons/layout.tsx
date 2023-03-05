@@ -127,6 +127,12 @@ export function Layout({
         />
       )}
       <main className={styles.main}>{children}</main>
+      <footer className={styles.footer}>
+        <p>
+          <Link href="/privacyPolicy">Privacy Policy</Link>
+        </p>
+        <p>&copy; {new Date().getFullYear()} deinlog.com</p>
+      </footer>
     </>
   );
 }
