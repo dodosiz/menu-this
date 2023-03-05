@@ -53,7 +53,7 @@ export function Layout({
   return (
     <>
       <Head>
-        <title>Menu This</title>
+        <title>Deinlog</title>
         <meta
           name="description"
           content="Create the online menu for your business"
@@ -71,7 +71,7 @@ export function Layout({
             }}
             href="/"
           >
-            MENU THIS
+            DEINLOG
           </Link>
         </div>
         <div className={styles.desktop_menu}>
@@ -100,7 +100,7 @@ export function Layout({
                 className={styles.logo}
               >
                 <Link onClick={() => setOpen(false)} as={NextLink} href="/">
-                  MENU THIS
+                  DEINLOG
                 </Link>
               </DrawerHeader>
               <DrawerBody className={styles.drawer_body}>

@@ -25,7 +25,7 @@ export default function MenuView({
   return (
     <>
       <Head>
-        <title>Menu This</title>
+        <title>Deinlog</title>
         <meta
           name="description"
           content="Create the online menu for your business"
