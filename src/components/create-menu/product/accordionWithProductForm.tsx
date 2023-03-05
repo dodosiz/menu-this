@@ -1,5 +1,5 @@
 import { ProductMap } from "@/pages/api/menu/get-menu-data/[userId]";
-import { SECONDARY_COLOR, MAIN_COLOR } from "@/styles/constants";
+import { SECONDARY_COLOR, MAIN_COLOR } from "@/constants";
 import {
   Accordion,
   AccordionButton,

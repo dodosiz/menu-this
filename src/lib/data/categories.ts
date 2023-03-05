@@ -1,3 +1,4 @@
+import { CATEGORY_LIMIT } from "@/constants";
 import { prisma } from "../core/prisma";
 
 export async function getCategories(userId: string) {
@@ -24,6 +25,12 @@ export interface CreateCategoryData {
 export async function createCategory(
   data: CreateCategoryData
 ): Promise<CreateCategoryResult> {
+  const categoryCount = await prisma.category.count({
+    where: { userId: data.userId },
+  });
+  if (categoryCount >= CATEGORY_LIMIT) {
+    throw new Error("Max limit reached");
+  }
   const category = await prisma.category.create({
     data: {
       userId: data.userId,

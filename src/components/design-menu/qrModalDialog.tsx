@@ -1,4 +1,4 @@
-import { SECONDARY_COLOR } from "@/styles/constants";
+import { SECONDARY_COLOR } from "@/constants";
 import {
   Box,
   Button,

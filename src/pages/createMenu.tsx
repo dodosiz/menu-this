@@ -9,6 +9,7 @@ import {
   TabPanels,
   Tabs,
   Text,
+  Tooltip,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import styles from "@/styles/createMenu.module.css";
@@ -28,6 +29,7 @@ import { CategoryMobileForm } from "@/components/create-menu/category/categoryMo
 import { CategoryMobileMenu } from "@/components/create-menu/category/categoryMobileMenu";
 import { swapDates } from "@/components/create-menu/category/categoryFormHandler";
 import { Router } from "next/router";
+import { CATEGORY_LIMIT } from "@/constants";
 
 export default function CreateMenu() {
   const [isLoading, setLoading] = useState(false);
@@ -205,15 +207,26 @@ export default function CreateMenu() {
                       <AiOutlineArrowRight />
                     </Text>
                   )}
-                  <IconButton
-                    colorScheme="teal"
-                    variant="ghost"
-                    aria-label="Create new"
-                    icon={<IoMdAdd />}
-                    isDisabled={isCreateNewCategory}
-                    onClick={() => setCreateNewCategory(true)}
-                    size="md"
-                  />
+                  <Tooltip
+                    label={
+                      categories.length >= CATEGORY_LIMIT
+                        ? `Maximum limit of ${CATEGORY_LIMIT} categories reached`
+                        : undefined
+                    }
+                  >
+                    <IconButton
+                      colorScheme="teal"
+                      variant="ghost"
+                      aria-label="Create new"
+                      icon={<IoMdAdd />}
+                      isDisabled={
+                        isCreateNewCategory ||
+                        categories.length >= CATEGORY_LIMIT
+                      }
+                      onClick={() => setCreateNewCategory(true)}
+                      size="md"
+                    />
+                  </Tooltip>
                 </TabList>
                 <Divider />
                 <TabPanels>

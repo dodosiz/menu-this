@@ -10,6 +10,7 @@ import {
   NumberInputField,
   NumberInputStepper,
   Textarea,
+  Tooltip,
 } from "@chakra-ui/react";
 import { IoMdAdd, IoMdCheckmark } from "react-icons/io";
 import styles from "@/styles/components/create-menu/product/productForm.module.css";
@@ -22,6 +23,7 @@ import {
   UpdateProductData,
 } from "@/lib/data/products";
 import { RxCross2 } from "react-icons/rx";
+import { PRODUCT_LIMIT } from "@/constants";
 
 interface ProductFormProps {
   categoryId: string;
@@ -194,16 +196,29 @@ export function ProductForm({
             />
           </GridItem>
           <GridItem colSpan={{ base: 5, sm: 5, md: 1 }}>
-            <Button
-              isDisabled={!name.length || !price.length}
-              type="submit"
-              leftIcon={editedProduct ? <IoMdCheckmark /> : <IoMdAdd />}
-              colorScheme="teal"
-              variant="outline"
-              isLoading={isLoading}
+            <Tooltip
+              label={
+                productMap[categoryId].length >= PRODUCT_LIMIT
+                  ? `Maximum limit of ${PRODUCT_LIMIT} products reached`
+                  : undefined
+              }
             >
-              {editedProduct ? "Update" : "Add Product"}
-            </Button>
+              <Button
+                isDisabled={
+                  !name.length ||
+                  !price.length ||
+                  (!editedProduct &&
+                    productMap[categoryId].length >= PRODUCT_LIMIT)
+                }
+                type="submit"
+                leftIcon={editedProduct ? <IoMdCheckmark /> : <IoMdAdd />}
+                colorScheme="teal"
+                variant="outline"
+                isLoading={isLoading}
+              >
+                {editedProduct ? "Update" : "Add Product"}
+              </Button>
+            </Tooltip>
             {editedProduct && setEditedProductId && (
               <Button
                 leftIcon={<RxCross2 />}

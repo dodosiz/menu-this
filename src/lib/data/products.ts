@@ -1,3 +1,4 @@
+import { PRODUCT_LIMIT } from "@/constants";
 import { prisma } from "../core/prisma";
 
 export interface CreateProductResult {
@@ -15,6 +16,14 @@ export interface CreateProductData {
 export async function createProduct(
   data: CreateProductData
 ): Promise<CreateProductResult> {
+  const productCount = await prisma.product.count({
+    where: {
+      categoryId: data.categoryId,
+    },
+  });
+  if (productCount >= PRODUCT_LIMIT) {
+    throw new Error("Max limit reached");
+  }
   const newProduct = await prisma.product.create({
     data: {
       description: data.description,

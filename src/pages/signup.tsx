@@ -2,7 +2,7 @@ import { supabase } from "@/lib/core/supabase";
 import { Auth, ThemeSupa } from "@supabase/auth-ui-react";
 import { useRouter } from "next/router";
 import { Container } from "@chakra-ui/react";
-import { LOGO_COLOR, LOGO_COLOR_LIGHT } from "@/styles/constants";
+import { LOGO_COLOR, LOGO_COLOR_LIGHT } from "@/constants";
 import { Layout } from "@/components/commons/layout";
 
 export default function Login() {

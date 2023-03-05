@@ -37,6 +37,7 @@ import { RiDeleteBin6Line, RiEditLine } from "react-icons/ri";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { Category } from "@prisma/client";
 import { AiOutlineArrowDown, AiOutlineArrowUp } from "react-icons/ai";
+import { CATEGORY_LIMIT } from "@/constants";
 
 interface CategoryMobileFormProps extends CategoryFormProps {
   currentCategory: Category | null;
@@ -165,6 +166,7 @@ export function CategoryMobileForm(props: CategoryMobileFormProps) {
               <MenuItem
                 onClick={() => setCategoryModalOpen(true)}
                 icon={<IoMdAdd />}
+                disabled={props.categories.length >= CATEGORY_LIMIT}
               >
                 Create
               </MenuItem>
