@@ -78,14 +78,6 @@ export default function DesignMenu() {
     Router.events.on("routeChangeStart", () => {
       setLoading(true);
     });
-
-    Router.events.on("routeChangeComplete", () => {
-      setLoading(false);
-    });
-
-    Router.events.on("routeChangeError", () => {
-      setLoading(false);
-    });
   });
 
   async function updateCustomization() {
