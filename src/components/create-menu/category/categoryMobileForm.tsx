@@ -216,6 +216,7 @@ export function CategoryMobileForm(props: CategoryMobileFormProps) {
                 onChange={(e) => setCategoryTitle(e.target.value)}
                 variant="outline"
                 focusBorderColor="teal.200"
+                maxLength={50}
               />
             </FormControl>
           </ModalBody>

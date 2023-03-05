@@ -158,6 +158,7 @@ export function ProductForm({
               name="name"
               required={true}
               value={name}
+              maxLength={100}
               placeholder="Product name"
               focusBorderColor="teal.200"
               onChange={(e) => setName(e.target.value)}
@@ -189,6 +190,7 @@ export function ProductForm({
               placeholder="Write the product description here..."
               focusBorderColor="teal.200"
               resize="vertical"
+              maxLength={250}
             />
           </GridItem>
           <GridItem colSpan={{ base: 5, sm: 5, md: 1 }}>

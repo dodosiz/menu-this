@@ -10,42 +10,42 @@ generator client {
 
 model Category {
   id        String     @default(cuid()) @id
-  userId    String
-  title     String
+  userId    String     @db.VarChar(50)
+  title     String     @db.VarChar(50)
   products  Product[]
   created_at    DateTime  @default(now())
 }
 
 model Product {
   id            String     @default(cuid()) @id
-  name          String
-  description   String
+  name          String     @db.VarChar(100)
+  description   String     @db.VarChar(250)
   price         Float
   Category      Category  @relation(fields: [categoryId], references: [id])
-  categoryId    String
+  categoryId    String    @db.VarChar(50)
   created_at    DateTime  @default(now())
 }
 
 model Menu {
   id                       String     @default(cuid()) @id
   userId                   String
-  title_color              String
-  name_color               String
-  description_color        String
+  title_color              String     @db.VarChar(50)
+  name_color               String     @db.VarChar(50)
+  description_color        String     @db.VarChar(50)
   title_margin             Int
   name_margin              Int
   name_title_margin        Int
-  title_size               String 
-  name_size                String
-  description_size         String
-  title_font               String
-  content_font             String 
-  background_color         String
-  template                 String?
+  title_size               String     @db.VarChar(50)
+  name_size                String     @db.VarChar(50)
+  description_size         String     @db.VarChar(50)
+  title_font               String     @db.VarChar(50)
+  content_font             String     @db.VarChar(50)
+  background_color         String     @db.VarChar(50)
+  template                 String?    @db.VarChar(50)
 }
 
 model DeleteRequest {
   id            String     @default(cuid()) @id
-  userId        String
-  created_at    DateTime  @default(now())
+  userId        String     @db.VarChar(50)
+  created_at    DateTime   @default(now())
 }

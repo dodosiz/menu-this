@@ -69,6 +69,7 @@ export function CategoryForm(props: CategoryFormProps) {
             focusBorderColor="teal.200"
             marginRight="2"
             name="category"
+            maxLength={50}
             className={styles.category_input}
           />
           <IconButton
