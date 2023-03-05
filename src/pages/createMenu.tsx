@@ -21,7 +21,7 @@ import { ProductsList } from "@/components/create-menu/product/productsList";
 import { Auth } from "@supabase/auth-ui-react";
 import { MenuData, ProductMap } from "./api/menu/get-menu-data/[userId]";
 import { LoadingPage } from "@/components/commons/loadingPage";
-import { ErrorNotification } from "@/components/commons/error-notification";
+import { Notification } from "@/components/commons/notification";
 import { AiOutlineArrowRight, AiOutlineArrowUp } from "react-icons/ai";
 import { AccordionWithProductForm } from "@/components/create-menu/product/accordionWithProductForm";
 import { CategoryMobileForm } from "@/components/create-menu/category/categoryMobileForm";
@@ -77,7 +77,8 @@ export default function CreateMenu() {
     <Layout user={user}>
       <>
         {!!errorMessage.length && (
-          <ErrorNotification
+          <Notification
+            status="error"
             message={errorMessage}
             onClose={() => setErrorMessage("")}
           />

@@ -12,6 +12,7 @@ import { useRef } from "react";
 
 interface LeaveAlertProps {
   confirmMessage: string;
+  title: string;
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
@@ -20,6 +21,7 @@ interface LeaveAlertProps {
 export function LeaveAlert({
   confirmMessage,
   isOpen,
+  title,
   onClose,
   onConfirm,
 }: LeaveAlertProps) {
@@ -35,7 +37,7 @@ export function LeaveAlert({
       <AlertDialogOverlay />
 
       <AlertDialogContent>
-        <AlertDialogHeader>Unsaved changes</AlertDialogHeader>
+        <AlertDialogHeader>{title}</AlertDialogHeader>
         <AlertDialogCloseButton />
         <AlertDialogBody>{confirmMessage}</AlertDialogBody>
         <AlertDialogFooter>

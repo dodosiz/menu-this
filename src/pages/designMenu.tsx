@@ -1,4 +1,4 @@
-import { ErrorNotification } from "@/components/commons/error-notification";
+import { Notification } from "@/components/commons/notification";
 import { Layout } from "@/components/commons/layout";
 import { Category, Menu } from "@prisma/client";
 import { Auth } from "@supabase/auth-ui-react";
@@ -167,7 +167,8 @@ export default function DesignMenu() {
     >
       <>
         {!!errorMessage.length && (
-          <ErrorNotification
+          <Notification
+            status="error"
             message={errorMessage}
             onClose={() => setErrorMessage("")}
           />

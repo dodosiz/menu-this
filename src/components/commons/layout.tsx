@@ -4,6 +4,7 @@ import NextLink from "next/link";
 import { User } from "@supabase/supabase-js";
 import { supabase } from "@/lib/core/supabase";
 import {
+  Button,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -12,11 +13,18 @@ import {
   DrawerOverlay,
   IconButton,
   Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { useState } from "react";
+import { CgProfile } from "react-icons/cg";
+import { useState, useEffect } from "react";
 import { LeaveAlert } from "./leave-alert";
+import { UserStatus } from "@/lib/data/user";
+import { Notification } from "./notification";
 
 interface LayoutProps {
   children: React.ReactElement;
@@ -36,11 +44,56 @@ export function Layout({
   const router = useRouter();
   const [isOpen, setOpen] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showDeleteUserConfirm, setShowDeleteUserConfirm] = useState(false);
   const [nextRoute, setNextRoute] = useState("");
+  const [deletionRequested, setDeletionRequested] = useState(false);
+  const [showDeleteNotification, setShowDeleteNotification] = useState(false);
+  const [showCancelDeleteNotification, setShowCancelDeleteNotification] =
+    useState(false);
+  useEffect(() => {
+    if (user) {
+      fetch(`/api/user/${user.id}`)
+        .then((res) => res.json())
+        .then((data: UserStatus) => {
+          setDeletionRequested(data.requested);
+        });
+    }
+  }, [user]);
   async function handleLogout() {
     setOpen(false);
     await supabase.auth.signOut();
     router.push("/api/logout");
+  }
+  async function handleDeleteUser(userId: string) {
+    const JSONdata = JSON.stringify({ id: userId });
+    const options = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSONdata,
+    };
+    setShowDeleteUserConfirm(false);
+    const response = await fetch("/api/user/request-delete", options);
+    if (response.status === 200) {
+      setDeletionRequested(true);
+      setShowDeleteNotification(true);
+    }
+  }
+  async function handleCancelDeleteUser(userId: string) {
+    const JSONdata = JSON.stringify({ id: userId });
+    const options = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSONdata,
+    };
+    const response = await fetch("/api/user/cancel-delete", options);
+    if (response.status === 200) {
+      setDeletionRequested(false);
+      setShowCancelDeleteNotification(true);
+    }
   }
   function routeWithConfirm(route: string) {
     if (unsavedChanges) {
@@ -77,7 +130,10 @@ export function Layout({
         <div className={styles.desktop_menu}>
           <MenuItems
             user={user}
+            deletionRequested={deletionRequested}
+            handleCancelDeleteUser={handleCancelDeleteUser}
             handleLogout={handleLogout}
+            handleDeleteUser={() => setShowDeleteUserConfirm(true)}
             routeWithConfirm={routeWithConfirm}
           />
         </div>
@@ -107,7 +163,10 @@ export function Layout({
                 <MenuItems
                   setOpen={setOpen}
                   user={user}
+                  deletionRequested={deletionRequested}
+                  handleCancelDeleteUser={handleCancelDeleteUser}
                   handleLogout={handleLogout}
+                  handleDeleteUser={() => setShowDeleteUserConfirm(true)}
                   routeWithConfirm={routeWithConfirm}
                 />
               </DrawerBody>
@@ -117,6 +176,7 @@ export function Layout({
       </nav>
       {showConfirm && (
         <LeaveAlert
+          title="Unsaved changes"
           confirmMessage={confirmMessage ?? ""}
           isOpen={showConfirm}
           onClose={() => setShowConfirm(false)}
@@ -124,6 +184,31 @@ export function Layout({
             discardUnsavedChanges?.();
             router.push(nextRoute);
           }}
+        />
+      )}
+      {showDeleteUserConfirm && (
+        <LeaveAlert
+          title="Request delete profile"
+          confirmMessage="Are you sure you want to request a profile deletion?"
+          isOpen={showDeleteUserConfirm}
+          onClose={() => setShowDeleteUserConfirm(false)}
+          onConfirm={() => {
+            handleDeleteUser(user!.id);
+          }}
+        />
+      )}
+      {showDeleteNotification && (
+        <Notification
+          status="info"
+          message="Your profile will be deleted in the next hours, you can change your decission anytime before."
+          onClose={() => setShowDeleteNotification(false)}
+        />
+      )}
+      {showCancelDeleteNotification && (
+        <Notification
+          status="info"
+          message="The profile deletion has been canceled, we are happy to have you back!"
+          onClose={() => setShowCancelDeleteNotification(false)}
         />
       )}
       <main className={styles.main}>{children}</main>
@@ -139,14 +224,20 @@ export function Layout({
 
 interface MenuItemsProps {
   user: User | null;
+  deletionRequested: boolean;
   handleLogout: () => void;
+  handleDeleteUser: (userId: string) => void;
+  handleCancelDeleteUser: (userId: string) => void;
   setOpen?: (b: boolean) => void;
   routeWithConfirm: (r: string) => void;
 }
 
 function MenuItems({
   user,
+  deletionRequested,
   handleLogout,
+  handleDeleteUser,
+  handleCancelDeleteUser,
   setOpen,
   routeWithConfirm,
 }: MenuItemsProps) {
@@ -178,9 +269,34 @@ function MenuItems({
           >
             Create Menu
           </Link>
-          <button className={styles.nav_item} onClick={handleLogout}>
-            Sign Out
-          </button>
+          <Menu>
+            <MenuButton
+              leftIcon={<CgProfile />}
+              fontWeight="normal"
+              variant="none"
+              className={styles.nav_item}
+              as={Button}
+            >
+              Profile
+            </MenuButton>
+            <MenuList>
+              <MenuItem
+                color="red"
+                onClick={() => {
+                  if (deletionRequested) {
+                    handleCancelDeleteUser(user.id);
+                  } else {
+                    handleDeleteUser(user.id);
+                  }
+                }}
+              >
+                {deletionRequested
+                  ? "Cancel delete profile request"
+                  : "Request delete profile"}
+              </MenuItem>
+              <MenuItem onClick={handleLogout}>Sign Out</MenuItem>
+            </MenuList>
+          </Menu>
         </>
       )}
       {!user && (

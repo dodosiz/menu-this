@@ -43,3 +43,9 @@ model Menu {
   background_color         String
   template                 String?
 }
+
+model DeleteRequest {
+  id            String     @default(cuid()) @id
+  userId        String
+  created_at    DateTime  @default(now())
+}

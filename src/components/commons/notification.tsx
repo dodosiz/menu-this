@@ -9,16 +9,17 @@ import {
 import styles from "@/styles/components/commons/notification.module.css";
 
 interface NotificationProps {
+  status: "error" | "info";
   message: string;
   onClose: () => void;
 }
 
-export function ErrorNotification({ message, onClose }: NotificationProps) {
+export function Notification({ message, onClose, status }: NotificationProps) {
   return (
-    <Alert className={styles.notification} status="error">
+    <Alert className={styles.notification} status={status}>
       <AlertIcon />
       <Box className={styles.message}>
-        <AlertTitle>Error</AlertTitle>
+        {status === "error" && <AlertTitle>Error</AlertTitle>}
         <AlertDescription>{message}</AlertDescription>
       </Box>
       <CloseButton
