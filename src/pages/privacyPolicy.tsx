@@ -88,11 +88,7 @@ export default function PrivacyPolicy() {
               When you visit, use, or navigate our Services, we may process
               personal information depending on how you interact with
               deinlog.com and the Services, the choices you make, and the
-              products and features you use. Click{" "}
-              <Link as={NextLink} href="#personalinfo">
-                here
-              </Link>{" "}
-              to learn more.
+              products and features you use.
             </Box>
             <Box as="b">Do we process any sensitive personal information?</Box>
             <Box>We do not process sensitive personal information.</Box>
@@ -104,7 +100,7 @@ export default function PrivacyPolicy() {
               our Services, communicate with you, for security and fraud
               prevention, and to comply with law. We may also process your
               information for other purposes with your consent. We process your
-              information only when we have a valid legal reason to do so. Click
+              information only when we have a valid legal reason to do so. Click{" "}
               <Link as={NextLink} href="#infouse">
                 here
               </Link>{" "}
@@ -149,17 +145,13 @@ export default function PrivacyPolicy() {
             </Box>
             <Box as="b">How do you exercise your rights?</Box>
             <Box>
-              The easiest way to exercise your rights is by filling out our data
-              subject request form available{" "}
-              <Link href="/contact" as={NextLink}>
-                here
-              </Link>
-              . We will consider and act upon any request in accordance with
-              applicable data protection laws.
+              The easiest way to exercise your rights is by sending us an email
+              at info&lt;at&gt;deinlog.com. We will consider and act upon any
+              request in accordance with applicable data protection laws.
             </Box>
             <Box>
-              Want to learn more about what Theodossios Aswestopoulos does with
-              any information we collect? Click{" "}
+              Want to learn more about what deinlog.com does with any
+              information we collect? Click{" "}
               <Link as={NextLink} href="#toc">
                 here
               </Link>{" "}
@@ -681,13 +673,13 @@ export default function PrivacyPolicy() {
               data protection authorities are available here:
               https://www.edoeb.admin.ch/edoeb/en/home.html.
             </Box>
-            <Box>
-              Withdrawing your consent: If we are relying on your consent to
-              process your personal information, which may be express and/or
-              implied consent depending on the applicable law, you have the
-              right to withdraw your consent at any time. You can withdraw your
-              consent at any time by contacting us by using the contact details
-              provided in the section{" "}
+            <Box id="withdrawconsent">
+              <Box as="b">Withdrawing your consent:</Box> If we are relying on
+              your consent to process your personal information, which may be
+              express and/or implied consent depending on the applicable law,
+              you have the right to withdraw your consent at any time. You can
+              withdraw your consent at any time by contacting us by using the
+              contact details provided in the section{" "}
               <Link as={NextLink} href="#contact">
                 HOW CAN YOU CONTACT US ABOUT THIS NOTICE?
               </Link>{" "}
@@ -1132,8 +1124,8 @@ export default function PrivacyPolicy() {
               definition consumer applies to you, we must adhere to certain
               rights and obligations regarding your personal data. The
               information we collect, use, and disclose about you will vary
-              depending on how you interact with Theodossios Aswestopoulos and
-              our Services. To find out more, please visit the following links:
+              depending on how you interact with deinlog.com and our Services.
+              To find out more, please visit the following links:
             </Box>
             <UnorderedList>
               <ListItem>
