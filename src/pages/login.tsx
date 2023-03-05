@@ -18,6 +18,7 @@ export default function Login() {
           supabaseClient={supabase}
           view="sign_in"
           socialLayout="horizontal"
+          providers={["google"]}
           appearance={{
             theme: ThemeSupa,
             variables: {
