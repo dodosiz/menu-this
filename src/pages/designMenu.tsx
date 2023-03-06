@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { ProductMap } from "./api/menu/get-menu-data/[userId]";
 import { LoadingPage } from "@/components/commons/loadingPage";
 import { UnauthorizedPage } from "@/components/commons/unauthorizedPage";
-import { Box, Grid, GridItem, Heading, Image, Tooltip } from "@chakra-ui/react";
+import { Box, Grid, GridItem, Heading, Tooltip } from "@chakra-ui/react";
 import { CustomizeDrawer } from "@/components/design-menu/customizeDrawer";
 import { MenuViewer } from "@/components/design-menu/menuViewer";
 import { DesignMenuData } from "./api/menu/get-menu-design/[userId]";
@@ -20,6 +20,7 @@ import {
 import { Router } from "next/router";
 import { BASE_MENU, templateToMenu } from "@/lib/data/template-data";
 import styles from "@/styles/designMenu.module.css";
+import Image from "next/image";
 
 export default function DesignMenu() {
   const { user } = Auth.useUser();
@@ -225,8 +226,10 @@ export default function DesignMenu() {
                     <GridItem colSpan={{ base: 3, md: 1 }} key={templateName}>
                       <Tooltip hasArrow bg="teal.500" label={templateName}>
                         <Image
+                          width={600}
+                          height={600}
                           className={styles.template_image}
-                          src={`/templates/${templateName}.png`}
+                          src={`/templates/${templateName}.PNG`}
                           alt={templateName}
                           onClick={() => {
                             const newMenu = {
