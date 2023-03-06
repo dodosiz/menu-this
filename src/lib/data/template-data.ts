@@ -1,5 +1,20 @@
 import { Menu } from "@prisma/client";
 
+export const BASE_MENU: Omit<Menu, "userId" | "id" | "template"> = {
+  title_color: "#319795",
+  name_color: "#2d3748",
+  description_color: "#718096",
+  title_margin: 10,
+  name_margin: 2,
+  name_title_margin: 5,
+  title_size: "lg",
+  name_size: "md",
+  description_size: "1em",
+  title_font: "'Open Sans', sans-serif",
+  content_font: "'Raleway', sans-serif",
+  background_color: "#fdfdfd",
+};
+
 export const templateToMenu: { [key: string]: Partial<Menu> } = {
   light: {
     background_color: "#E3F6FF",

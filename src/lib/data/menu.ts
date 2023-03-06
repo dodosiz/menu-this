@@ -2,34 +2,37 @@ import { Menu } from "@prisma/client";
 import { prisma } from "../core/prisma";
 import { templateToMenu } from "./template-data";
 
-export async function getMenuByUserIdOrCreateDefault(
-  userId: string
-): Promise<Menu> {
+export async function getMenuByUserId(userId: string): Promise<Menu | null> {
   const menu = await prisma.menu.findFirst({
     where: {
       userId,
     },
   });
-  if (!menu) {
-    const newMenu = await prisma.menu.create({
-      data: {
-        title_color: "#319795",
-        name_color: "#2d3748",
-        description_color: "#718096",
-        title_margin: 10,
-        name_margin: 2,
-        name_title_margin: 5,
-        title_size: "lg",
-        name_size: "md",
-        description_size: "1em",
-        title_font: "'Open Sans', sans-serif",
-        content_font: "'Raleway', sans-serif",
-        background_color: "#fdfdfd",
-        userId,
-      },
-    });
-    return newMenu;
-  }
+  return menu;
+}
+
+export interface CreateMenuData extends UpdateMenuData {
+  userId: string;
+}
+
+export async function createMenu(data: CreateMenuData) {
+  const menu = await prisma.menu.create({
+    data: {
+      title_color: data.titleColor,
+      name_color: data.nameColor,
+      description_color: data.descriptionColor,
+      background_color: data.backgroundColor,
+      title_margin: data.titleMargin,
+      name_margin: data.nameMargin,
+      name_title_margin: data.nameTitleMargin,
+      title_size: data.titleSize,
+      name_size: data.nameSize,
+      description_size: data.descriptionSize,
+      title_font: data.titleFont,
+      content_font: data.contentFont,
+      userId: data.userId,
+    },
+  });
   return menu;
 }
 

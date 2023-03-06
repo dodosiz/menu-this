@@ -6,14 +6,20 @@ import { useEffect, useState } from "react";
 import { ProductMap } from "./api/menu/get-menu-data/[userId]";
 import { LoadingPage } from "@/components/commons/loadingPage";
 import { UnauthorizedPage } from "@/components/commons/unauthorizedPage";
-import { Grid, GridItem } from "@chakra-ui/react";
+import { Box, Grid, GridItem, Heading, Image, Tooltip } from "@chakra-ui/react";
 import { CustomizeDrawer } from "@/components/design-menu/customizeDrawer";
 import { MenuViewer } from "@/components/design-menu/menuViewer";
 import { DesignMenuData } from "./api/menu/get-menu-design/[userId]";
 import { TemplateDrawer } from "@/components/design-menu/templateDrawer";
 import { ViewMenuButtons } from "@/components/design-menu/viewMenuButtons";
-import { UpdateMenuData, UpdateTemplateData } from "@/lib/data/menu";
+import {
+  CreateMenuData,
+  UpdateMenuData,
+  UpdateTemplateData,
+} from "@/lib/data/menu";
 import { Router } from "next/router";
+import { BASE_MENU, templateToMenu } from "@/lib/data/template-data";
+import styles from "@/styles/designMenu.module.css";
 
 export default function DesignMenu() {
   const { user } = Auth.useUser();
@@ -119,6 +125,46 @@ export default function DesignMenu() {
     }
   }
 
+  async function createMenu(menu: Menu) {
+    if (!user) {
+      return;
+    }
+    const data: CreateMenuData = {
+      menuId: menu.id,
+      titleColor: menu.title_color,
+      nameColor: menu.name_color,
+      descriptionColor: menu.description_color,
+      backgroundColor: menu.background_color,
+      titleMargin: menu.title_margin,
+      nameMargin: menu.name_margin,
+      nameTitleMargin: menu.name_title_margin,
+      titleSize: menu.title_size,
+      nameSize: menu.name_size,
+      descriptionSize: menu.description_size,
+      titleFont: menu.title_font,
+      contentFont: menu.content_font,
+      userId: user.id,
+    };
+    const JSONdata = JSON.stringify(data);
+    const options = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSONdata,
+    };
+    const response = await fetch("/api/menu/create-menu", options);
+    if (response.status === 200) {
+      const result = await response.json();
+      setMenu({
+        ...menu,
+        id: result.id,
+      });
+    } else if (response.status === 500) {
+      setErrorMessage("Internal server error");
+    }
+  }
+
   async function updateTemplate() {
     if (!menu) {
       return;
@@ -168,39 +214,66 @@ export default function DesignMenu() {
         <div>
           {isLoading && <LoadingPage fullHeight={true} />}
           {!user && !isLoading && <UnauthorizedPage />}
-          {user && !isLoading && (
+          {!menu && user && (
+            <>
+              <Heading size="xl" as="h1">
+                Choose a template
+              </Heading>
+              <Box padding={5}>
+                <Grid templateColumns="repeat(3, 1fr)" gap={10}>
+                  {Object.keys(templateToMenu).map((templateName) => (
+                    <GridItem colSpan={{ base: 3, md: 1 }} key={templateName}>
+                      <Tooltip hasArrow bg="teal.500" label={templateName}>
+                        <Image
+                          className={styles.template_image}
+                          src={`/templates/${templateName}.png`}
+                          alt={templateName}
+                          onClick={() => {
+                            const newMenu = {
+                              id: "",
+                              userId: user.id,
+                              ...BASE_MENU,
+                              ...templateToMenu[templateName],
+                              template: templateName,
+                            };
+                            setMenu(newMenu);
+                            createMenu(newMenu);
+                          }}
+                        />
+                      </Tooltip>
+                    </GridItem>
+                  ))}
+                </Grid>
+              </Box>
+            </>
+          )}
+          {user && !isLoading && menu && (
             <Grid templateColumns="repeat(5, 1fr)" gap={4}>
               <GridItem colSpan={4}>
-                {menu && (
-                  <MenuViewer
-                    categories={categories}
-                    productMap={productMap}
-                    menu={menu}
-                  />
-                )}
+                <MenuViewer
+                  categories={categories}
+                  productMap={productMap}
+                  menu={menu}
+                />
               </GridItem>
               <GridItem colSpan={1}>
-                {menu && (
-                  <TemplateDrawer
-                    menu={menu}
-                    setMenu={setMenu}
-                    isTemplateDrawerOpen={isTemplateDrawerOpen}
-                    setTemplateDrawerOpen={setTemplateDrawerOpen}
-                    onUpdateTemplate={updateTemplate}
-                    setTemplateDirty={setTemplateDirty}
-                  />
-                )}
-                {menu && (
-                  <CustomizeDrawer
-                    isCustomDrawerOpen={isCustomDrawerOpen}
-                    setCustomDrawerOpen={setCustomDrawerOpen}
-                    menu={menu}
-                    setMenu={setMenu}
-                    onUpdateCustomization={updateCustomization}
-                    setCustomDirty={setCustomDirty}
-                  />
-                )}
-                {menu && <ViewMenuButtons menuId={menu.id} />}
+                <TemplateDrawer
+                  menu={menu}
+                  setMenu={setMenu}
+                  isTemplateDrawerOpen={isTemplateDrawerOpen}
+                  setTemplateDrawerOpen={setTemplateDrawerOpen}
+                  onUpdateTemplate={updateTemplate}
+                  setTemplateDirty={setTemplateDirty}
+                />
+                <CustomizeDrawer
+                  isCustomDrawerOpen={isCustomDrawerOpen}
+                  setCustomDrawerOpen={setCustomDrawerOpen}
+                  menu={menu}
+                  setMenu={setMenu}
+                  onUpdateCustomization={updateCustomization}
+                  setCustomDirty={setCustomDirty}
+                />
+                <ViewMenuButtons menuId={menu.id} />
               </GridItem>
             </Grid>
           )}

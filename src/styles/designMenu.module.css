@@ -1,0 +1,4 @@
+.template_image:hover {
+  box-shadow: rgba(49, 151, 149, 0.16) 0px 6px 9px,
+    rgba(49, 151, 149, 0.23) 0px 6px 9px;
+}
