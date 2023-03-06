@@ -1,12 +1,12 @@
 import { getCategories } from "@/lib/data/categories";
-import { getMenuByUserIdOrCreateDefault } from "@/lib/data/menu";
+import { getMenuByUserId } from "@/lib/data/menu";
 import { getProductsInCategories } from "@/lib/data/products";
 import { Category, Menu } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { ProductMap } from "../get-menu-data/[userId]";
 
 export interface DesignMenuData {
-  menu: Menu;
+  menu: Menu | null;
   categories: Category[];
   productMap: ProductMap;
 }
@@ -17,7 +17,7 @@ export default async function handler(
 ) {
   const { userId } = req.query;
   // design part
-  const menu = await getMenuByUserIdOrCreateDefault(userId as string);
+  const menu = await getMenuByUserId(userId as string);
   // data part
   const categories = await getCategories(userId as string);
   const categoryIds = categories.map((c) => c.id);
@@ -29,5 +29,6 @@ export default async function handler(
     );
     productMap[category.id] = productsInCategory;
   }
-  res.status(200).json({ menu, categories, productMap });
+  const data: DesignMenuData = { menu, categories, productMap };
+  res.status(200).json(data);
 }
