@@ -83,7 +83,6 @@ export default function Login() {
               leftIcon={<FcGoogle />}
               variant="outline"
               colorScheme="teal"
-              isLoading={loading}
               onClick={logInWithGoogle}
             >
               Log in with Google

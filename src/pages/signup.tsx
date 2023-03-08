@@ -11,8 +11,9 @@ import { validateEmail } from "@/components/utils";
 import { FcGoogle } from "react-icons/fc";
 
 export default function SignUp() {
-  const { user, session } = Auth.useUser();
   const router = useRouter();
+  const [user, setUser] = useState(Auth.useUser().user);
+  const [session, setSession] = useState(Auth.useUser().session);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
@@ -35,6 +36,8 @@ export default function SignUp() {
       email: email,
       password: password,
     });
+    setUser(data.user);
+    setSession(data.session);
     setLoading(false);
     if (error) {
       setErrorMessage(error.message);
@@ -100,7 +103,6 @@ export default function SignUp() {
                 leftIcon={<FcGoogle />}
                 variant="outline"
                 colorScheme="teal"
-                isLoading={loading}
                 onClick={signUpWithGoogle}
               >
                 Sign up with Google
