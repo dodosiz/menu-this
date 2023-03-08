@@ -66,7 +66,7 @@ export default function SignUp() {
         )}
         {!!user && !session && (
           <Heading className={styles.signup_heading} size="xl" as="h1">
-            Please verify your email address,
+            Please confirm your email address.
           </Heading>
         )}
         {!user && !session && (
