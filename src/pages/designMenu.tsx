@@ -25,6 +25,7 @@ import Image from "next/image";
 export default function DesignMenu() {
   const { user } = Auth.useUser();
   const [isLoading, setLoading] = useState(false);
+  const [isRouteLoading, setRouteLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [categories, setCategories] = useState<Category[]>([]);
   const [productMap, setProductMap] = useState<ProductMap>({});
@@ -83,15 +84,15 @@ export default function DesignMenu() {
 
   useEffect(() => {
     Router.events.on("routeChangeStart", () => {
-      setLoading(true);
+      setRouteLoading(true);
     });
 
     Router.events.on("routeChangeComplete", () => {
-      setLoading(false);
+      setRouteLoading(false);
     });
 
     Router.events.on("routeChangeError", () => {
-      setLoading(false);
+      setRouteLoading(false);
     });
   });
 
@@ -221,8 +222,8 @@ export default function DesignMenu() {
           />
         )}
         <div>
-          {isLoading && <LoadingPage fullHeight={true} />}
-          {!user && !isLoading && <UnauthorizedPage />}
+          {(isLoading || isRouteLoading) && <LoadingPage fullHeight={true} />}
+          {!user && !isLoading && !isRouteLoading && <UnauthorizedPage />}
           {!menu && user && (
             <>
               <Heading size="xl" as="h1">
@@ -258,7 +259,7 @@ export default function DesignMenu() {
               </Box>
             </>
           )}
-          {user && !isLoading && menu && (
+          {user && !isLoading && !isRouteLoading && menu && (
             <Grid templateColumns="repeat(5, 1fr)" gap={4}>
               <GridItem colSpan={4}>
                 <MenuViewer

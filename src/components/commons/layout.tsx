@@ -184,7 +184,7 @@ function MenuItems({ user, setOpen, routeWithConfirm }: MenuItemsProps) {
           as={NextLink}
           href="/login"
         >
-          Sign In
+          Log In
         </Link>
       )}
       {!user && (

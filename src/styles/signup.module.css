@@ -1,0 +1,10 @@
+.signup_heading {
+  color: var(--logo-color);
+  margin: 5% 0;
+}
+
+.signup_form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

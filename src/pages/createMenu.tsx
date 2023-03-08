@@ -33,6 +33,7 @@ import { CATEGORY_LIMIT } from "@/constants";
 
 export default function CreateMenu() {
   const [isLoading, setLoading] = useState(false);
+  const [isRouteLoading, setRouteLoading] = useState(false);
   const [isCreateNewCategory, setCreateNewCategory] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [productMap, setProductMap] = useState<ProductMap>({});
@@ -63,15 +64,15 @@ export default function CreateMenu() {
 
   useEffect(() => {
     Router.events.on("routeChangeStart", () => {
-      setLoading(true);
+      setRouteLoading(true);
     });
 
     Router.events.on("routeChangeComplete", () => {
-      setLoading(false);
+      setRouteLoading(false);
     });
 
     Router.events.on("routeChangeError", () => {
-      setLoading(false);
+      setRouteLoading(false);
     });
   });
 
@@ -86,9 +87,9 @@ export default function CreateMenu() {
           />
         )}
         <div className={styles.create_menu}>
-          {isLoading && <LoadingPage fullHeight={true} />}
-          {!user && !isLoading && <UnauthorizedPage />}
-          {user && !isLoading && (
+          {(isLoading || isRouteLoading) && <LoadingPage fullHeight={true} />}
+          {!user && !isLoading && !isRouteLoading && <UnauthorizedPage />}
+          {user && !isLoading && !isRouteLoading && (
             <>
               <Heading size="xl" as="h1">
                 Create your menu
