@@ -117,7 +117,7 @@ export default function Profile() {
                 leftIcon={<GoSignOut />}
                 onClick={handleLogout}
               >
-                Sign Out
+                Log Out
               </Button>
             </Box>
           )}

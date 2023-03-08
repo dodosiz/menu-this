@@ -7,6 +7,8 @@ import { FormEvent, useState } from "react";
 import styles from "@/styles/signup.module.css";
 import { PasswordInput } from "@/components/commons/passwordInput";
 import { Notification } from "@/components/commons/notification";
+import { validateEmail } from "@/components/utils";
+import { FcGoogle } from "react-icons/fc";
 
 export default function SignUp() {
   const { user, session } = Auth.useUser();
@@ -32,6 +34,17 @@ export default function SignUp() {
     const { data, error } = await supabase.auth.signUp({
       email: email,
       password: password,
+    });
+    setLoading(false);
+    if (error) {
+      setErrorMessage(error.message);
+    }
+  }
+  async function signUpWithGoogle(e: FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
     });
     setLoading(false);
     if (error) {
@@ -81,18 +94,21 @@ export default function SignUp() {
                 isLoading={loading}
                 type="submit"
               >
-                Sign Up
+                Sign up
+              </Button>
+              <Button
+                leftIcon={<FcGoogle />}
+                variant="outline"
+                colorScheme="teal"
+                isLoading={loading}
+                onClick={signUpWithGoogle}
+              >
+                Sign up with Google
               </Button>
             </form>
           </Container>
         )}
       </>
     </Layout>
-  );
-}
-
-function validateEmail(email: string) {
-  return email.match(
-    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   );
 }
