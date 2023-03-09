@@ -9,7 +9,7 @@ import {
 import styles from "@/styles/components/commons/notification.module.css";
 
 interface NotificationProps {
-  status: "error" | "info";
+  status: "error" | "info" | "success";
   message: string;
   onClose: () => void;
 }

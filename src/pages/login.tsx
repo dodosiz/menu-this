@@ -69,7 +69,11 @@ export default function Login() {
               type="email"
               placeholder="Email"
             />
-            <PasswordInput value={password} setValue={setPassword} />
+            <PasswordInput
+              placeholder="Enter password"
+              value={password}
+              setValue={setPassword}
+            />
             <Button
               isDisabled={isSubmitDisabled()}
               variant="outline"
