@@ -1,29 +1,48 @@
 import { Auth } from "@supabase/auth-ui-react";
-import { Avatar, Box, Button, Container, Stack, Text } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  Grid,
+  GridItem,
+  Heading,
+  Progress,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import { Layout } from "@/components/commons/layout";
 import { UnauthorizedPage } from "@/components/commons/unauthorizedPage";
 import { useEffect, useState } from "react";
-import { UserStatus } from "@/lib/data/user";
+import { CategoryProductCount, UserStatus } from "@/lib/data/user";
 import { LeaveAlert } from "@/components/commons/leave-alert";
 import { Notification } from "@/components/commons/notification";
 import { LoadingPage } from "@/components/commons/loadingPage";
 import { supabase } from "@/lib/core/supabase";
-import { useRouter } from "next/router";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import { Router, useRouter } from "next/router";
+import { RiDeleteBin6Line, RiLockPasswordFill } from "react-icons/ri";
 import { GoSignOut } from "react-icons/go";
 import { TiCancel } from "react-icons/ti";
 import styles from "@/styles/profile.module.css";
+import { CATEGORY_LIMIT, PRODUCT_LIMIT } from "@/constants";
 
 export default function Profile() {
   const { user } = Auth.useUser();
   const [deletionRequested, setDeletionRequested] = useState(false);
+  const [categoryProductCount, setCategoryProductCount] =
+    useState<CategoryProductCount>({});
   const [showDeleteNotification, setShowDeleteNotification] = useState(false);
   const [showCancelDeleteNotification, setShowCancelDeleteNotification] =
     useState(false);
   const [showDeleteUserConfirm, setShowDeleteUserConfirm] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const [isRouteLoading, setRouteLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
+
+  function getNumberOfCategories() {
+    return Object.keys(categoryProductCount).length;
+  }
 
   useEffect(() => {
     setLoading(true);
@@ -32,6 +51,7 @@ export default function Profile() {
         .then((res) => res.json())
         .then((data: UserStatus) => {
           setDeletionRequested(data.requested);
+          setCategoryProductCount(data.categoryProductCount);
           setLoading(false);
         })
         .catch(() => {
@@ -40,6 +60,20 @@ export default function Profile() {
         });
     }
   }, [user]);
+
+  useEffect(() => {
+    Router.events.on("routeChangeStart", () => {
+      setRouteLoading(true);
+    });
+
+    Router.events.on("routeChangeComplete", () => {
+      setRouteLoading(false);
+    });
+
+    Router.events.on("routeChangeError", () => {
+      setRouteLoading(false);
+    });
+  });
 
   async function handleDeleteUser(userId: string) {
     const JSONdata = JSON.stringify({ id: userId });
@@ -82,46 +116,88 @@ export default function Profile() {
   return (
     <Layout user={user}>
       <>
-        {isLoading && <LoadingPage fullHeight={true} />}
-        <Container>
-          {!user && !isLoading && <UnauthorizedPage />}
-          {user && !isLoading && (
-            <Box className={styles.profile_page}>
-              <Avatar bg="teal.500" />
-              <Text>
-                Logged in as: <Text as="i">{user.email}</Text>
-              </Text>
-              <Button
-                width="100%"
-                color={deletionRequested ? "teal.500" : "red.500"}
-                variant="outline"
-                leftIcon={
-                  deletionRequested ? <TiCancel /> : <RiDeleteBin6Line />
-                }
-                onClick={() => {
-                  if (deletionRequested) {
-                    handleCancelDeleteUser(user.id);
-                  } else {
-                    setShowDeleteUserConfirm(true);
+        {(isLoading || isRouteLoading) && <LoadingPage fullHeight={true} />}
+        {!user && !isLoading && !isRouteLoading && <UnauthorizedPage />}
+        {user && !isLoading && !isRouteLoading && (
+          <Grid templateColumns="repeat(6, 1fr)" gap={4}>
+            <GridItem className={styles.grid_item} colSpan={{ base: 6, md: 2 }}>
+              <Stack spacing={2}>
+                <Avatar alignSelf="center" size="xl" bg="teal.500" />
+                <Text>
+                  Logged in as: <Text as="i">{user.email}</Text>
+                </Text>
+                <Button
+                  width="100%"
+                  color={deletionRequested ? "teal.500" : "red.500"}
+                  variant="outline"
+                  leftIcon={
+                    deletionRequested ? <TiCancel /> : <RiDeleteBin6Line />
                   }
-                }}
-              >
-                {deletionRequested
-                  ? "Cancel delete profile request"
-                  : "Request delete profile"}
-              </Button>
-              <Button
-                width="100%"
-                color="grey"
-                variant="outline"
-                leftIcon={<GoSignOut />}
-                onClick={handleLogout}
-              >
-                Log Out
-              </Button>
-            </Box>
-          )}
-        </Container>
+                  onClick={() => {
+                    if (deletionRequested) {
+                      handleCancelDeleteUser(user.id);
+                    } else {
+                      setShowDeleteUserConfirm(true);
+                    }
+                  }}
+                >
+                  {deletionRequested
+                    ? "Cancel delete profile request"
+                    : "Request delete profile"}
+                </Button>
+                <Button
+                  width="100%"
+                  color="teal"
+                  variant="outline"
+                  leftIcon={<RiLockPasswordFill />}
+                  onClick={() => router.push("/updateUser")}
+                >
+                  Change Password
+                </Button>
+                <Button
+                  width="100%"
+                  color="teal"
+                  variant="outline"
+                  leftIcon={<GoSignOut />}
+                  onClick={handleLogout}
+                >
+                  Log Out
+                </Button>
+              </Stack>
+            </GridItem>
+            <GridItem className={styles.grid_item} colSpan={{ base: 6, md: 4 }}>
+              <Heading className={styles.heading} size="xl" as="h1">
+                Profile data
+              </Heading>
+              <Stack gap={1} marginTop={5}>
+                <Progress
+                  colorScheme="teal"
+                  size="lg"
+                  value={(getNumberOfCategories() / CATEGORY_LIMIT) * 100}
+                />
+                <Text fontSize="sm">{`Categories created: ${getNumberOfCategories()} out of ${CATEGORY_LIMIT}`}</Text>
+              </Stack>
+              {Object.keys(categoryProductCount).map((categoryId) => {
+                return (
+                  <Stack key={categoryId} gap={1} marginTop={5}>
+                    <Progress
+                      colorScheme="teal"
+                      size="lg"
+                      value={
+                        (categoryProductCount[categoryId].count /
+                          PRODUCT_LIMIT) *
+                        100
+                      }
+                    />
+                    <Text fontSize="sm">
+                      {`Products created for category "${categoryProductCount[categoryId].title}": ${categoryProductCount[categoryId].count} out of ${PRODUCT_LIMIT}`}
+                    </Text>
+                  </Stack>
+                );
+              })}
+            </GridItem>
+          </Grid>
+        )}
         {showDeleteUserConfirm && user && (
           <LeaveAlert
             title="Request delete profile"

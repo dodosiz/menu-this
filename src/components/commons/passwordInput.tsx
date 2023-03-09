@@ -11,6 +11,7 @@ import { RxEyeClosed } from "react-icons/rx";
 interface PasswordInputProps {
   password?: string;
   isRepeat?: boolean;
+  placeholder: string;
   value: string;
   setValue: (v: string) => void;
 }
@@ -31,7 +32,7 @@ export function PasswordInput(props: PasswordInputProps) {
         type={show ? "text" : "password"}
         value={props.value}
         onChange={(e) => props.setValue(e.target.value)}
-        placeholder={props.isRepeat ? "Repeat password" : "Enter password"}
+        placeholder={props.placeholder}
       />
       <InputRightElement width="4.5rem">
         <IconButton

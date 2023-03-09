@@ -31,6 +31,9 @@ export default function SignUp() {
   }
   async function signUp(e: FormEvent) {
     e.preventDefault();
+    if (isSubmitDisabled()) {
+      return;
+    }
     setLoading(true);
     const { data, error } = await supabase.auth.signUp({
       email: email,
@@ -83,8 +86,13 @@ export default function SignUp() {
                 type="email"
                 placeholder="Email"
               />
-              <PasswordInput value={password} setValue={setPassword} />
               <PasswordInput
+                placeholder="Enter password"
+                value={password}
+                setValue={setPassword}
+              />
+              <PasswordInput
+                placeholder="Repeat password"
                 value={repeatPassword}
                 setValue={setRepeatPassword}
                 password={password}
