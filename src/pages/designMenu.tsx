@@ -203,6 +203,18 @@ export default function DesignMenu() {
     }
   }
 
+  function setBackground(categoryId: string, background: string | null) {
+    const updatedCategories = categories.map((c) => {
+      return c.id === categoryId
+        ? {
+            ...c,
+            background,
+          }
+        : c;
+    });
+    setCategories(updatedCategories);
+  }
+
   return (
     <Layout
       user={user}
@@ -264,8 +276,10 @@ export default function DesignMenu() {
               <GridItem colSpan={4}>
                 <MenuViewer
                   categories={categories}
+                  setBackground={setBackground}
                   productMap={productMap}
                   menu={menu}
+                  inEdit={true}
                 />
               </GridItem>
               <GridItem colSpan={1}>

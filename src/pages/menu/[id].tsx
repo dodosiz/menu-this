@@ -1,6 +1,5 @@
 import { MenuViewer } from "@/components/design-menu/menuViewer";
 import { getMenuViewData, MenuViewData } from "@/lib/data/menu-view";
-import { Container } from "@chakra-ui/react";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 
@@ -33,13 +32,7 @@ export default function MenuView({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Container>
-        <MenuViewer
-          categories={categories}
-          productMap={productMap}
-          menu={menu}
-        />
-      </Container>
+      <MenuViewer categories={categories} productMap={productMap} menu={menu} />
     </>
   );
 }

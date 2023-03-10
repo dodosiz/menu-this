@@ -12,6 +12,7 @@ model Category {
   id        String     @default(cuid()) @id
   userId    String     @db.VarChar(50)
   title     String     @db.VarChar(50)
+  background     String?     @db.VarChar(200)
   products  Product[]
   created_at    DateTime  @default(now())
 }

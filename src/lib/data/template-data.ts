@@ -65,3 +65,22 @@ export const templateToMenu: { [key: string]: Partial<Menu> } = {
     content_font: "'Open Sans', sans-serif",
   },
 };
+
+export const BACKGROUND_IMG: { [k: string]: { path: string; alt: string } } = {
+  burger: {
+    path: "/background/burger.jpg",
+    alt: "A juicy burger",
+  },
+  burger_2: {
+    path: "/background/burger_2.jpg",
+    alt: "Double beef burger",
+  },
+  red_wine: {
+    path: "/background/red_wine.jpg",
+    alt: "Red wine",
+  },
+  white_wine: {
+    path: "/background/white_wine.jpg",
+    alt: "White wine",
+  },
+};
