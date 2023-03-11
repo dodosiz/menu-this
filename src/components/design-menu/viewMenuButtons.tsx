@@ -70,7 +70,7 @@ export function ViewMenuButtons({
         Save Changes
       </Button>
       <IconButton
-        icon={<ImQrcode />}
+        icon={<FaRegSave />}
         colorScheme="teal"
         aria-label="save changes"
         variant="outline"
