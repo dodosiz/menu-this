@@ -83,4 +83,32 @@ export const BACKGROUND_IMG: { [k: string]: { path: string; alt: string } } = {
     path: "/background/white_wine.jpg",
     alt: "White wine",
   },
+  beer: {
+    path: "/background/beer.jpg",
+    alt: "Blonde beer",
+  },
+  beer_2: {
+    path: "/background/beer_2.jpg",
+    alt: "Beer variety",
+  },
+  bread: {
+    path: "/background/bread.jpg",
+    alt: "Healthy bread",
+  },
+  coffee: {
+    path: "/background/coffee.jpg",
+    alt: "Cold coffee",
+  },
+  coffee_2: {
+    path: "/background/coffee_2.jpg",
+    alt: "Warm coffee",
+  },
+  hot_dog: {
+    path: "/background/hot_dog.jpg",
+    alt: "Hot dogs",
+  },
+  spaghetti: {
+    path: "/background/spaghetti.jpg",
+    alt: "Spaghetti",
+  },
 };
