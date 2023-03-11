@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import styles from "@/styles/designMenu.module.css";
 import { CategoryView } from "@/lib/data/menu-view";
+import { useEffect, useState } from "react";
 
 interface ChoosePhotoModalProps {
   categoryId: string | undefined;
@@ -29,6 +30,16 @@ export function ChoosePhotoModal({
   categories,
 }: ChoosePhotoModalProps) {
   const category = categories.find((c) => c.id === categoryId);
+  const [selectedBackground, setSelectedBackground] = useState<string | null>(
+    category ? category.background : null
+  );
+  useEffect(() => {
+    setTimeout(() => {
+      window.document
+        .getElementById("selected")
+        ?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  });
   return (
     <Modal
       size="4xl"
@@ -47,12 +58,20 @@ export function ChoosePhotoModal({
             {Object.keys(BACKGROUND_IMG).map((id) => (
               <GridItem colSpan={{ base: 3, md: 1 }} key={id}>
                 <Image
-                  className={styles.template_image}
+                  className={
+                    id === selectedBackground
+                      ? styles.template_image_active
+                      : styles.template_image
+                  }
+                  id={id === selectedBackground ? "selected" : id}
                   src={BACKGROUND_IMG[id].path}
                   alt={BACKGROUND_IMG[id].alt}
                   onClick={() => {
-                    setBackground?.(categoryId!!, id);
-                    setCategoryId(undefined);
+                    if (id === selectedBackground) {
+                      setSelectedBackground(null);
+                    } else {
+                      setSelectedBackground(id);
+                    }
                   }}
                 />
               </GridItem>
@@ -62,15 +81,14 @@ export function ChoosePhotoModal({
 
         <ModalFooter>
           <Button
-            marginRight="10px"
             variant="outline"
             onClick={() => {
-              setBackground?.(categoryId!!, null);
+              setBackground?.(categoryId!!, selectedBackground);
               setCategoryId(undefined);
             }}
-            colorScheme="red"
+            colorScheme="teal"
           >
-            Remove Background
+            Apply
           </Button>
         </ModalFooter>
       </ModalContent>
