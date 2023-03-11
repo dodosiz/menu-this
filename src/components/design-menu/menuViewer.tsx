@@ -66,6 +66,7 @@ export function MenuViewer({
             <Image
               marginTop={i > 0 ? title_margin : 0}
               position="relative"
+              marginBottom={name_margin}
               width="100vw"
               src={BACKGROUND_IMG[category.background].path}
               alt={BACKGROUND_IMG[category.background].alt}
