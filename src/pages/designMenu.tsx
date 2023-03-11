@@ -14,8 +14,8 @@ import { TemplateDrawer } from "@/components/design-menu/templateDrawer";
 import { ViewMenuButtons } from "@/components/design-menu/viewMenuButtons";
 import {
   CreateMenuData,
+  UpdateDesignData,
   UpdateMenuData,
-  UpdateTemplateData,
 } from "@/lib/data/menu";
 import { Router } from "next/router";
 import { BASE_MENU, templateToMenu } from "@/lib/data/template-data";
@@ -34,6 +34,7 @@ export default function DesignMenu() {
   const [isTemplateDrawerOpen, setTemplateDrawerOpen] = useState(false);
   const [isCustomDirty, setCustomDirty] = useState(false);
   const [isTemplateDirty, setTemplateDirty] = useState(false);
+  const [isBackgroundDirty, setBackgroundDirty] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -55,19 +56,30 @@ export default function DesignMenu() {
     }
   }, [user]);
 
-  function getConfirmMessage(isCustomDirty: boolean, isTemplateDirty: boolean) {
-    return isCustomDirty && !isTemplateDirty
-      ? 'Leave without applying the changes in "Customize"?'
-      : !isCustomDirty && isTemplateDirty
-      ? 'Leave without applying the changes in "Template"?'
-      : 'Leave without applying the changes in "Customize" and "Template"?';
+  function getConfirmMessage(
+    isCustomDirty: boolean,
+    isTemplateDirty: boolean,
+    isBackgroundDirty: boolean
+  ) {
+    const sections = [];
+    if (isCustomDirty) {
+      sections.push('"Customize"');
+    }
+    if (isTemplateDirty) {
+      sections.push('"Template"');
+    }
+    if (isBackgroundDirty) {
+      sections.push('"Category Background"');
+    }
+    return `Leave without applying the changes in ${sections.join(", ")}?`;
   }
 
   useEffect(() => {
     const beforeUnloadHandler = (e: BeforeUnloadEvent) => {
       const confirmationMessage = getConfirmMessage(
         isCustomDirty,
-        isTemplateDirty
+        isTemplateDirty,
+        isBackgroundDirty
       );
       (e || window.event).returnValue = confirmationMessage;
       return confirmationMessage;
@@ -80,7 +92,7 @@ export default function DesignMenu() {
     return () => {
       window.removeEventListener("beforeunload", beforeUnloadHandler);
     };
-  }, [isCustomDirty, isTemplateDirty]);
+  }, [isCustomDirty, isTemplateDirty, isBackgroundDirty]);
 
   useEffect(() => {
     Router.events.on("routeChangeStart", () => {
@@ -96,11 +108,11 @@ export default function DesignMenu() {
     });
   });
 
-  async function updateCustomization() {
+  async function updateDesign() {
     if (!menu) {
       return;
     }
-    const data: UpdateMenuData = {
+    const updateMenuData: UpdateMenuData = {
       menuId: menu.id,
       titleColor: menu.title_color,
       nameColor: menu.name_color,
@@ -115,6 +127,11 @@ export default function DesignMenu() {
       titleFont: menu.title_font,
       contentFont: menu.content_font,
     };
+    const data: UpdateDesignData = {
+      categories,
+      menu: updateMenuData,
+      template: menu.template,
+    };
     const JSONdata = JSON.stringify(data);
     const options = {
       method: "PUT",
@@ -124,11 +141,12 @@ export default function DesignMenu() {
       body: JSONdata,
     };
     setLoading(true);
-    const response = await fetch("/api/menu/update-menu", options);
+    const response = await fetch("/api/menu/update-design", options);
     if (response.status === 200) {
       setLoading(false);
-      setCustomDrawerOpen(false);
       setCustomDirty(false);
+      setTemplateDirty(false);
+      setBackgroundDirty(false);
     } else if (response.status === 500) {
       setErrorMessage("Internal server error");
       setLoading(false);
@@ -175,34 +193,6 @@ export default function DesignMenu() {
     }
   }
 
-  async function updateTemplate() {
-    if (!menu) {
-      return;
-    }
-    const data: UpdateTemplateData = {
-      menuId: menu.id,
-      template: menu.template,
-    };
-    const JSONdata = JSON.stringify(data);
-    const options = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSONdata,
-    };
-    setLoading(true);
-    const response = await fetch("/api/menu/update-template", options);
-    if (response.status === 200) {
-      setLoading(false);
-      setTemplateDrawerOpen(false);
-      setTemplateDirty(false);
-    } else if (response.status === 500) {
-      setErrorMessage("Internal server error");
-      setLoading(false);
-    }
-  }
-
   function setBackground(categoryId: string, background: string | null) {
     const updatedCategories = categories.map((c) => {
       return c.id === categoryId
@@ -213,16 +203,22 @@ export default function DesignMenu() {
         : c;
     });
     setCategories(updatedCategories);
+    setBackgroundDirty(true);
   }
 
   return (
     <Layout
       user={user}
-      unsavedChanges={isTemplateDirty || isCustomDirty}
-      confirmMessage={getConfirmMessage(isCustomDirty, isTemplateDirty)}
+      unsavedChanges={isTemplateDirty || isCustomDirty || isBackgroundDirty}
+      confirmMessage={getConfirmMessage(
+        isCustomDirty,
+        isTemplateDirty,
+        isBackgroundDirty
+      )}
       discardUnsavedChanges={() => {
         setTemplateDirty(false);
         setCustomDirty(false);
+        setBackgroundDirty(false);
       }}
     >
       <>
@@ -288,7 +284,6 @@ export default function DesignMenu() {
                   setMenu={setMenu}
                   isTemplateDrawerOpen={isTemplateDrawerOpen}
                   setTemplateDrawerOpen={setTemplateDrawerOpen}
-                  onUpdateTemplate={updateTemplate}
                   setTemplateDirty={setTemplateDirty}
                 />
                 <CustomizeDrawer
@@ -296,10 +291,9 @@ export default function DesignMenu() {
                   setCustomDrawerOpen={setCustomDrawerOpen}
                   menu={menu}
                   setMenu={setMenu}
-                  onUpdateCustomization={updateCustomization}
                   setCustomDirty={setCustomDirty}
                 />
-                <ViewMenuButtons menuId={menu.id} />
+                <ViewMenuButtons menuId={menu.id} updateDesign={updateDesign} />
               </GridItem>
             </Grid>
           )}

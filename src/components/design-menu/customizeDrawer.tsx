@@ -28,7 +28,6 @@ interface DesignDrawerProps {
   isCustomDrawerOpen: boolean;
   setCustomDrawerOpen: (b: boolean) => void;
   setMenu: (m: Menu) => void;
-  onUpdateCustomization: () => void;
   setCustomDirty: (b: boolean) => void;
 }
 
@@ -55,7 +54,6 @@ export function CustomizeDrawer({
   isCustomDrawerOpen,
   setCustomDrawerOpen,
   setMenu,
-  onUpdateCustomization,
   setCustomDirty,
 }: DesignDrawerProps) {
   return (
@@ -87,7 +85,7 @@ export function CustomizeDrawer({
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>Customize Menu</DrawerHeader>
-          <form onSubmit={onUpdateCustomization} className={styles.form}>
+          <form className={styles.form}>
             <DrawerBody className={styles.form_body}>
               <Accordion allowMultiple>
                 <AccordionItem>
@@ -320,14 +318,6 @@ export function CustomizeDrawer({
                 onClick={() => setCustomDrawerOpen(false)}
               >
                 Close
-              </Button>
-              <Button
-                onClick={onUpdateCustomization}
-                type="submit"
-                variant="outline"
-                colorScheme="teal"
-              >
-                Apply
               </Button>
             </DrawerFooter>
           </form>

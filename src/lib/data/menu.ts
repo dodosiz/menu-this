@@ -1,4 +1,4 @@
-import { Menu } from "@prisma/client";
+import { Category, Menu } from "@prisma/client";
 import { prisma } from "../core/prisma";
 import { templateToMenu } from "./template-data";
 
@@ -52,34 +52,14 @@ export interface UpdateMenuData {
   contentFont: string;
 }
 
-export async function updateMenu(data: UpdateMenuData) {
-  await prisma.menu.update({
-    data: {
-      title_color: data.titleColor,
-      name_color: data.nameColor,
-      description_color: data.descriptionColor,
-      background_color: data.backgroundColor,
-      title_margin: data.titleMargin,
-      name_margin: data.nameMargin,
-      name_title_margin: data.nameTitleMargin,
-      title_size: data.titleSize,
-      name_size: data.nameSize,
-      description_size: data.descriptionSize,
-      title_font: data.titleFont,
-      content_font: data.contentFont,
-    },
-    where: {
-      id: data.menuId,
-    },
-  });
-}
-
-export interface UpdateTemplateData {
-  menuId: string;
+export interface UpdateDesignData {
+  menu: UpdateMenuData;
   template: string | null;
+  categories: Category[];
 }
 
-export async function updateTemplate(data: UpdateTemplateData) {
+export async function updateDesign(data: UpdateDesignData) {
+  // update template
   const menu = data.template ? templateToMenu[data.template] : {};
   await prisma.menu.update({
     data: {
@@ -87,7 +67,38 @@ export async function updateTemplate(data: UpdateTemplateData) {
       template: data.template,
     },
     where: {
-      id: data.menuId,
+      id: data.menu.menuId,
     },
   });
+  // update menu
+  await prisma.menu.update({
+    data: {
+      title_color: data.menu.titleColor,
+      name_color: data.menu.nameColor,
+      description_color: data.menu.descriptionColor,
+      background_color: data.menu.backgroundColor,
+      title_margin: data.menu.titleMargin,
+      name_margin: data.menu.nameMargin,
+      name_title_margin: data.menu.nameTitleMargin,
+      title_size: data.menu.titleSize,
+      name_size: data.menu.nameSize,
+      description_size: data.menu.descriptionSize,
+      title_font: data.menu.titleFont,
+      content_font: data.menu.contentFont,
+    },
+    where: {
+      id: data.menu.menuId,
+    },
+  });
+  // update background images
+  for (const c of data.categories) {
+    await prisma.category.update({
+      data: {
+        background: c.background,
+      },
+      where: {
+        id: c.id,
+      },
+    });
+  }
 }

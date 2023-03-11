@@ -4,12 +4,17 @@ import { ImEye, ImQrcode } from "react-icons/im";
 import styles from "@/styles/components/design-menu/viewMenuButtons.module.css";
 import { useRouter } from "next/router";
 import { QrDialog } from "./qrModalDialog";
+import { FaRegSave } from "react-icons/fa";
 
 interface ViewMenuButtonsProps {
   menuId: string;
+  updateDesign: () => {};
 }
 
-export function ViewMenuButtons({ menuId }: ViewMenuButtonsProps) {
+export function ViewMenuButtons({
+  menuId,
+  updateDesign,
+}: ViewMenuButtonsProps) {
   const router = useRouter();
   const [showQR, setShowQR] = useState(false);
   return (
@@ -54,6 +59,24 @@ export function ViewMenuButtons({ menuId }: ViewMenuButtonsProps) {
         size="sm"
         onClick={() => setShowQR(true)}
         className={`${styles.qr_button} ${styles.qr_button_mobile}`}
+      />
+      <Button
+        leftIcon={<FaRegSave />}
+        colorScheme="teal"
+        variant="outline"
+        onClick={() => updateDesign()}
+        className={`${styles.save_button} ${styles.save_button_desktop}`}
+      >
+        Save Changes
+      </Button>
+      <IconButton
+        icon={<ImQrcode />}
+        colorScheme="teal"
+        aria-label="save changes"
+        variant="outline"
+        size="sm"
+        onClick={() => updateDesign()}
+        className={`${styles.save_button} ${styles.save_button_mobile}`}
       />
     </>
   );

@@ -72,14 +72,6 @@ export function ChoosePhotoModal({
           >
             Remove Background
           </Button>
-          <Button
-            variant="outline"
-            colorScheme="grey"
-            mr={3}
-            onClick={() => setCategoryId(undefined)}
-          >
-            Close
-          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
