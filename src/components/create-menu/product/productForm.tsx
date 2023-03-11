@@ -105,7 +105,7 @@ export function ProductForm({
     } else if (response.status === 500) {
       setLoading(false);
       setEditedProductId?.("");
-      setErrorMessage("Internal server error");
+      setErrorMessage("Failed to update product");
     }
   }
 
@@ -147,7 +147,7 @@ export function ProductForm({
       scrollToBottom();
     } else if (response.status === 500) {
       setLoading(false);
-      setErrorMessage("Internal server error");
+      setErrorMessage("Failed to create product");
     }
   }
 

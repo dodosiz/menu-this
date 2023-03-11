@@ -42,7 +42,7 @@ export function ProductsList({
       const newProducts = products.filter((p) => p.id !== productId);
       setProductMap({ ...productMap, [categoryId]: newProducts });
     } else if (response.status === 500) {
-      setErrorMessage("Internal server error");
+      setErrorMessage("Failed to delete product");
     }
   }
 
@@ -76,7 +76,7 @@ export function ProductsList({
     });
     const response = await fetch("/api/product/swap", options);
     if (response.status === 500) {
-      setErrorMessage("Internal server error");
+      setErrorMessage("Failed to update the product order");
     }
   }
 

@@ -48,7 +48,7 @@ export default function DesignMenu() {
           setLoading(false);
         })
         .catch(() => {
-          setErrorMessage("Internal server error");
+          setErrorMessage("Failed to fetch menu data");
           setLoading(false);
         });
     } else {
@@ -148,7 +148,7 @@ export default function DesignMenu() {
       setTemplateDirty(false);
       setBackgroundDirty(false);
     } else if (response.status === 500) {
-      setErrorMessage("Internal server error");
+      setErrorMessage("Failed to update menu");
       setLoading(false);
     }
   }
@@ -189,7 +189,7 @@ export default function DesignMenu() {
         id: result.id,
       });
     } else if (response.status === 500) {
-      setErrorMessage("Internal server error");
+      setErrorMessage("Failed to create menu");
     }
   }
 

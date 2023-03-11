@@ -54,7 +54,7 @@ export default function CreateMenu() {
           setLoading(false);
         })
         .catch(() => {
-          setErrorMessage("Internal server error");
+          setErrorMessage("Failed to fetch menu data");
           setLoading(false);
         });
     } else {

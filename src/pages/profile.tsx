@@ -55,7 +55,7 @@ export default function Profile() {
           setLoading(false);
         })
         .catch(() => {
-          setErrorMessage("Internal server error");
+          setErrorMessage("Failed to fetch user data");
           setLoading(false);
         });
     }

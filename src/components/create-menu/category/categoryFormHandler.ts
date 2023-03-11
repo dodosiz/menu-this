@@ -38,7 +38,7 @@ export async function updateCategory(props: UpdateProps) {
   } else if (response.status === 500) {
     props.setLoading(false);
     props.setEditedCategoryId("");
-    props.setErrorMessage("Internal server error");
+    props.setErrorMessage("Failed to update category");
   }
 }
 
@@ -88,7 +88,7 @@ export async function createCategory(props: CreateCategoryProps) {
   } else if (response.status === 500) {
     props.setLoading(false);
     props.setCreateNewCategory(false);
-    props.setErrorMessage("Internal server error");
+    props.setErrorMessage("Failed to create category");
   }
 }
 
@@ -120,7 +120,7 @@ export async function handleDelete(props: DeleteProps) {
     );
   } else if (response.status === 500) {
     props.setLoading(false);
-    props.setErrorMessage("Internal server error");
+    props.setErrorMessage("Failed to delete category");
   }
 }
 
@@ -163,6 +163,6 @@ export async function swapDates(props: SwapProps) {
   props.updateTabIndex();
   const response = await fetch("/api/category/swap", options);
   if (response.status === 500) {
-    props.setErrorMessage("Internal server error");
+    props.setErrorMessage("Failed to update the category order");
   }
 }
