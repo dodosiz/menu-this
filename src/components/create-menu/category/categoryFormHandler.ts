@@ -77,6 +77,7 @@ export async function createCategory(props: CreateCategoryProps) {
         title: data.title,
         userId: data.userId,
         created_at: result.created_at,
+        background: null,
       },
     ]);
     props.setProductMap({

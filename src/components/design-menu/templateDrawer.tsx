@@ -20,7 +20,6 @@ interface TemplateDrawerProps {
   isTemplateDrawerOpen: boolean;
   setTemplateDrawerOpen: (b: boolean) => void;
   setMenu: (m: Menu) => void;
-  onUpdateTemplate: () => void;
   setTemplateDirty: (b: boolean) => void;
 }
 
@@ -29,7 +28,6 @@ export function TemplateDrawer({
   setMenu,
   isTemplateDrawerOpen,
   setTemplateDrawerOpen,
-  onUpdateTemplate,
   setTemplateDirty,
 }: TemplateDrawerProps) {
   return (
@@ -61,7 +59,7 @@ export function TemplateDrawer({
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>Apply a template</DrawerHeader>
-          <form onSubmit={onUpdateTemplate} className={styles.form}>
+          <form className={styles.form}>
             <DrawerBody className={styles.form_body}>
               <RadioCard
                 options={Object.keys(templateToMenu)}
@@ -85,14 +83,6 @@ export function TemplateDrawer({
                 onClick={() => setTemplateDrawerOpen(false)}
               >
                 Close
-              </Button>
-              <Button
-                onClick={onUpdateTemplate}
-                type="submit"
-                variant="outline"
-                colorScheme="teal"
-              >
-                Apply
               </Button>
             </DrawerFooter>
           </form>
