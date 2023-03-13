@@ -1,7 +1,8 @@
+import { getBrand } from "@/lib/data/brand";
 import { getCategories } from "@/lib/data/categories";
 import { getMenuByUserId } from "@/lib/data/menu";
 import { getProductsInCategories } from "@/lib/data/products";
-import { Category, Menu } from "@prisma/client";
+import { Brand, Category, Menu } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { ProductMap } from "../get-menu-data/[userId]";
 
@@ -9,6 +10,7 @@ export interface DesignMenuData {
   menu: Menu | null;
   categories: Category[];
   productMap: ProductMap;
+  brand: Brand | null;
 }
 
 export default async function handler(
@@ -29,6 +31,7 @@ export default async function handler(
     );
     productMap[category.id] = productsInCategory;
   }
-  const data: DesignMenuData = { menu, categories, productMap };
+  const brand = await getBrand(userId as string);
+  const data: DesignMenuData = { menu, categories, productMap, brand };
   res.status(200).json(data);
 }

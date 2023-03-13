@@ -8,6 +8,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model Brand {
+  id        String     @default(cuid()) @id
+  userId    String     @db.VarChar(50)
+  title     String     @db.VarChar(50)
+}
+
 model Category {
   id        String     @default(cuid()) @id
   userId    String     @db.VarChar(50)

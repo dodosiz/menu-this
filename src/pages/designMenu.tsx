@@ -1,6 +1,6 @@
 import { Notification } from "@/components/commons/notification";
 import { Layout } from "@/components/commons/layout";
-import { Category, Menu } from "@prisma/client";
+import { Brand, Category, Menu } from "@prisma/client";
 import { Auth } from "@supabase/auth-ui-react";
 import { useEffect, useState } from "react";
 import { ProductMap } from "./api/menu/get-menu-data/[userId]";
@@ -29,6 +29,7 @@ export default function DesignMenu() {
   const [errorMessage, setErrorMessage] = useState("");
   const [categories, setCategories] = useState<Category[]>([]);
   const [productMap, setProductMap] = useState<ProductMap>({});
+  const [brand, setBrand] = useState<Brand | null>(null);
   const [menu, setMenu] = useState<Menu | null>(null);
   const [isCustomDrawerOpen, setCustomDrawerOpen] = useState(false);
   const [isTemplateDrawerOpen, setTemplateDrawerOpen] = useState(false);
@@ -45,6 +46,7 @@ export default function DesignMenu() {
           setCategories(data.categories);
           setProductMap(data.productMap);
           setMenu(data.menu);
+          setBrand(data.brand);
           setLoading(false);
         })
         .catch(() => {
@@ -267,7 +269,7 @@ export default function DesignMenu() {
               </Box>
             </>
           )}
-          {user && !isLoading && !isRouteLoading && menu && (
+          {user && !isLoading && !isRouteLoading && menu && brand && (
             <Grid templateColumns="repeat(5, 1fr)" gap={4}>
               <GridItem colSpan={4}>
                 <MenuViewer
@@ -276,6 +278,7 @@ export default function DesignMenu() {
                   productMap={productMap}
                   menu={menu}
                   inEdit={true}
+                  brand={brand}
                 />
               </GridItem>
               <GridItem colSpan={1}>
