@@ -16,3 +16,17 @@ export async function createBrand(data: CreateBrandData) {
   });
   return newBrand;
 }
+
+export interface UpdateBrandData {
+  brandId: string;
+  title: string;
+}
+
+export async function updateBrand(data: UpdateBrandData) {
+  await prisma.brand.update({
+    data: {
+      title: data.title,
+    },
+    where: { id: data.brandId },
+  });
+}

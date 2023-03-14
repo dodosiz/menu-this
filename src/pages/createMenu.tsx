@@ -31,6 +31,7 @@ import { swapDates } from "@/components/create-menu/category/categoryFormHandler
 import { Router } from "next/router";
 import { CATEGORY_LIMIT } from "@/constants";
 import { CreateBrand } from "@/components/create-menu/brand/createBrand";
+import { EditBrand } from "@/components/create-menu/brand/editBrand";
 
 export default function CreateMenu() {
   const [isLoading, setLoading] = useState(false);
@@ -104,6 +105,12 @@ export default function CreateMenu() {
             <>
               <Heading size="xl" as="h1">
                 Menu of &quot;{brand.title}&quot;
+                <EditBrand
+                  brand={brand}
+                  setBrand={setBrand}
+                  setErrorMessage={setErrorMessage}
+                  setLoading={setLoading}
+                />
               </Heading>
               <Box className={styles.mobile_categories}>
                 {!!categories.length && (
