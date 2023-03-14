@@ -1,4 +1,4 @@
-import { Category, Menu, Product } from "@prisma/client";
+import { Brand, Category, Menu, Product } from "@prisma/client";
 import { getCategories } from "./categories";
 import { prisma } from "../core/prisma";
 import { getProductsInCategories } from "./products";
@@ -7,6 +7,7 @@ export interface MenuViewData {
   menu: Menu;
   categories: CategoryView[];
   productMap: ProductMapView;
+  brand: Brand;
 }
 
 export type CategoryView = Omit<Category, "created_at">;
@@ -29,6 +30,9 @@ export async function getMenuViewData(menuId: string): Promise<MenuViewData> {
       created_at: null,
     }));
   }
+  const brand = await prisma.brand.findFirstOrThrow({
+    where: { userId: menu.userId },
+  });
   return {
     menu,
     categories: categories.map((c) => ({
@@ -36,5 +40,6 @@ export async function getMenuViewData(menuId: string): Promise<MenuViewData> {
       created_at: null,
     })),
     productMap,
+    brand,
   };
 }

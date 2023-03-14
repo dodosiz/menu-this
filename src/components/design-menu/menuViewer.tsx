@@ -8,6 +8,7 @@ import "@fontsource/playfair-display/400.css";
 import { Fragment, useState } from "react";
 import {
   Box,
+  Center,
   Container,
   Grid,
   GridItem,
@@ -16,7 +17,7 @@ import {
   Image,
   Text,
 } from "@chakra-ui/react";
-import { Menu } from "@prisma/client";
+import { Brand, Menu } from "@prisma/client";
 import styles from "@/styles/components/design-menu/designMenuViewer.module.css";
 import { BACKGROUND_IMG, templateToMenu } from "@/lib/data/template-data";
 import { CategoryView, ProductMapView } from "@/lib/data/menu-view";
@@ -29,6 +30,7 @@ interface DesignMenuViewer {
   productMap: ProductMapView;
   menu: Menu;
   inEdit?: boolean;
+  brand: Brand;
 }
 
 export function MenuViewer({
@@ -36,6 +38,7 @@ export function MenuViewer({
   productMap,
   menu,
   inEdit,
+  brand,
   setBackground,
 }: DesignMenuViewer) {
   const {
@@ -60,11 +63,16 @@ export function MenuViewer({
       className={styles.menu}
       backgroundColor={background_color}
     >
+      <Center>
+        <Heading color={title_color} size="2xl" as="h1" fontFamily={title_font}>
+          {brand.title}
+        </Heading>
+      </Center>
       {categories.map((category, i) => (
         <>
           {category.background && (
             <Image
-              marginTop={i > 0 ? title_margin : 0}
+              marginTop={title_margin}
               position="relative"
               marginBottom={name_margin}
               width="100vw"
@@ -74,7 +82,7 @@ export function MenuViewer({
           )}
           <Box paddingLeft="20px" paddingRight="20px" key={`cb-${category.id}`}>
             <Heading
-              marginTop={i > 0 && !category.background ? title_margin : 0}
+              marginTop={!category.background ? title_margin : 0}
               color={title_color}
               size={title_size}
               as="h1"

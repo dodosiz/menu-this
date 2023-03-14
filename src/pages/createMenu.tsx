@@ -14,7 +14,7 @@ import {
 import { useState, useEffect } from "react";
 import styles from "@/styles/createMenu.module.css";
 import { IoMdAdd } from "react-icons/io";
-import { Category } from "@prisma/client";
+import { Brand, Category } from "@prisma/client";
 import { CategoryForm } from "@/components/create-menu/category/categoryForm";
 import { CategoryTab } from "@/components/create-menu/category/categoryTab";
 import { UnauthorizedPage } from "@/components/commons/unauthorizedPage";
@@ -30,6 +30,7 @@ import { CategoryMobileMenu } from "@/components/create-menu/category/categoryMo
 import { swapDates } from "@/components/create-menu/category/categoryFormHandler";
 import { Router } from "next/router";
 import { CATEGORY_LIMIT } from "@/constants";
+import { CreateBrand } from "@/components/create-menu/brand/createBrand";
 
 export default function CreateMenu() {
   const [isLoading, setLoading] = useState(false);
@@ -37,6 +38,7 @@ export default function CreateMenu() {
   const [isCreateNewCategory, setCreateNewCategory] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [productMap, setProductMap] = useState<ProductMap>({});
+  const [brand, setBrand] = useState<Brand | null>(null);
   const [editedCategoryId, setEditedCategoryId] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [expanded, setExpanded] = useState(0);
@@ -51,6 +53,7 @@ export default function CreateMenu() {
         .then((data: MenuData) => {
           setCategories(data.initialCategories);
           setProductMap(data.initialProductMap);
+          setBrand(data.brand);
           setLoading(false);
         })
         .catch(() => {
@@ -89,10 +92,18 @@ export default function CreateMenu() {
         <div className={styles.create_menu}>
           {(isLoading || isRouteLoading) && <LoadingPage fullHeight={true} />}
           {!user && !isLoading && !isRouteLoading && <UnauthorizedPage />}
-          {user && !isLoading && !isRouteLoading && (
+          {user && !isLoading && !isRouteLoading && !brand && (
+            <CreateBrand
+              setBrand={setBrand}
+              setErrorMessage={setErrorMessage}
+              setLoading={setLoading}
+              userId={user.id}
+            />
+          )}
+          {user && !isLoading && !isRouteLoading && !!brand && (
             <>
               <Heading size="xl" as="h1">
-                Create your menu
+                Menu of &quot;{brand.title}&quot;
               </Heading>
               <Box className={styles.mobile_categories}>
                 {!!categories.length && (

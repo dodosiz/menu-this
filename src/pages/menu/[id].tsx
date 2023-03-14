@@ -20,6 +20,7 @@ export default function MenuView({
   menu,
   categories,
   productMap,
+  brand,
 }: MenuViewData) {
   return (
     <>
@@ -32,7 +33,12 @@ export default function MenuView({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <MenuViewer categories={categories} productMap={productMap} menu={menu} />
+      <MenuViewer
+        categories={categories}
+        productMap={productMap}
+        menu={menu}
+        brand={brand}
+      />
     </>
   );
 }
