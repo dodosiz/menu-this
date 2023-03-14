@@ -20,16 +20,6 @@ export const BASE_MENU: Omit<Menu, "userId" | "id" | "template"> = {
 };
 
 export const templateToMenu: { [key: string]: Partial<Menu> } = {
-  light: {
-    background_color: "#E3F6FF",
-    brand_color: "#84C9BB",
-    title_color: "#84C9BB",
-    name_color: "#84C9BB",
-    description_color: "#84C9BB",
-    brand_font: "'Handlee', cursive",
-    title_font: "'Montserrat', sans-serif",
-    content_font: "'Montserrat', sans-serif",
-  },
   pastel: {
     brand_color: "#B08BBB",
     title_color: "#B08BBB",
