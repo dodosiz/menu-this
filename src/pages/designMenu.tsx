@@ -21,6 +21,7 @@ import { Router } from "next/router";
 import { BASE_MENU, templateToMenu } from "@/lib/data/template-data";
 import styles from "@/styles/designMenu.module.css";
 import Image from "next/image";
+import { ActionPage } from "@/components/commons/actionPage";
 
 export default function DesignMenu() {
   const { user } = Auth.useUser();
@@ -234,72 +235,103 @@ export default function DesignMenu() {
         <div>
           {(isLoading || isRouteLoading) && <LoadingPage fullHeight={true} />}
           {!user && !isLoading && !isRouteLoading && <UnauthorizedPage />}
-          {!menu && user && (
-            <>
-              <Heading size="xl" as="h1">
-                Choose a template
-              </Heading>
-              <Box padding={5}>
-                <Grid templateColumns="repeat(3, 1fr)" gap={10}>
-                  {Object.keys(templateToMenu).map((templateName) => (
-                    <GridItem colSpan={{ base: 3, md: 1 }} key={templateName}>
-                      <Tooltip hasArrow bg="teal.500" label={templateName}>
-                        <Image
-                          width={600}
-                          height={600}
-                          className={styles.template_image}
-                          src={`/templates/${templateName}.PNG`}
-                          alt={templateName}
-                          onClick={() => {
-                            const newMenu = {
-                              id: "",
-                              userId: user.id,
-                              ...BASE_MENU,
-                              ...templateToMenu[templateName],
-                              template: templateName,
-                            };
-                            setMenu(newMenu);
-                            createMenu(newMenu);
-                          }}
-                        />
-                      </Tooltip>
-                    </GridItem>
-                  ))}
-                </Grid>
-              </Box>
-            </>
+          {user && !isLoading && !isRouteLoading && !brand && (
+            <ActionPage
+              action="Create your brand"
+              title="You need to create your brand first"
+              destination="/createMenu"
+            />
           )}
-          {user && !isLoading && !isRouteLoading && menu && brand && (
-            <Grid templateColumns="repeat(5, 1fr)" gap={4}>
-              <GridItem colSpan={4}>
-                <MenuViewer
-                  categories={categories}
-                  setBackground={setBackground}
-                  productMap={productMap}
-                  menu={menu}
-                  inEdit={true}
-                  brand={brand}
-                />
-              </GridItem>
-              <GridItem colSpan={1}>
-                <TemplateDrawer
-                  menu={menu}
-                  setMenu={setMenu}
-                  isTemplateDrawerOpen={isTemplateDrawerOpen}
-                  setTemplateDrawerOpen={setTemplateDrawerOpen}
-                  setTemplateDirty={setTemplateDirty}
-                />
-                <CustomizeDrawer
-                  isCustomDrawerOpen={isCustomDrawerOpen}
-                  setCustomDrawerOpen={setCustomDrawerOpen}
-                  menu={menu}
-                  setMenu={setMenu}
-                  setCustomDirty={setCustomDirty}
-                />
-                <ViewMenuButtons menuId={menu.id} updateDesign={updateDesign} />
-              </GridItem>
-            </Grid>
-          )}
+          {user &&
+            !isLoading &&
+            !isRouteLoading &&
+            brand &&
+            !categories.length && (
+              <ActionPage
+                action="Add categories"
+                title="Maybe add some categories with products first?"
+                destination="/createMenu"
+              />
+            )}
+          {!menu &&
+            !isLoading &&
+            !isRouteLoading &&
+            user &&
+            brand &&
+            !!categories.length && (
+              <>
+                <Heading size="xl" as="h1">
+                  Choose a template
+                </Heading>
+                <Box padding={5}>
+                  <Grid templateColumns="repeat(3, 1fr)" gap={10}>
+                    {Object.keys(templateToMenu).map((templateName) => (
+                      <GridItem colSpan={{ base: 3, md: 1 }} key={templateName}>
+                        <Tooltip hasArrow bg="teal.500" label={templateName}>
+                          <Image
+                            width={600}
+                            height={600}
+                            className={styles.template_image}
+                            src={`/templates/${templateName}.PNG`}
+                            alt={templateName}
+                            onClick={() => {
+                              const newMenu = {
+                                id: "",
+                                userId: user.id,
+                                ...BASE_MENU,
+                                ...templateToMenu[templateName],
+                                template: templateName,
+                              };
+                              setMenu(newMenu);
+                              createMenu(newMenu);
+                            }}
+                          />
+                        </Tooltip>
+                      </GridItem>
+                    ))}
+                  </Grid>
+                </Box>
+              </>
+            )}
+          {user &&
+            !isLoading &&
+            !isRouteLoading &&
+            menu &&
+            brand &&
+            !!categories.length && (
+              <Grid templateColumns="repeat(5, 1fr)" gap={4}>
+                <GridItem colSpan={4}>
+                  <MenuViewer
+                    categories={categories}
+                    setBackground={setBackground}
+                    productMap={productMap}
+                    menu={menu}
+                    inEdit={true}
+                    brand={brand}
+                  />
+                </GridItem>
+                <GridItem colSpan={1}>
+                  <TemplateDrawer
+                    menu={menu}
+                    setMenu={setMenu}
+                    isTemplateDrawerOpen={isTemplateDrawerOpen}
+                    setTemplateDrawerOpen={setTemplateDrawerOpen}
+                    setTemplateDirty={setTemplateDirty}
+                  />
+                  <CustomizeDrawer
+                    isCustomDrawerOpen={isCustomDrawerOpen}
+                    setCustomDrawerOpen={setCustomDrawerOpen}
+                    menu={menu}
+                    setMenu={setMenu}
+                    setCustomDirty={setCustomDirty}
+                  />
+                  <ViewMenuButtons
+                    menuId={menu.id}
+                    updateDesign={updateDesign}
+                  />
+                </GridItem>
+              </Grid>
+            )}
         </div>
       </>
     </Layout>
