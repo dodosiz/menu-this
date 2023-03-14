@@ -101,6 +101,17 @@ export function CustomizeDrawer({
                     </AccordionButton>
                   </h2>
                   <AccordionPanel paddingLeft={0} pb={4}>
+                    <Text className={styles.label}>Brand name color</Text>
+                    <ColorPicker
+                      value={menu.brand_color}
+                      setValue={(c) => {
+                        setMenu({
+                          ...menu,
+                          brand_color: c,
+                        });
+                        setCustomDirty(true);
+                      }}
+                    />
                     <Text className={styles.label}>Category name color</Text>
                     <ColorPicker
                       value={menu.title_color}
@@ -162,6 +173,18 @@ export function CustomizeDrawer({
                     </AccordionButton>
                   </h2>
                   <AccordionPanel paddingLeft={0} pb={4}>
+                    <Text className={styles.label}>Brand name top margin</Text>
+                    <SliderInput
+                      maxValue={400}
+                      value={menu.brand_margin}
+                      setValue={(m) => {
+                        setMenu({
+                          ...menu,
+                          brand_margin: m,
+                        });
+                        setCustomDirty(true);
+                      }}
+                    />
                     <Text className={styles.label}>
                       Category name top margin
                     </Text>
@@ -219,6 +242,18 @@ export function CustomizeDrawer({
                     </AccordionButton>
                   </h2>
                   <AccordionPanel paddingLeft={0} pb={4}>
+                    <Text className={styles.label}>Brand name size</Text>
+                    <SelectInput
+                      options={["xl", "lg", "md", "sm"]}
+                      value={menu.brand_size}
+                      setValue={(s) => {
+                        setMenu({
+                          ...menu,
+                          brand_size: s,
+                        });
+                        setCustomDirty(true);
+                      }}
+                    />
                     <Text className={styles.label}>Category name size</Text>
                     <SelectInput
                       options={["xl", "lg", "md", "sm"]}
@@ -280,6 +315,19 @@ export function CustomizeDrawer({
                     </AccordionButton>
                   </h2>
                   <AccordionPanel paddingLeft={0} pb={4}>
+                    <Text className={styles.label}>Brand name font</Text>
+                    <SelectInput
+                      options={FONTS}
+                      displayOption={FONT_DISPLAY_OPTIONS}
+                      value={menu.brand_font}
+                      setValue={(f) => {
+                        setMenu({
+                          ...menu,
+                          brand_font: f,
+                        });
+                        setCustomDirty(true);
+                      }}
+                    />
                     <Text className={styles.label}>Category title font</Text>
                     <SelectInput
                       options={FONTS}

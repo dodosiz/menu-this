@@ -50,6 +50,10 @@ export function MenuViewer({
     name_margin,
     name_size,
     name_title_margin,
+    brand_color,
+    brand_margin,
+    brand_size,
+    brand_font,
     title_color,
     title_font,
     title_margin,
@@ -64,7 +68,13 @@ export function MenuViewer({
       backgroundColor={background_color}
     >
       <Center>
-        <Heading color={title_color} size="2xl" as="h1" fontFamily={title_font}>
+        <Heading
+          color={brand_color}
+          size={brand_size}
+          as="h1"
+          fontFamily={brand_font}
+          marginTop={brand_margin}
+        >
           {brand.title}
         </Heading>
       </Center>
