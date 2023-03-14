@@ -38,15 +38,19 @@ model Product {
 model Menu {
   id                       String     @default(cuid()) @id
   userId                   String
+  brand_color              String     @db.VarChar(50) @default("#319795")
   title_color              String     @db.VarChar(50)
   name_color               String     @db.VarChar(50)
   description_color        String     @db.VarChar(50)
+  brand_margin             Int        @default(10)
   title_margin             Int
   name_margin              Int
   name_title_margin        Int
+  brand_size               String     @db.VarChar(50) @default("lg")
   title_size               String     @db.VarChar(50)
   name_size                String     @db.VarChar(50)
   description_size         String     @db.VarChar(50)
+  brand_font               String     @db.VarChar(50) @default("'Open Sans', sans-serif")
   title_font               String     @db.VarChar(50)
   content_font             String     @db.VarChar(50)
   background_color         String     @db.VarChar(50)
