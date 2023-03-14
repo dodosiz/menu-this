@@ -143,18 +143,6 @@ function MenuItems({ user, setOpen, routeWithConfirm }: MenuItemsProps) {
             onClick={(e) => {
               e.preventDefault();
               setOpen?.(false);
-              routeWithConfirm("/designMenu");
-            }}
-            href="/"
-            className={styles.nav_item}
-            as={NextLink}
-          >
-            Design Menu
-          </Link>
-          <Link
-            onClick={(e) => {
-              e.preventDefault();
-              setOpen?.(false);
               routeWithConfirm("/createMenu");
             }}
             href="/"
@@ -162,6 +150,18 @@ function MenuItems({ user, setOpen, routeWithConfirm }: MenuItemsProps) {
             as={NextLink}
           >
             Create Menu
+          </Link>
+          <Link
+            onClick={(e) => {
+              e.preventDefault();
+              setOpen?.(false);
+              routeWithConfirm("/designMenu");
+            }}
+            href="/"
+            className={styles.nav_item}
+            as={NextLink}
+          >
+            Design Menu
           </Link>
           <Link
             onClick={(e) => {

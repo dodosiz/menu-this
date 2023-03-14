@@ -4,6 +4,10 @@ import "@fontsource/montserrat/400.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/poppins/400.css";
 import "@fontsource/playfair-display/400.css";
+import "@fontsource/lato/400.css";
+import "@fontsource/handlee/400.css";
+import "@fontsource/gloria-hallelujah/400.css";
+import "@fontsource/beth-ellen/400.css";
 
 import { Fragment, useState } from "react";
 import {

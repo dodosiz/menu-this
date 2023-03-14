@@ -38,6 +38,10 @@ const FONTS = [
   "'Roboto', sans-serif",
   "'Poppins', sans-serif",
   "'Playfair Display', serif",
+  "'Lato', sans-serif",
+  "'Handlee', cursive",
+  "'Beth Ellen', cursive",
+  "'Gloria Hallelujah', cursive",
 ];
 
 const FONT_DISPLAY_OPTIONS = {
@@ -47,6 +51,10 @@ const FONT_DISPLAY_OPTIONS = {
   "'Roboto', sans-serif": "Roboto",
   "'Poppins', sans-serif": "Poppins",
   "'Playfair Display', serif": "Playfair Display",
+  "'Lato', sans-serif": "Lato",
+  "'Handlee', cursive": "Handlee",
+  "'Beth Ellen', cursive": "Beth Ellen",
+  "'Gloria Hallelujah', cursive": "Gloria Hallelujah",
 };
 
 export function CustomizeDrawer({
@@ -244,7 +252,7 @@ export function CustomizeDrawer({
                   <AccordionPanel paddingLeft={0} pb={4}>
                     <Text className={styles.label}>Brand name size</Text>
                     <SelectInput
-                      options={["xl", "lg", "md", "sm"]}
+                      options={["4xl", "2xl", "xl", "lg", "md", "sm"]}
                       value={menu.brand_size}
                       setValue={(s) => {
                         setMenu({
