@@ -6,8 +6,6 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { userId } = req.query;
-  const { requested, categoryProductCount } = await getUserStatus(
-    userId as string
-  );
-  res.status(200).json({ requested, categoryProductCount });
+  const { categoryProductCount } = await getUserStatus(userId as string);
+  res.status(200).json({ categoryProductCount });
 }

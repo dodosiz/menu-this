@@ -1,7 +1,6 @@
 import Head from "next/head";
 import styles from "@/styles/components/commons/layout.module.css";
 import NextLink from "next/link";
-import { User } from "@supabase/supabase-js";
 import {
   Drawer,
   DrawerBody,
@@ -16,6 +15,7 @@ import { useRouter } from "next/router";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { useState } from "react";
 import { LeaveAlert } from "./leave-alert";
+import { User } from "firebase/auth";
 
 interface LayoutProps {
   children: React.ReactElement;

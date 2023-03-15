@@ -56,9 +56,3 @@ model Menu {
   background_color         String     @db.VarChar(50)
   template                 String?    @db.VarChar(50)
 }
-
-model DeleteRequest {
-  id            String     @default(cuid()) @id
-  userId        String     @db.VarChar(50)
-  created_at    DateTime   @default(now())
-}

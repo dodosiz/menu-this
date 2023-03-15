@@ -19,11 +19,10 @@ import { CategoryForm } from "@/components/create-menu/category/categoryForm";
 import { CategoryTab } from "@/components/create-menu/category/categoryTab";
 import { UnauthorizedPage } from "@/components/commons/unauthorizedPage";
 import { ProductsList } from "@/components/create-menu/product/productsList";
-import { Auth } from "@supabase/auth-ui-react";
 import { MenuData, ProductMap } from "./api/menu/get-menu-data/[userId]";
 import { LoadingPage } from "@/components/commons/loadingPage";
 import { Notification } from "@/components/commons/notification";
-import { AiOutlineArrowRight, AiOutlineArrowUp } from "react-icons/ai";
+import { AiOutlineArrowRight } from "react-icons/ai";
 import { AccordionWithProductForm } from "@/components/create-menu/product/accordionWithProductForm";
 import { CategoryMobileForm } from "@/components/create-menu/category/categoryMobileForm";
 import { CategoryMobileMenu } from "@/components/create-menu/category/categoryMobileMenu";
@@ -32,6 +31,7 @@ import { Router } from "next/router";
 import { CATEGORY_LIMIT } from "@/constants";
 import { CreateBrand } from "@/components/create-menu/brand/createBrand";
 import { EditBrand } from "@/components/create-menu/brand/editBrand";
+import { auth } from "@/lib/core/firebase";
 
 export default function CreateMenu() {
   const [isLoading, setLoading] = useState(false);
@@ -44,12 +44,12 @@ export default function CreateMenu() {
   const [errorMessage, setErrorMessage] = useState("");
   const [expanded, setExpanded] = useState(0);
   const [tabIndex, setTabIndex] = useState(0);
-  const { user } = Auth.useUser();
+  const user = auth.currentUser;
 
   useEffect(() => {
     setLoading(true);
     if (user) {
-      fetch(`/api/menu/get-menu-data/${user.id}`)
+      fetch(`/api/menu/get-menu-data/${user.uid}`)
         .then((res) => res.json())
         .then((data: MenuData) => {
           setCategories(data.initialCategories);
@@ -92,13 +92,15 @@ export default function CreateMenu() {
         )}
         <div className={styles.create_menu}>
           {(isLoading || isRouteLoading) && <LoadingPage fullHeight={true} />}
-          {!user && !isLoading && !isRouteLoading && <UnauthorizedPage />}
+          {(!user || !user.emailVerified) && !isLoading && !isRouteLoading && (
+            <UnauthorizedPage />
+          )}
           {user && !isLoading && !isRouteLoading && !brand && (
             <CreateBrand
               setBrand={setBrand}
               setErrorMessage={setErrorMessage}
               setLoading={setLoading}
-              userId={user.id}
+              userId={user.uid}
             />
           )}
           {user && !isLoading && !isRouteLoading && !!brand && (

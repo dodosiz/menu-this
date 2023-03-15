@@ -1,5 +1,4 @@
 import { Layout } from "@/components/commons/layout";
-import { Auth } from "@supabase/auth-ui-react";
 import { Grid, GridItem, Heading, Image } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
 import styles from "@/styles/home.module.css";
@@ -9,11 +8,20 @@ import { FaArrowRight } from "react-icons/fa";
 import { Router, useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { LoadingPage } from "@/components/commons/loadingPage";
+import { auth } from "@/lib/core/firebase";
+import { Notification } from "@/components/commons/notification";
 
 export default function Home() {
-  const { user } = Auth.useUser();
+  const user = auth.currentUser;
   const router = useRouter();
   const [isLoading, setLoading] = useState(false);
+  const [showVerificationInfo, setShowVerificationInfo] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setShowVerificationInfo(!user.emailVerified);
+    }
+  }, [user]);
 
   useEffect(() => {
     Router.events.on("routeChangeStart", () => {
@@ -203,6 +211,13 @@ export default function Home() {
               </GridItem>
             </Grid>
           </>
+        )}
+        {user && !user.emailVerified && showVerificationInfo && (
+          <Notification
+            status="info"
+            message="Please verify your email address"
+            onClose={() => setShowVerificationInfo(false)}
+          />
         )}
       </>
     </Layout>

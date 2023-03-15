@@ -53,7 +53,7 @@ interface CreateCategoryProps extends CategoryFormProps {
 export async function createCategory(props: CreateCategoryProps) {
   const data: CreateCategoryData = {
     title: props.categoryTitle,
-    userId: props.user.id,
+    userId: props.user.uid,
   };
   const JSONdata = JSON.stringify(data);
   const options = {

@@ -4,9 +4,9 @@ import { FormEvent, useState, useEffect } from "react";
 import { FiCheck } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
 import { Category } from "@prisma/client";
-import { User } from "@supabase/supabase-js";
 import { ProductMap } from "@/pages/api/menu/get-menu-data/[userId]";
 import { createCategory, updateCategory } from "./categoryFormHandler";
+import { User } from "firebase/auth";
 
 export interface CategoryFormProps {
   categories: Category[];

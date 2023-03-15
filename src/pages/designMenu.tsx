@@ -1,7 +1,6 @@
 import { Notification } from "@/components/commons/notification";
 import { Layout } from "@/components/commons/layout";
 import { Brand, Category, Menu } from "@prisma/client";
-import { Auth } from "@supabase/auth-ui-react";
 import { useEffect, useState } from "react";
 import { ProductMap } from "./api/menu/get-menu-data/[userId]";
 import { LoadingPage } from "@/components/commons/loadingPage";
@@ -22,9 +21,10 @@ import { BASE_MENU, templateToMenu } from "@/lib/data/template-data";
 import styles from "@/styles/designMenu.module.css";
 import Image from "next/image";
 import { ActionPage } from "@/components/commons/actionPage";
+import { auth } from "@/lib/core/firebase";
 
 export default function DesignMenu() {
-  const { user } = Auth.useUser();
+  const user = auth.currentUser;
   const [isLoading, setLoading] = useState(false);
   const [isRouteLoading, setRouteLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -41,7 +41,7 @@ export default function DesignMenu() {
   useEffect(() => {
     setLoading(true);
     if (user) {
-      fetch(`/api/menu/get-menu-design/${user.id}`)
+      fetch(`/api/menu/get-menu-design/${user.uid}`)
         .then((res) => res.json())
         .then((data: DesignMenuData) => {
           setCategories(data.categories);
@@ -182,7 +182,7 @@ export default function DesignMenu() {
       brandFont: menu.brand_font,
       titleFont: menu.title_font,
       contentFont: menu.content_font,
-      userId: user.id,
+      userId: user.uid,
     };
     const JSONdata = JSON.stringify(data);
     const options = {
@@ -242,7 +242,9 @@ export default function DesignMenu() {
         )}
         <div>
           {(isLoading || isRouteLoading) && <LoadingPage fullHeight={true} />}
-          {!user && !isLoading && !isRouteLoading && <UnauthorizedPage />}
+          {(!user || !user.emailVerified) && !isLoading && !isRouteLoading && (
+            <UnauthorizedPage />
+          )}
           {user && !isLoading && !isRouteLoading && !brand && (
             <ActionPage
               action="Create your brand"
@@ -285,7 +287,7 @@ export default function DesignMenu() {
                             onClick={() => {
                               const newMenu = {
                                 id: "",
-                                userId: user.id,
+                                userId: user.uid,
                                 ...BASE_MENU,
                                 ...templateToMenu[templateName],
                                 template: templateName,
