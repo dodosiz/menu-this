@@ -1,6 +1,6 @@
 import { Layout } from "@/components/commons/layout";
 import { Auth } from "@supabase/auth-ui-react";
-import { Heading } from "@chakra-ui/react";
+import { Grid, GridItem, Heading, Image } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
 import styles from "@/styles/home.module.css";
 import { Divider } from "@chakra-ui/react";
@@ -32,21 +32,19 @@ export default function Home() {
   return (
     <Layout user={user}>
       <>
-        <div className={styles.banner}>
-          {isLoading && <LoadingPage fullHeight={true} />}
-          {!isLoading && (
-            <>
+        {isLoading && <LoadingPage fullHeight={true} />}
+        {!isLoading && (
+          <>
+            <div className={styles.banner}>
               <Heading size="xl" className={styles.banner_header} as="h1">
-                Create your{" "}
-                <span className={styles.banner_header_coloured}>
-                  online menu
-                </span>
+                Create your <span className={styles.coloured}>online menu</span>
               </Heading>
               <Text className={styles.banner_text} fontSize="md">
-                Use our tool to create the menu of your business online.
-                <br /> Create categories and add products, this is all you need
-                to do.
-                <br /> Everything else is done by us.
+                With <strong className={styles.coloured}>DEINLOG</strong>, you
+                can easily design and customize your own digital menu that is
+                perfect for restaurants, cafes, and other food-related
+                businesses.
+                <br /> Use our tool to create the menu of your business online.
               </Text>
               <Button
                 className={styles.banner_button}
@@ -55,12 +53,154 @@ export default function Home() {
                 rightIcon={<FaArrowRight />}
                 onClick={() => router.push("/createMenu")}
               >
-                Create your menu
+                Get started
               </Button>
-            </>
-          )}
-        </div>
-        <Divider />
+            </div>
+            <Divider />
+            <Grid
+              className={styles.grid}
+              templateColumns="repeat(3, 1fr)"
+              gap={4}
+            >
+              <GridItem
+                className={styles.grid_item}
+                colSpan={{ base: 3, md: 1 }}
+              >
+                <Text
+                  className={styles.banner_text + " " + styles.text_left}
+                  fontSize="md"
+                >
+                  Our menu data management system is designed to make category
+                  and product creation, updating, and deletion as easy and
+                  intuitive as possible. With our user-friendly interface, you
+                  will be able to manage your menu items quickly and
+                  efficiently.
+                </Text>
+              </GridItem>
+              <GridItem
+                className={styles.grid_item}
+                colSpan={{ base: 3, md: 1 }}
+              >
+                <Image
+                  height="400px"
+                  src="/screen/screen1.png"
+                  alt="Online menu data"
+                />
+              </GridItem>
+              <GridItem
+                className={styles.grid_item}
+                colSpan={{ base: 3, md: 1 }}
+              >
+                <Image
+                  height="400px"
+                  src="/screen/screen2.png"
+                  alt="Online menu data"
+                />
+              </GridItem>
+            </Grid>
+            <Divider />
+            <Grid
+              className={styles.grid}
+              templateColumns="repeat(3, 1fr)"
+              gap={4}
+            >
+              <GridItem
+                className={styles.grid_item}
+                colSpan={{ base: 3, md: 1 }}
+              >
+                <Image
+                  height="400px"
+                  src="/screen/screen3.png"
+                  alt="Online menu data"
+                />
+              </GridItem>
+              <GridItem
+                className={styles.grid_item}
+                colSpan={{ base: 3, md: 1 }}
+              >
+                <Image
+                  height="400px"
+                  src="/screen/screen4.png"
+                  alt="Online menu data"
+                />
+              </GridItem>
+              <GridItem
+                className={styles.grid_item}
+                colSpan={{ base: 3, md: 1 }}
+              >
+                <Text
+                  className={styles.banner_text + " " + styles.text_right}
+                  fontSize="md"
+                >
+                  Our templates are designed to make the process of creating a
+                  menu as easy as possible. Simply choose the template that best
+                  fits your needs, add your own content, and customize it to
+                  your liking. With a few clicks, you can have a
+                  professional-looking menu that perfectly represents your
+                  brand.
+                </Text>
+              </GridItem>
+            </Grid>
+            <Divider />
+            <Grid
+              className={styles.grid}
+              templateColumns="repeat(3, 1fr)"
+              gap={4}
+            >
+              <GridItem
+                className={styles.grid_item + " " + styles.grid_item_column}
+                colSpan={{ base: 3, md: 1 }}
+              >
+                <Text
+                  className={styles.banner_text + " " + styles.text_left}
+                  fontSize="md"
+                >
+                  For those who want to take their design to the next level, our
+                  app offers powerful customization tools. You can choose from a
+                  variety of font styles and colors, adjust the layout, and even
+                  add your own images to create a truly unique design.
+                  <br />
+                  <br />
+                  Our app also offers the convenience of an autogenerated QR
+                  code for your menu. Simply create your menu, and our app will
+                  generate a unique QR code that your customers can easily scan
+                  with their smartphones. This saves time and makes it easy for
+                  your customers to access your menu quickly and efficiently.
+                </Text>
+                <Button
+                  className={styles.banner_button}
+                  colorScheme="teal"
+                  variant="solid"
+                  rightIcon={<FaArrowRight />}
+                  maxWidth="180px"
+                  onClick={() => router.push("/createMenu")}
+                >
+                  Start creating
+                </Button>
+              </GridItem>
+              <GridItem
+                className={styles.grid_item}
+                colSpan={{ base: 3, md: 1 }}
+              >
+                <Image
+                  height="400px"
+                  src="/screen/screen5.png"
+                  alt="Online menu data"
+                />
+              </GridItem>
+              <GridItem
+                className={styles.grid_item}
+                colSpan={{ base: 3, md: 1 }}
+              >
+                <Image
+                  height="400px"
+                  src="/screen/screen6.png"
+                  alt="Online menu data"
+                />
+              </GridItem>
+            </Grid>
+          </>
+        )}
       </>
     </Layout>
   );

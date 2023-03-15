@@ -50,7 +50,7 @@ export default function PrivacyPolicy() {
             </Heading>
             <Box as="b">Last updated March 04, 2023</Box>
             <Box fontSize="md">
-              {"This privacy notice for deinlog.com ('Company'," +
+              {"This privacy notice for deinlog.com ('Website'," +
                 "'we', 'us', or 'our'), describes how and why we might collect," +
                 "store, use, and/or share ('process') your information when you use" +
                 "our services ('Services'), such as when you:"}
@@ -145,8 +145,9 @@ export default function PrivacyPolicy() {
             <Box as="b">How do you exercise your rights?</Box>
             <Box>
               The easiest way to exercise your rights is by sending us an email
-              at info&lt;at&gt;deinlog.com. We will consider and act upon any
-              request in accordance with applicable data protection laws.
+              at <strong>info@deinlog.com</strong>. We will consider and act
+              upon any request in accordance with applicable data protection
+              laws.
             </Box>
             <Box>
               Want to learn more about what deinlog.com does with any
@@ -720,7 +721,7 @@ export default function PrivacyPolicy() {
             </Box>
             <Box>
               If you have questions or comments about your privacy rights, you
-              may email us at info&lt;at&gt;deinlog.com.
+              may email us at <strong>info@deinlog.com</strong>.
             </Box>
             <Heading as="h3" size="md" id="DNT">
               10. CONTROLS FOR DO-NOT-TRACK FEATURES
@@ -934,10 +935,10 @@ export default function PrivacyPolicy() {
             <Box>
               More information about our data collection and sharing practices
               can be found in this privacy notice. You may contact us by email
-              at info&lt;at&gt;deinlog.com, or by referring to the contact
-              details at the bottom of this document. If you are using an
-              authorised agent to exercise your right to opt out we may deny a
-              request if the authorised agent does not submit proof that they
+              at <strong>info@deinlog.com</strong>, or by referring to the
+              contact details at the bottom of this document. If you are using
+              an authorised agent to exercise your right to opt out we may deny
+              a request if the authorised agent does not submit proof that they
               have been validly authorised to act on your behalf.
             </Box>
             <Box>
@@ -1095,9 +1096,9 @@ export default function PrivacyPolicy() {
             </UnorderedList>
             <Box>
               To exercise these rights, you can contact us by email at
-              info&lt;at&gt;deinlog.com, or by referring to the contact details
-              at the bottom of this document. If you have a complaint about how
-              we handle your data, we would like to hear from you.
+              <strong>info@deinlog.com</strong>, or by referring to the contact
+              details at the bottom of this document. If you have a complaint
+              about how we handle your data, we would like to hear from you.
             </Box>
             <Heading as="h3" size="md" id="virginia">
               12. DO VIRGINIA RESIDENTS HAVE SPECIFIC PRIVACY RIGHTS?
@@ -1183,12 +1184,12 @@ export default function PrivacyPolicy() {
             <Box>
               More information about our data collection and sharing practices
               can be found in this privacy notice. You may contact us by email
-              at info&lt;at&gt;deinlog.com, by visiting http://www.deinlog.com,
-              or by referring to the contact details at the bottom of this
-              document. If you are using an authorised agent to exercise your
-              rights, we may deny a request if the authorised agent does not
-              submit proof that they have been validly authorised to act on your
-              behalf.
+              at <strong>info@deinlog.com</strong>, by visiting
+              http://www.deinlog.com, or by referring to the contact details at
+              the bottom of this document. If you are using an authorised agent
+              to exercise your rights, we may deny a request if the authorised
+              agent does not submit proof that they have been validly authorised
+              to act on your behalf.
             </Box>
             <Box>
               <Box as="u">Verification process</Box>
@@ -1248,12 +1249,7 @@ export default function PrivacyPolicy() {
             </Heading>
             <Box>
               If you have questions or comments about this notice, you may email
-              us at info&lt;at&gt;deinlog.com or by post to:
-            </Box>
-            <Box>
-              <p>Theodossios Aswestopoulos</p>
-              <p>Templergraben 46</p>
-              <p>52062, Aachen (Germany)</p>
+              us at <strong>info@deinlog.com</strong>
             </Box>
             <Heading as="h3" size="md" id="request">
               15. HOW CAN YOU REVIEW, UPDATE, OR DELETE THE DATA WE COLLECT FROM

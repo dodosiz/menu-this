@@ -3,24 +3,58 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: 60vh;
 }
 
 .banner_header {
   color: var(--main-color);
 }
 
-.banner_header_coloured {
+.coloured {
   color: var(--logo-color);
 }
 
 .banner_text {
   color: var(--secondary-color);
-  width: 40vw;
+  width: 50vw;
   margin-top: 2rem;
   text-align: center;
 }
 
 .banner_button {
   margin-top: 2rem;
+}
+
+.grid_item {
+  display: flex;
+}
+
+.grid_item_column {
+  flex-direction: column;
+}
+
+.text_left {
+  text-align: left;
+}
+
+.text_right {
+  text-align: right;
+}
+
+.grid {
+  padding: 10px 0;
+}
+
+@media (max-width: 700px) {
+  .grid_item {
+    display: flex;
+    justify-content: center;
+  }
+  .text_left,
+  .text_right {
+    text-align: center;
+  }
+  .grid_item_column {
+    align-items: center;
+  }
 }

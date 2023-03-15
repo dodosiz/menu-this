@@ -44,7 +44,7 @@ export default function PrivacyPolicy() {
               <Box as="b">Last updated March 05, 2023</Box>
             </Box>
             <Box>
-              This Cookie Policy explains how deinlog.com (&quot;Company,&quot;
+              This Cookie Policy explains how deinlog.com (&quot;Website,&quot;
               &quot;we,&quot; &quot;us,&quot; and &quot;our&quot;) uses cookies
               and similar technologies to recognize you when you visit our
               website at{" "}
@@ -70,12 +70,11 @@ export default function PrivacyPolicy() {
               more efficiently, as well as to provide reporting information.
             </Box>
             <Box>
-              Cookies set by the website owner (in this case, Theodossios
-              Aswestopoulos) are called &quot;first-party cookies.&quot; Cookies
-              set by parties other than the website owner are called
-              &quot;third-party cookies.&quot; Third-party cookies enable
-              third-party features or functionality to be provided on or through
-              the website (e.g., advertising, interactive content, and
+              Cookies set by the website owner are called &quot;first-party
+              cookies.&quot; Cookies set by parties other than the website owner
+              are called &quot;third-party cookies.&quot; Third-party cookies
+              enable third-party features or functionality to be provided on or
+              through the website (e.g., advertising, interactive content, and
               analytics). The parties that set these third-party cookies can
               recognize your computer both when it visits the website in
               question and also when it visits certain other websites.
@@ -316,13 +315,8 @@ export default function PrivacyPolicy() {
             </Heading>
             <Box>
               If you have any questions about our use of cookies or other
-              technologies, you may email us at info&lt;at&gt;deinlog.com or by
-              post to:
-            </Box>
-            <Box>
-              <p>Theodossios Aswestopoulos</p>
-              <p>Templergraben 46</p>
-              <p>52062, Aachen (Germany)</p>
+              technologies, you may email us at{" "}
+              <strong>info@deinlog.com</strong>
             </Box>
           </Container>
         )}
