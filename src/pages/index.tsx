@@ -69,7 +69,7 @@ export default function Home() {
                 colSpan={{ base: 3, md: 1 }}
               >
                 <Text
-                  className={styles.banner_text + " " + styles.text_left}
+                  className={styles.banner_text + " " + styles.text_justify}
                   fontSize="md"
                 >
                   Our menu data management system is designed to make category
@@ -131,7 +131,7 @@ export default function Home() {
                 colSpan={{ base: 3, md: 1 }}
               >
                 <Text
-                  className={styles.banner_text + " " + styles.text_right}
+                  className={styles.banner_text + " " + styles.text_justify}
                   fontSize="md"
                 >
                   Our templates are designed to make the process of creating a
@@ -154,7 +154,7 @@ export default function Home() {
                 colSpan={{ base: 3, md: 1 }}
               >
                 <Text
-                  className={styles.banner_text + " " + styles.text_left}
+                  className={styles.banner_text + " " + styles.text_justify}
                   fontSize="md"
                 >
                   For those who want to take their design to the next level, our
