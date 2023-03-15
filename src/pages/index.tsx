@@ -51,6 +51,8 @@ export default function Home() {
                 colorScheme="teal"
                 variant="solid"
                 rightIcon={<FaArrowRight />}
+                minWidth="180px"
+                maxWidth="180px"
                 onClick={() => router.push("/createMenu")}
               >
                 Get started
@@ -172,6 +174,7 @@ export default function Home() {
                   colorScheme="teal"
                   variant="solid"
                   rightIcon={<FaArrowRight />}
+                  minWidth="180px"
                   maxWidth="180px"
                   onClick={() => router.push("/createMenu")}
                 >
