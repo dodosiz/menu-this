@@ -1,6 +1,6 @@
 import { Notification } from "@/components/commons/notification";
 import { Layout } from "@/components/commons/layout";
-import { Brand, Category, Menu } from "@prisma/client";
+import { Category, Menu } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { ProductMap } from "./api/menu/get-menu-data/[userId]";
 import { LoadingPage } from "@/components/commons/loadingPage";
@@ -22,6 +22,8 @@ import styles from "@/styles/designMenu.module.css";
 import Image from "next/image";
 import { ActionPage } from "@/components/commons/actionPage";
 import { auth } from "@/lib/core/firebase";
+import { Brand, getBrandDocumentReference } from "@/lib/data/brand";
+import { onSnapshot, Unsubscribe } from "firebase/firestore";
 
 export default function DesignMenu() {
   const user = auth.currentUser;
@@ -39,15 +41,24 @@ export default function DesignMenu() {
   const [isBackgroundDirty, setBackgroundDirty] = useState(false);
 
   useEffect(() => {
+    let unsubscribeBrand: Unsubscribe;
     setLoading(true);
     if (user) {
+      unsubscribeBrand = onSnapshot(
+        getBrandDocumentReference(user.uid),
+        (d) => {
+          const data = d.data();
+          if (data) {
+            setBrand(data);
+          }
+        }
+      );
       fetch(`/api/menu/get-menu-design/${user.uid}`)
         .then((res) => res.json())
         .then((data: DesignMenuData) => {
           setCategories(data.categories);
           setProductMap(data.productMap);
           setMenu(data.menu);
-          setBrand(data.brand);
           setLoading(false);
         })
         .catch(() => {
@@ -57,6 +68,11 @@ export default function DesignMenu() {
     } else {
       setLoading(false);
     }
+    return () => {
+      if (!!unsubscribeBrand) {
+        unsubscribeBrand();
+      }
+    };
   }, [user]);
 
   function getConfirmMessage(

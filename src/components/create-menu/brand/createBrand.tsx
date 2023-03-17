@@ -1,4 +1,4 @@
-import { CreateBrandData } from "@/lib/data/brand";
+import { BrandDTO } from "@/lib/data/brand";
 import {
   Button,
   Center,
@@ -7,13 +7,10 @@ import {
   Input,
   VStack,
 } from "@chakra-ui/react";
-import { Brand } from "@prisma/client";
 import { FormEvent, useState } from "react";
 
 interface CreateBrandProps {
   userId: string;
-  setLoading: (b: boolean) => void;
-  setBrand: (b: Brand) => void;
   setErrorMessage: (e: string) => void;
 }
 
@@ -21,7 +18,7 @@ export function CreateBrand(props: CreateBrandProps) {
   const [brandName, setBrandName] = useState("");
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    const data: CreateBrandData = {
+    const data: BrandDTO = {
       userId: props.userId,
       title: brandName,
     };
@@ -33,14 +30,8 @@ export function CreateBrand(props: CreateBrandProps) {
       },
       body: JSONdata,
     };
-    props.setLoading(true);
     const response = await fetch("/api/brand/create", options);
-    if (response.status === 200) {
-      const newBrand = (await response.json()) as Brand;
-      props.setLoading(false);
-      props.setBrand(newBrand);
-    } else if (response.status === 500) {
-      props.setLoading(false);
+    if (response.status === 500) {
       props.setErrorMessage("Failed to create brand");
     }
   }

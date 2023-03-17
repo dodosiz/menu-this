@@ -21,12 +21,13 @@ import {
   Image,
   Text,
 } from "@chakra-ui/react";
-import { Brand, Menu } from "@prisma/client";
+import { Menu } from "@prisma/client";
 import styles from "@/styles/components/design-menu/designMenuViewer.module.css";
 import { BACKGROUND_IMG, templateToMenu } from "@/lib/data/template-data";
 import { CategoryView, ProductMapView } from "@/lib/data/menu-view";
 import { HiOutlinePhotograph } from "react-icons/hi";
 import { ChoosePhotoModal } from "./choosePhotoModal";
+import { Brand } from "@/lib/data/brand";
 
 interface DesignMenuViewer {
   categories: CategoryView[];

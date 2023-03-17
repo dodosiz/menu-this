@@ -1,7 +1,8 @@
-import { Brand, Category, Menu, Product } from "@prisma/client";
+import { Category, Menu, Product } from "@prisma/client";
 import { getCategories } from "./categories";
 import { prisma } from "../core/prisma";
 import { getProductsInCategories } from "./products";
+import { Brand, getBrand } from "./brand";
 
 export interface MenuViewData {
   menu: Menu;
@@ -30,9 +31,7 @@ export async function getMenuViewData(menuId: string): Promise<MenuViewData> {
       created_at: null,
     }));
   }
-  const brand = await prisma.brand.findFirstOrThrow({
-    where: { userId: menu.userId },
-  });
+  const brand = await getBrand(menu.userId);
   return {
     menu,
     categories: categories.map((c) => ({
@@ -40,6 +39,6 @@ export async function getMenuViewData(menuId: string): Promise<MenuViewData> {
       created_at: null,
     })),
     productMap,
-    brand,
+    brand: { title: brand.title },
   };
 }

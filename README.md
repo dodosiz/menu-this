@@ -14,8 +14,6 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-# Tastings App
-
 ## Migrations
 
 Run the migrations:
@@ -44,4 +42,12 @@ To stop the services:
 
 ```
 npx supabase stop
+```
+
+## Run Firebase emulator
+
+To run the emulators:
+
+```
+firebase emulators:start
 ```

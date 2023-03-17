@@ -14,7 +14,7 @@ import {
 import { useState, useEffect } from "react";
 import styles from "@/styles/createMenu.module.css";
 import { IoMdAdd } from "react-icons/io";
-import { Brand, Category } from "@prisma/client";
+import { Category } from "@prisma/client";
 import { CategoryForm } from "@/components/create-menu/category/categoryForm";
 import { CategoryTab } from "@/components/create-menu/category/categoryTab";
 import { UnauthorizedPage } from "@/components/commons/unauthorizedPage";
@@ -32,6 +32,8 @@ import { CATEGORY_LIMIT } from "@/constants";
 import { CreateBrand } from "@/components/create-menu/brand/createBrand";
 import { EditBrand } from "@/components/create-menu/brand/editBrand";
 import { auth } from "@/lib/core/firebase";
+import { onSnapshot, Unsubscribe } from "firebase/firestore";
+import { Brand, getBrandDocumentReference } from "@/lib/data/brand";
 
 export default function CreateMenu() {
   const [isLoading, setLoading] = useState(false);
@@ -47,14 +49,23 @@ export default function CreateMenu() {
   const user = auth.currentUser;
 
   useEffect(() => {
+    let unsubscribeBrand: Unsubscribe;
     setLoading(true);
     if (user) {
+      unsubscribeBrand = onSnapshot(
+        getBrandDocumentReference(user.uid),
+        (d) => {
+          const data = d.data();
+          if (data) {
+            setBrand(data);
+          }
+        }
+      );
       fetch(`/api/menu/get-menu-data/${user.uid}`)
         .then((res) => res.json())
         .then((data: MenuData) => {
           setCategories(data.initialCategories);
           setProductMap(data.initialProductMap);
-          setBrand(data.brand);
           setLoading(false);
         })
         .catch(() => {
@@ -64,6 +75,11 @@ export default function CreateMenu() {
     } else {
       setLoading(false);
     }
+    return () => {
+      if (!!unsubscribeBrand) {
+        unsubscribeBrand();
+      }
+    };
   }, [user]);
 
   useEffect(() => {
@@ -96,12 +112,7 @@ export default function CreateMenu() {
             <UnauthorizedPage />
           )}
           {user && !isLoading && !isRouteLoading && !brand && (
-            <CreateBrand
-              setBrand={setBrand}
-              setErrorMessage={setErrorMessage}
-              setLoading={setLoading}
-              userId={user.uid}
-            />
+            <CreateBrand setErrorMessage={setErrorMessage} userId={user.uid} />
           )}
           {user && !isLoading && !isRouteLoading && !!brand && (
             <>
@@ -109,6 +120,7 @@ export default function CreateMenu() {
                 Menu of &quot;{brand.title}&quot;
                 <EditBrand
                   brand={brand}
+                  user={user}
                   setBrand={setBrand}
                   setErrorMessage={setErrorMessage}
                   setLoading={setLoading}
