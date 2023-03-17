@@ -18,10 +18,10 @@ import {
 } from "@chakra-ui/react";
 import { MdDesignServices } from "react-icons/md";
 import styles from "@/styles/components/design-menu/customizeDrawer.module.css";
-import { Menu } from "@prisma/client";
 import { ColorPicker } from "./form/color-picker";
 import { SliderInput } from "./form/slider-input";
 import { SelectInput } from "./form/select-input";
+import { Menu } from "@/lib/data/menu";
 
 interface DesignDrawerProps {
   menu: Menu;
@@ -111,22 +111,22 @@ export function CustomizeDrawer({
                   <AccordionPanel paddingLeft={0} pb={4}>
                     <Text className={styles.label}>Brand name color</Text>
                     <ColorPicker
-                      value={menu.brand_color}
+                      value={menu.brandColor}
                       setValue={(c) => {
                         setMenu({
                           ...menu,
-                          brand_color: c,
+                          brandColor: c,
                         });
                         setCustomDirty(true);
                       }}
                     />
                     <Text className={styles.label}>Category name color</Text>
                     <ColorPicker
-                      value={menu.title_color}
+                      value={menu.titleColor}
                       setValue={(c) => {
                         setMenu({
                           ...menu,
-                          title_color: c,
+                          titleColor: c,
                         });
                         setCustomDirty(true);
                       }}
@@ -135,33 +135,33 @@ export function CustomizeDrawer({
                       Product name and price color
                     </Text>
                     <ColorPicker
-                      value={menu.name_color}
+                      value={menu.nameColor}
                       setValue={(c) => {
                         setMenu({
                           ...menu,
-                          name_color: c,
+                          nameColor: c,
                         });
                         setCustomDirty(true);
                       }}
                     />
                     <Text className={styles.label}>Description color</Text>
                     <ColorPicker
-                      value={menu.description_color}
+                      value={menu.descriptionColor}
                       setValue={(dc) => {
                         setMenu({
                           ...menu,
-                          description_color: dc,
+                          descriptionColor: dc,
                         });
                         setCustomDirty(true);
                       }}
                     />
                     <Text className={styles.label}>Background color</Text>
                     <ColorPicker
-                      value={menu.background_color}
+                      value={menu.backgroundColor}
                       setValue={(c) => {
                         setMenu({
                           ...menu,
-                          background_color: c,
+                          backgroundColor: c,
                         });
                         setCustomDirty(true);
                       }}
@@ -184,11 +184,11 @@ export function CustomizeDrawer({
                     <Text className={styles.label}>Brand name top margin</Text>
                     <SliderInput
                       maxValue={400}
-                      value={menu.brand_margin}
+                      value={menu.brandMargin}
                       setValue={(m) => {
                         setMenu({
                           ...menu,
-                          brand_margin: m,
+                          brandMargin: m,
                         });
                         setCustomDirty(true);
                       }}
@@ -198,11 +198,11 @@ export function CustomizeDrawer({
                     </Text>
                     <SliderInput
                       maxValue={400}
-                      value={menu.title_margin}
+                      value={menu.titleMargin}
                       setValue={(m) => {
                         setMenu({
                           ...menu,
-                          title_margin: m,
+                          titleMargin: m,
                         });
                         setCustomDirty(true);
                       }}
@@ -212,11 +212,11 @@ export function CustomizeDrawer({
                     </Text>
                     <SliderInput
                       maxValue={20}
-                      value={menu.name_margin}
+                      value={menu.nameMargin}
                       setValue={(m) => {
                         setMenu({
                           ...menu,
-                          name_margin: m,
+                          nameMargin: m,
                         });
                         setCustomDirty(true);
                       }}
@@ -226,11 +226,11 @@ export function CustomizeDrawer({
                     </Text>
                     <SliderInput
                       maxValue={200}
-                      value={menu.name_title_margin}
+                      value={menu.nameTitleMargin}
                       setValue={(m) => {
                         setMenu({
                           ...menu,
-                          name_title_margin: m,
+                          nameTitleMargin: m,
                         });
                         setCustomDirty(true);
                       }}
@@ -253,11 +253,11 @@ export function CustomizeDrawer({
                     <Text className={styles.label}>Brand name size</Text>
                     <SelectInput
                       options={["4xl", "2xl", "xl", "lg", "md", "sm"]}
-                      value={menu.brand_size}
+                      value={menu.brandSize}
                       setValue={(s) => {
                         setMenu({
                           ...menu,
-                          brand_size: s,
+                          brandSize: s,
                         });
                         setCustomDirty(true);
                       }}
@@ -265,11 +265,11 @@ export function CustomizeDrawer({
                     <Text className={styles.label}>Category name size</Text>
                     <SelectInput
                       options={["xl", "lg", "md", "sm"]}
-                      value={menu.title_size}
+                      value={menu.titleSize}
                       setValue={(s) => {
                         setMenu({
                           ...menu,
-                          title_size: s,
+                          titleSize: s,
                         });
                         setCustomDirty(true);
                       }}
@@ -279,11 +279,11 @@ export function CustomizeDrawer({
                     </Text>
                     <SelectInput
                       options={["xl", "lg", "md", "sm"]}
-                      value={menu.name_size}
+                      value={menu.nameSize}
                       setValue={(s) => {
                         setMenu({
                           ...menu,
-                          name_size: s,
+                          nameSize: s,
                         });
                         setCustomDirty(true);
                       }}
@@ -299,11 +299,11 @@ export function CustomizeDrawer({
                         "1em": "md",
                         "0.8em": "sm",
                       }}
-                      value={menu.description_size}
+                      value={menu.descriptionSize}
                       setValue={(s) => {
                         setMenu({
                           ...menu,
-                          description_size: s,
+                          descriptionSize: s,
                         });
                         setCustomDirty(true);
                       }}
@@ -327,11 +327,11 @@ export function CustomizeDrawer({
                     <SelectInput
                       options={FONTS}
                       displayOption={FONT_DISPLAY_OPTIONS}
-                      value={menu.brand_font}
+                      value={menu.brandFont}
                       setValue={(f) => {
                         setMenu({
                           ...menu,
-                          brand_font: f,
+                          brandFont: f,
                         });
                         setCustomDirty(true);
                       }}
@@ -340,11 +340,11 @@ export function CustomizeDrawer({
                     <SelectInput
                       options={FONTS}
                       displayOption={FONT_DISPLAY_OPTIONS}
-                      value={menu.title_font}
+                      value={menu.titleFont}
                       setValue={(f) => {
                         setMenu({
                           ...menu,
-                          title_font: f,
+                          titleFont: f,
                         });
                         setCustomDirty(true);
                       }}
@@ -353,11 +353,11 @@ export function CustomizeDrawer({
                     <SelectInput
                       options={FONTS}
                       displayOption={FONT_DISPLAY_OPTIONS}
-                      value={menu.content_font}
+                      value={menu.contentFont}
                       setValue={(f) => {
                         setMenu({
                           ...menu,
-                          content_font: f,
+                          contentFont: f,
                         });
                         setCustomDirty(true);
                       }}

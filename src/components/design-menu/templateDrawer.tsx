@@ -11,9 +11,9 @@ import {
 } from "@chakra-ui/react";
 import { HiTemplate } from "react-icons/hi";
 import styles from "@/styles/components/design-menu/templateDrawer.module.css";
-import { Menu } from "@prisma/client";
 import { RadioCard } from "./form/radio-card";
 import { templateToMenu } from "@/lib/data/template-data";
+import { Menu } from "@/lib/data/menu";
 
 interface TemplateDrawerProps {
   menu: Menu;

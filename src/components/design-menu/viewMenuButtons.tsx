@@ -7,12 +7,12 @@ import { QrDialog } from "./qrModalDialog";
 import { FaRegSave } from "react-icons/fa";
 
 interface ViewMenuButtonsProps {
-  menuId: string;
+  userId: string;
   updateDesign: () => {};
 }
 
 export function ViewMenuButtons({
-  menuId,
+  userId,
   updateDesign,
 }: ViewMenuButtonsProps) {
   const router = useRouter();
@@ -22,13 +22,13 @@ export function ViewMenuButtons({
       <QrDialog
         isOpen={showQR}
         setOpen={setShowQR}
-        url={`${window.location.origin}/menu/${menuId}`}
+        url={`${window.location.origin}/menu/${userId}`}
       />
       <Button
         leftIcon={<ImEye />}
         colorScheme="teal"
         variant="outline"
-        onClick={() => router.push(`/menu/${menuId}`)}
+        onClick={() => router.push(`/menu/${userId}`)}
         className={`${styles.view_button} ${styles.view_button_desktop}`}
       >
         View
@@ -39,7 +39,7 @@ export function ViewMenuButtons({
         aria-label="view"
         variant="outline"
         size="sm"
-        onClick={() => router.push(`/menu/${menuId}`)}
+        onClick={() => router.push(`/menu/${userId}`)}
         className={`${styles.view_button} ${styles.view_button_mobile}`}
       />
       <Button

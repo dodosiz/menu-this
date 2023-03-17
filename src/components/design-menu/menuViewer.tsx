@@ -21,13 +21,13 @@ import {
   Image,
   Text,
 } from "@chakra-ui/react";
-import { Menu } from "@prisma/client";
 import styles from "@/styles/components/design-menu/designMenuViewer.module.css";
 import { BACKGROUND_IMG, templateToMenu } from "@/lib/data/template-data";
 import { CategoryView, ProductMapView } from "@/lib/data/menu-view";
 import { HiOutlinePhotograph } from "react-icons/hi";
 import { ChoosePhotoModal } from "./choosePhotoModal";
 import { Brand } from "@/lib/data/brand";
+import { Menu } from "@/lib/data/menu";
 
 interface DesignMenuViewer {
   categories: CategoryView[];
@@ -47,22 +47,22 @@ export function MenuViewer({
   setBackground,
 }: DesignMenuViewer) {
   const {
-    background_color,
-    content_font,
-    description_color,
-    description_size,
-    name_color,
-    name_margin,
-    name_size,
-    name_title_margin,
-    brand_color,
-    brand_margin,
-    brand_size,
-    brand_font,
-    title_color,
-    title_font,
-    title_margin,
-    title_size,
+    backgroundColor,
+    contentFont,
+    descriptionColor,
+    descriptionSize,
+    nameColor,
+    nameMargin,
+    nameSize,
+    nameTitleMargin,
+    brandColor,
+    brandMargin,
+    brandSize,
+    brandFont,
+    titleColor,
+    titleFont,
+    titleMargin,
+    titleSize,
   } = menu.template ? { ...templateToMenu[menu.template], ...menu } : menu;
   const [categoryId, setCategoryId] = useState<string | undefined>(undefined);
   return (
@@ -70,15 +70,15 @@ export function MenuViewer({
       paddingLeft={0}
       paddingRight={0}
       className={styles.menu}
-      backgroundColor={background_color}
+      backgroundColor={backgroundColor}
     >
       <Center>
         <Heading
-          color={brand_color}
-          size={brand_size}
+          color={brandColor}
+          size={brandSize}
           as="h1"
-          fontFamily={brand_font}
-          marginTop={brand_margin}
+          fontFamily={brandFont}
+          marginTop={brandMargin}
         >
           {brand.title}
         </Heading>
@@ -87,9 +87,9 @@ export function MenuViewer({
         <>
           {category.background && (
             <Image
-              marginTop={title_margin}
+              marginTop={titleMargin}
               position="relative"
-              marginBottom={name_margin}
+              marginBottom={nameMargin}
               width="100vw"
               src={BACKGROUND_IMG[category.background].path}
               alt={BACKGROUND_IMG[category.background].alt}
@@ -97,22 +97,22 @@ export function MenuViewer({
           )}
           <Box paddingLeft="20px" paddingRight="20px" key={`cb-${category.id}`}>
             <Heading
-              marginTop={!category.background ? title_margin : 0}
-              color={title_color}
-              size={title_size}
+              marginTop={!category.background ? titleMargin : 0}
+              color={titleColor}
+              size={titleSize}
               as="h1"
-              fontFamily={title_font}
+              fontFamily={titleFont}
             >
               {category.title}
               {inEdit && (
                 <IconButton
                   icon={<HiOutlinePhotograph />}
-                  color={title_color}
+                  color={titleColor}
                   aria-label="design"
                   variant="outline"
                   size="md"
                   onClick={() => setCategoryId(category.id)}
-                  _hover={{ background: title_color, color: background_color }}
+                  _hover={{ background: titleColor, color: backgroundColor }}
                   borderRadius="50%"
                   float="right"
                 />
@@ -122,38 +122,38 @@ export function MenuViewer({
               {productMap[category.id].map((product, i) => (
                 <Fragment key={`gi-${product.id}`}>
                   <GridItem
-                    marginTop={i > 0 ? name_margin : name_title_margin}
+                    marginTop={i > 0 ? nameMargin : nameTitleMargin}
                     colSpan={{ base: 3, md: 4 }}
                   >
                     <Heading
-                      fontFamily={content_font}
-                      color={name_color}
+                      fontFamily={contentFont}
+                      color={nameColor}
                       as="h2"
-                      size={name_size}
+                      size={nameSize}
                     >
                       {product.name}
                     </Heading>
                   </GridItem>
                   <GridItem
-                    marginTop={i > 0 ? name_margin : name_title_margin}
+                    marginTop={i > 0 ? nameMargin : nameTitleMargin}
                     colSpan={{ base: 2, md: 1 }}
                   >
                     <Heading
                       display="flex"
-                      fontFamily={content_font}
+                      fontFamily={contentFont}
                       justifyContent="flex-end"
-                      color={name_color}
+                      color={nameColor}
                       as="h2"
-                      size={name_size}
+                      size={nameSize}
                     >
                       € {product.price.toFixed(2)}
                     </Heading>
                   </GridItem>
                   <GridItem colSpan={{ base: 3, md: 4 }}>
                     <Text
-                      fontFamily={content_font}
-                      fontSize={description_size}
-                      color={description_color}
+                      fontFamily={contentFont}
+                      fontSize={descriptionSize}
+                      color={descriptionColor}
                     >
                       {product.description}
                     </Text>

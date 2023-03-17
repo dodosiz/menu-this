@@ -1,6 +1,6 @@
 import { Notification } from "@/components/commons/notification";
 import { Layout } from "@/components/commons/layout";
-import { Category, Menu } from "@prisma/client";
+import { Category } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { ProductMap } from "./api/menu/get-menu-data/[userId]";
 import { LoadingPage } from "@/components/commons/loadingPage";
@@ -8,14 +8,9 @@ import { UnauthorizedPage } from "@/components/commons/unauthorizedPage";
 import { Box, Grid, GridItem, Heading, Tooltip } from "@chakra-ui/react";
 import { CustomizeDrawer } from "@/components/design-menu/customizeDrawer";
 import { MenuViewer } from "@/components/design-menu/menuViewer";
-import { DesignMenuData } from "./api/menu/get-menu-design/[userId]";
 import { TemplateDrawer } from "@/components/design-menu/templateDrawer";
 import { ViewMenuButtons } from "@/components/design-menu/viewMenuButtons";
-import {
-  CreateMenuData,
-  UpdateDesignData,
-  UpdateMenuData,
-} from "@/lib/data/menu";
+import { Menu, MenuDTO } from "@/lib/data/menu";
 import { Router } from "next/router";
 import { BASE_MENU, templateToMenu } from "@/lib/data/template-data";
 import styles from "@/styles/designMenu.module.css";
@@ -24,6 +19,8 @@ import { ActionPage } from "@/components/commons/actionPage";
 import { auth } from "@/lib/core/firebase";
 import { Brand, getBrandDocumentReference } from "@/lib/data/brand";
 import { onSnapshot, Unsubscribe } from "firebase/firestore";
+import { UpdateDesignData } from "./api/menu/update-design";
+import { DesignMenuData } from "./api/menu/get-menu-design/[userId]";
 
 export default function DesignMenu() {
   const user = auth.currentUser;
@@ -41,8 +38,7 @@ export default function DesignMenu() {
   const [isBackgroundDirty, setBackgroundDirty] = useState(false);
 
   useEffect(() => {
-    let unsubscribeBrand: Unsubscribe;
-    setLoading(true);
+    let unsubscribeBrand: Unsubscribe | undefined;
     if (user) {
       unsubscribeBrand = onSnapshot(
         getBrandDocumentReference(user.uid),
@@ -53,6 +49,17 @@ export default function DesignMenu() {
           }
         }
       );
+    }
+    return () => {
+      if (!!unsubscribeBrand) {
+        unsubscribeBrand();
+      }
+    };
+  });
+
+  useEffect(() => {
+    setLoading(true);
+    if (user) {
       fetch(`/api/menu/get-menu-design/${user.uid}`)
         .then((res) => res.json())
         .then((data: DesignMenuData) => {
@@ -68,11 +75,6 @@ export default function DesignMenu() {
     } else {
       setLoading(false);
     }
-    return () => {
-      if (!!unsubscribeBrand) {
-        unsubscribeBrand();
-      }
-    };
   }, [user]);
 
   function getConfirmMessage(
@@ -128,27 +130,27 @@ export default function DesignMenu() {
   });
 
   async function updateDesign() {
-    if (!menu) {
+    if (!menu || !user) {
       return;
     }
-    const updateMenuData: UpdateMenuData = {
-      menuId: menu.id,
-      brandColor: menu.brand_color,
-      titleColor: menu.title_color,
-      nameColor: menu.name_color,
-      descriptionColor: menu.description_color,
-      backgroundColor: menu.background_color,
-      brandMargin: menu.brand_margin,
-      titleMargin: menu.title_margin,
-      nameMargin: menu.name_margin,
-      nameTitleMargin: menu.name_title_margin,
-      brandSize: menu.brand_size,
-      titleSize: menu.title_size,
-      nameSize: menu.name_size,
-      descriptionSize: menu.description_size,
-      brandFont: menu.brand_font,
-      titleFont: menu.title_font,
-      contentFont: menu.content_font,
+    const updateMenuData: MenuDTO = {
+      brandColor: menu.brandColor,
+      titleColor: menu.titleColor,
+      nameColor: menu.nameColor,
+      descriptionColor: menu.descriptionColor,
+      backgroundColor: menu.backgroundColor,
+      brandMargin: menu.brandMargin,
+      titleMargin: menu.titleMargin,
+      nameMargin: menu.nameMargin,
+      nameTitleMargin: menu.nameTitleMargin,
+      brandSize: menu.brandSize,
+      titleSize: menu.titleSize,
+      nameSize: menu.nameSize,
+      descriptionSize: menu.descriptionSize,
+      brandFont: menu.brandFont,
+      titleFont: menu.titleFont,
+      contentFont: menu.contentFont,
+      userId: user.uid,
     };
     const data: UpdateDesignData = {
       categories,
@@ -180,24 +182,23 @@ export default function DesignMenu() {
     if (!user) {
       return;
     }
-    const data: CreateMenuData = {
-      menuId: menu.id,
-      brandColor: menu.brand_color,
-      titleColor: menu.title_color,
-      nameColor: menu.name_color,
-      descriptionColor: menu.description_color,
-      backgroundColor: menu.background_color,
-      brandMargin: menu.brand_margin,
-      titleMargin: menu.title_margin,
-      nameMargin: menu.name_margin,
-      nameTitleMargin: menu.name_title_margin,
-      brandSize: menu.brand_size,
-      titleSize: menu.title_size,
-      nameSize: menu.name_size,
-      descriptionSize: menu.description_size,
-      brandFont: menu.brand_font,
-      titleFont: menu.title_font,
-      contentFont: menu.content_font,
+    const data: MenuDTO = {
+      brandColor: menu.brandColor,
+      titleColor: menu.titleColor,
+      nameColor: menu.nameColor,
+      descriptionColor: menu.descriptionColor,
+      backgroundColor: menu.backgroundColor,
+      brandMargin: menu.brandMargin,
+      titleMargin: menu.titleMargin,
+      nameMargin: menu.nameMargin,
+      nameTitleMargin: menu.nameTitleMargin,
+      brandSize: menu.brandSize,
+      titleSize: menu.titleSize,
+      nameSize: menu.nameSize,
+      descriptionSize: menu.descriptionSize,
+      brandFont: menu.brandFont,
+      titleFont: menu.titleFont,
+      contentFont: menu.contentFont,
       userId: user.uid,
     };
     const JSONdata = JSON.stringify(data);
@@ -209,13 +210,7 @@ export default function DesignMenu() {
       body: JSONdata,
     };
     const response = await fetch("/api/menu/create-menu", options);
-    if (response.status === 200) {
-      const result = await response.json();
-      setMenu({
-        ...menu,
-        id: result.id,
-      });
-    } else if (response.status === 500) {
+    if (response.status === 500) {
       setErrorMessage("Failed to create menu");
     }
   }
@@ -352,7 +347,7 @@ export default function DesignMenu() {
                     setCustomDirty={setCustomDirty}
                   />
                   <ViewMenuButtons
-                    menuId={menu.id}
+                    userId={user.uid}
                     updateDesign={updateDesign}
                   />
                 </GridItem>

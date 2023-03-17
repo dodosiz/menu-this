@@ -55,7 +55,7 @@ export async function createBrand(data: CreateBrandData) {
   const document: Brand = {
     title: data.title,
   };
-  await setDoc(doc(db, "brands", data.userId), document);
+  await setDoc(doc(db, BRANDS_COLLECTION, data.userId), document);
 }
 
 export interface UpdateBrandData {

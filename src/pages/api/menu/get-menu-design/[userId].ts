@@ -1,7 +1,7 @@
 import { getCategories } from "@/lib/data/categories";
-import { getMenuByUserId } from "@/lib/data/menu";
+import { getMenu, Menu } from "@/lib/data/menu";
 import { getProductsInCategories } from "@/lib/data/products";
-import { Category, Menu } from "@prisma/client";
+import { Category } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { ProductMap } from "../get-menu-data/[userId]";
 
@@ -17,7 +17,7 @@ export default async function handler(
 ) {
   const { userId } = req.query;
   // design part
-  const menu = await getMenuByUserId(userId as string);
+  const menu = await getMenu(userId as string);
   // data part
   const categories = await getCategories(userId as string);
   const categoryIds = categories.map((c) => c.id);
