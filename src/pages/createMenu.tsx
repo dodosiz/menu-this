@@ -14,7 +14,6 @@ import {
 import { useState, useEffect } from "react";
 import styles from "@/styles/createMenu.module.css";
 import { IoMdAdd } from "react-icons/io";
-import { Category } from "@prisma/client";
 import { CategoryForm } from "@/components/create-menu/category/categoryForm";
 import { CategoryTab } from "@/components/create-menu/category/categoryTab";
 import { UnauthorizedPage } from "@/components/commons/unauthorizedPage";
@@ -34,6 +33,10 @@ import { EditBrand } from "@/components/create-menu/brand/editBrand";
 import { auth } from "@/lib/core/firebase";
 import { onSnapshot, Unsubscribe } from "firebase/firestore";
 import { Brand, getBrandDocumentReference } from "@/lib/data/brand";
+import {
+  Category,
+  getCategoryCollectionReference,
+} from "@/lib/data/categories";
 
 export default function CreateMenu() {
   const [isLoading, setLoading] = useState(false);
@@ -50,6 +53,7 @@ export default function CreateMenu() {
 
   useEffect(() => {
     let unsubscribeBrand: Unsubscribe;
+    let unsubscribeCategory: Unsubscribe;
     setLoading(true);
     if (user) {
       unsubscribeBrand = onSnapshot(
@@ -61,10 +65,17 @@ export default function CreateMenu() {
           }
         }
       );
+      unsubscribeCategory = onSnapshot(
+        getCategoryCollectionReference(user.uid),
+        (c) => {
+          const categories: Category[] = [];
+          c.forEach((r) => categories.push(r.data()));
+          setCategories(categories);
+        }
+      );
       fetch(`/api/menu/get-menu-data/${user.uid}`)
         .then((res) => res.json())
         .then((data: MenuData) => {
-          setCategories(data.initialCategories);
           setProductMap(data.initialProductMap);
           setLoading(false);
         })
@@ -78,6 +89,9 @@ export default function CreateMenu() {
     return () => {
       if (!!unsubscribeBrand) {
         unsubscribeBrand();
+      }
+      if (!!unsubscribeCategory) {
+        unsubscribeCategory();
       }
     };
   }, [user]);
@@ -139,7 +153,6 @@ export default function CreateMenu() {
                   productMap={productMap}
                   setProductMap={setProductMap}
                   handleCancel={() => setCreateNewCategory(false)}
-                  setCategories={setCategories}
                   setCreateNewCategory={setCreateNewCategory}
                   setErrorMessage={setErrorMessage}
                   categoryInEdit={
@@ -158,8 +171,8 @@ export default function CreateMenu() {
                           swapDates({
                             id1: categories[tabIndex].id,
                             id2: categories[tabIndex - 1].id,
+                            userId: user.uid,
                             categories: categories,
-                            setCategories: setCategories,
                             setErrorMessage: setErrorMessage,
                             updateTabIndex: () => setTabIndex(tabIndex - 1),
                           })
@@ -172,7 +185,7 @@ export default function CreateMenu() {
                             id1: categories[tabIndex].id,
                             id2: categories[tabIndex + 1].id,
                             categories: categories,
-                            setCategories: setCategories,
+                            userId: user.uid,
                             setErrorMessage: setErrorMessage,
                             updateTabIndex: () => setTabIndex(tabIndex + 1),
                           })
@@ -188,11 +201,7 @@ export default function CreateMenu() {
               >
                 <TabList className={styles.tablist}>
                   {categories
-                    .sort(
-                      (c1, c2) =>
-                        Date.parse(`${c1.created_at}`) -
-                        Date.parse(`${c2.created_at}`)
-                    )
+                    .sort((c1, c2) => c1.createdAt - c2.createdAt)
                     .map((category, index) => {
                       if (category.id === editedCategoryId) {
                         return (
@@ -201,7 +210,6 @@ export default function CreateMenu() {
                             productMap={productMap}
                             setProductMap={setProductMap}
                             handleCancel={() => setEditedCategoryId("")}
-                            setCategories={setCategories}
                             setCreateNewCategory={setCreateNewCategory}
                             setErrorMessage={setErrorMessage}
                             setTabIndex={setTabIndex}
@@ -217,7 +225,7 @@ export default function CreateMenu() {
                             categories={categories}
                             category={category}
                             index={index}
-                            setCategories={setCategories}
+                            userId={user.uid}
                             key={"tab-" + category.id}
                             editedCategoryId={editedCategoryId}
                             setErrorMessage={setErrorMessage}
@@ -233,7 +241,6 @@ export default function CreateMenu() {
                       productMap={productMap}
                       setProductMap={setProductMap}
                       handleCancel={() => setCreateNewCategory(false)}
-                      setCategories={setCategories}
                       setCreateNewCategory={setCreateNewCategory}
                       setErrorMessage={setErrorMessage}
                       setEditedCategoryId={setEditedCategoryId}

@@ -35,9 +35,9 @@ import {
 } from "./categoryFormHandler";
 import { RiDeleteBin6Line, RiEditLine } from "react-icons/ri";
 import { BiDotsVerticalRounded } from "react-icons/bi";
-import { Category } from "@prisma/client";
 import { AiOutlineArrowDown, AiOutlineArrowUp } from "react-icons/ai";
 import { CATEGORY_LIMIT } from "@/constants";
+import { Category } from "@/lib/data/categories";
 
 interface CategoryMobileFormProps extends CategoryFormProps {
   currentCategory: Category | null;
@@ -123,7 +123,7 @@ export function CategoryMobileForm(props: CategoryMobileFormProps) {
                       await handleDelete({
                         categories: props.categories,
                         categoryId: props.currentCategory!.id,
-                        setCategories: props.setCategories,
+                        userId: props.user.uid,
                         setCategoryIdToDelete: () => {},
                         setErrorMessage: props.setErrorMessage,
                         setLoading: setLoading,

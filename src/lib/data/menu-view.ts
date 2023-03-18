@@ -1,18 +1,15 @@
-import { Category, Product } from "@prisma/client";
-import { getCategories } from "./categories";
-import { prisma } from "../core/prisma";
+import { Product } from "@prisma/client";
+import { Category, getCategories } from "./categories";
 import { getProductsInCategories } from "./products";
 import { Brand, getBrand } from "./brand";
 import { getMenuOrThrow, Menu } from "./menu";
 
 export interface MenuViewData {
   menu: Menu;
-  categories: CategoryView[];
+  categories: Category[];
   productMap: ProductMapView;
   brand: Brand;
 }
-
-export type CategoryView = Omit<Category, "created_at">;
 
 export type ProductMapView = {
   [categoryId: string]: Omit<Product, "created_at">[];

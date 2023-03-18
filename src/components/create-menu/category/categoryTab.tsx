@@ -1,16 +1,16 @@
 import { Box, Spinner, Tab } from "@chakra-ui/react";
 import styles from "@/styles/components/create-menu/category/categoryTab.module.css";
 import { useState } from "react";
-import { Category } from "@prisma/client";
 import { ContextMenu } from "../contextMenu";
 import { handleDelete, swapDates } from "./categoryFormHandler";
+import { Category } from "@/lib/data/categories";
 
 interface CategoryTabProps {
   category: Category;
   index: number;
+  userId: string;
   categories: Category[];
   editedCategoryId: string;
-  setCategories: (c: Category[]) => void;
   setErrorMessage: (s: string) => void;
   setEditedCategoryId: (id: string) => void;
   setTabIndex: (i: number) => void;
@@ -37,6 +37,7 @@ export function CategoryTab(props: CategoryTabProps) {
               handleDelete({
                 ...props,
                 categoryId: props.category.id,
+                userId: props.userId,
                 setCategoryIdToDelete,
                 setLoading,
               })
@@ -48,7 +49,7 @@ export function CategoryTab(props: CategoryTabProps) {
                       id1: props.category.id,
                       id2: props.categories[props.index - 1].id,
                       categories: props.categories,
-                      setCategories: props.setCategories,
+                      userId: props.userId,
                       setErrorMessage: props.setErrorMessage,
                       updateTabIndex: () => props.setTabIndex(props.index - 1),
                     })
@@ -61,7 +62,7 @@ export function CategoryTab(props: CategoryTabProps) {
                       id1: props.category.id,
                       id2: props.categories[props.index + 1].id,
                       categories: props.categories,
-                      setCategories: props.setCategories,
+                      userId: props.userId,
                       setErrorMessage: props.setErrorMessage,
                       updateTabIndex: () => props.setTabIndex(props.index + 1),
                     })

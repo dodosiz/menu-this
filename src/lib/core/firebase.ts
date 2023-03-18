@@ -21,20 +21,21 @@ const firebaseConfig = {
   measurementId: "G-NQW3WK9KP9",
 };
 
+// change this to activate emulation
+const dev = true;
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// PROD
-// export const auth = getAuth(app);
-
-// DEV
-export const auth = getAuth();
-connectAuthEmulator(auth, "http://localhost:9099");
+export const auth = dev ? getAuth() : getAuth(app);
+if (dev) {
+  connectAuthEmulator(auth, "http://localhost:9099");
+}
 
 export const provider = new GoogleAuthProvider();
 
 // DEV
-export const db = getFirestore();
-if (!(db as any)._settingsFrozen) {
+export const db = dev ? getFirestore() : getFirestore(app);
+if (dev && !(db as any)._settingsFrozen) {
   connectFirestoreEmulator(db, "localhost", 8080);
 }

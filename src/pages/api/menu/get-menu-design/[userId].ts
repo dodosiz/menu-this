@@ -1,7 +1,6 @@
-import { getCategories } from "@/lib/data/categories";
+import { Category, getCategories } from "@/lib/data/categories";
 import { getMenu, Menu } from "@/lib/data/menu";
 import { getProductsInCategories } from "@/lib/data/products";
-import { Category } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import { ProductMap } from "../get-menu-data/[userId]";
 

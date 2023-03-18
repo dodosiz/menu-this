@@ -1,5 +1,5 @@
+import { Category } from "@/lib/data/categories";
 import { Select } from "@chakra-ui/react";
-import { Category } from "@prisma/client";
 
 interface CategoryMobileMenuProps {
   categories: Category[];
@@ -19,10 +19,7 @@ export function CategoryMobileMenu(props: CategoryMobileMenuProps) {
       value={props.tabIndex.toString()}
     >
       {props.categories
-        .sort(
-          (c1, c2) =>
-            Date.parse(`${c1.created_at}`) - Date.parse(`${c2.created_at}`)
-        )
+        .sort((c1, c2) => c1.createdAt - c2.createdAt)
         .map((c, i) => (
           <option
             style={{ color: "teal" }}

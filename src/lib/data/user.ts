@@ -1,4 +1,5 @@
 import { prisma } from "../core/prisma";
+import { getCategories } from "./categories";
 
 export type CategoryProductCount = {
   [categoryId: string]: { title: string; count: number };
@@ -9,7 +10,7 @@ export interface UserStatus {
 }
 
 export async function getUserStatus(userId: string): Promise<UserStatus> {
-  const categories = await prisma.category.findMany({ where: { userId } });
+  const categories = await getCategories(userId);
   const categoryProductCount: CategoryProductCount = {};
   for (const c of categories) {
     const productCount = await prisma.product.count({

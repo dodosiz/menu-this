@@ -1,6 +1,6 @@
-import { getCategories } from "@/lib/data/categories";
+import { Category, getCategories } from "@/lib/data/categories";
 import { getProductsInCategories } from "@/lib/data/products";
-import { Category, Product } from "@prisma/client";
+import { Product } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export interface MenuData {

@@ -13,12 +13,12 @@ import {
   ModalOverlay,
 } from "@chakra-ui/react";
 import styles from "@/styles/designMenu.module.css";
-import { CategoryView } from "@/lib/data/menu-view";
 import { useEffect, useState } from "react";
+import { Category } from "@/lib/data/categories";
 
 interface ChoosePhotoModalProps {
   categoryId: string | undefined;
-  categories: CategoryView[];
+  categories: Category[];
   setBackground?: (categoryId: string, background: string | null) => void;
   setCategoryId: (b: string | undefined) => void;
 }

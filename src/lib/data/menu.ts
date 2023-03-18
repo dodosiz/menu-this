@@ -1,4 +1,3 @@
-import { Category } from "@prisma/client";
 import {
   doc,
   FirestoreDataConverter,
@@ -7,6 +6,8 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../core/firebase";
+import { Category, getCategoryDocumentReference } from "./categories";
+import { templateToMenu } from "./template-data";
 
 const MENU_COLLECTION = "menu";
 
@@ -172,4 +173,40 @@ export async function createMenu(data: MenuDTO) {
     template: null,
   };
   await setDoc(doc(db, MENU_COLLECTION, data.userId), document);
+}
+
+export interface UpdateDesignData {
+  menu: MenuDTO;
+  template: string | null;
+  categories: Category[];
+}
+
+export async function updateDesign(data: UpdateDesignData) {
+  const menu = data.template ? templateToMenu[data.template] : {};
+  await updateDoc(getMenuDocumentReference(data.menu.userId), {
+    ...menu,
+    template: data.template,
+    brandColor: data.menu.brandColor,
+    titleColor: data.menu.titleColor,
+    nameColor: data.menu.nameColor,
+    descriptionColor: data.menu.descriptionColor,
+    backgroundColor: data.menu.backgroundColor,
+    brandMargin: data.menu.brandMargin,
+    titleMargin: data.menu.titleMargin,
+    nameMargin: data.menu.nameMargin,
+    nameTitleMargin: data.menu.nameTitleMargin,
+    brandSize: data.menu.brandSize,
+    titleSize: data.menu.titleSize,
+    nameSize: data.menu.nameSize,
+    descriptionSize: data.menu.descriptionSize,
+    brandFont: data.menu.brandFont,
+    titleFont: data.menu.titleFont,
+    contentFont: data.menu.contentFont,
+  });
+  // update background images
+  for (const c of data.categories) {
+    await updateDoc(getCategoryDocumentReference(data.menu.userId, c.id), {
+      background: c.background,
+    });
+  }
 }

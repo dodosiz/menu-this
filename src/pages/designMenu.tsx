@@ -1,6 +1,5 @@
 import { Notification } from "@/components/commons/notification";
 import { Layout } from "@/components/commons/layout";
-import { Category } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { ProductMap } from "./api/menu/get-menu-data/[userId]";
 import { LoadingPage } from "@/components/commons/loadingPage";
@@ -10,7 +9,7 @@ import { CustomizeDrawer } from "@/components/design-menu/customizeDrawer";
 import { MenuViewer } from "@/components/design-menu/menuViewer";
 import { TemplateDrawer } from "@/components/design-menu/templateDrawer";
 import { ViewMenuButtons } from "@/components/design-menu/viewMenuButtons";
-import { Menu, MenuDTO } from "@/lib/data/menu";
+import { Menu, MenuDTO, UpdateDesignData } from "@/lib/data/menu";
 import { Router } from "next/router";
 import { BASE_MENU, templateToMenu } from "@/lib/data/template-data";
 import styles from "@/styles/designMenu.module.css";
@@ -19,8 +18,8 @@ import { ActionPage } from "@/components/commons/actionPage";
 import { auth } from "@/lib/core/firebase";
 import { Brand, getBrandDocumentReference } from "@/lib/data/brand";
 import { onSnapshot, Unsubscribe } from "firebase/firestore";
-import { UpdateDesignData } from "./api/menu/update-design";
 import { DesignMenuData } from "./api/menu/get-menu-design/[userId]";
+import { Category } from "@/lib/data/categories";
 
 export default function DesignMenu() {
   const user = auth.currentUser;
