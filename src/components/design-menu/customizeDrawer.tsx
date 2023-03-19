@@ -26,9 +26,9 @@ import { Menu } from "@/lib/data/menu";
 interface DesignDrawerProps {
   menu: Menu;
   isCustomDrawerOpen: boolean;
-  setCustomDrawerOpen: (b: boolean) => void;
-  setMenu: (m: Menu) => void;
-  setCustomDirty: (b: boolean) => void;
+  setCustomDrawerOpen: (_b: boolean) => void;
+  setMenu: (_m: Menu) => void;
+  setCustomDirty: (_b: boolean) => void;
 }
 
 const FONTS = [

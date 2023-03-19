@@ -24,7 +24,7 @@ export default function UpdateUser() {
     setLoading(true);
     signInWithEmailAndPassword(auth, user!!.email || "", password)
       .then((value) => {
-        updatePassword(value.user, newPassword).then((value) => {
+        updatePassword(value.user, newPassword).then(() => {
           setLoading(false);
           setShowSuccess(true);
           setPassword("");
@@ -32,7 +32,7 @@ export default function UpdateUser() {
           setNewPassword("");
         });
       })
-      .catch((e) => {
+      .catch(() => {
         setErrorMessage("Failed to update user");
         setLoading(false);
       });

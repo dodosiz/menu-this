@@ -54,10 +54,10 @@ export default function SignUp() {
     e.preventDefault();
     setLoading(true);
     signInWithPopup(auth, provider)
-      .then((value) => {
+      .then(() => {
         setLoading(false);
       })
-      .catch((e) => {
+      .catch(() => {
         setLoading(false);
         setErrorMessage("Failed to sign up");
       });

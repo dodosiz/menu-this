@@ -29,10 +29,10 @@ interface ProductFormProps {
   products: Product[];
   editedProduct?: Product;
   userId: string;
-  setErrorMessage: (s: string) => void;
-  setEditedProductId?: (p: string) => void;
-  addProduct: (p: Product) => void;
-  mergeProduct: (p: UpdateProductResult) => void;
+  setErrorMessage: (_s: string) => void;
+  setEditedProductId?: (_p: string) => void;
+  addProduct: (_p: Product) => void;
+  mergeProduct: (_p: UpdateProductResult) => void;
 }
 
 export function ProductForm({

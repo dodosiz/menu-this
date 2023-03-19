@@ -4,7 +4,7 @@ import { Select } from "@chakra-ui/react";
 interface CategoryMobileMenuProps {
   categories: Category[];
   tabIndex: number;
-  setTabIndex: (i: number) => void;
+  setTabIndex: (_i: number) => void;
 }
 
 export function CategoryMobileMenu(props: CategoryMobileMenuProps) {

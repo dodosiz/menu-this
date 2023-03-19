@@ -16,7 +16,7 @@ import { useQRCode } from "next-qrcode";
 interface QrDialogProps {
   url: string;
   isOpen: boolean;
-  setOpen: (b: boolean) => void;
+  setOpen: (_b: boolean) => void;
 }
 
 export function QrDialog({ url, isOpen, setOpen }: QrDialogProps) {

@@ -19,8 +19,8 @@ import { Category } from "@/lib/data/categories";
 interface ChoosePhotoModalProps {
   categoryId: string | undefined;
   categories: Category[];
-  setBackground?: (categoryId: string, background: string | null) => void;
-  setCategoryId: (b: string | undefined) => void;
+  setBackground?: (_categoryId: string, _background: string | null) => void;
+  setCategoryId: (_b: string | undefined) => void;
 }
 
 export function ChoosePhotoModal({

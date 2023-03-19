@@ -18,9 +18,9 @@ import { Menu } from "@/lib/data/menu";
 interface TemplateDrawerProps {
   menu: Menu;
   isTemplateDrawerOpen: boolean;
-  setTemplateDrawerOpen: (b: boolean) => void;
-  setMenu: (m: Menu) => void;
-  setTemplateDirty: (b: boolean) => void;
+  setTemplateDrawerOpen: (_b: boolean) => void;
+  setMenu: (_m: Menu) => void;
+  setTemplateDirty: (_b: boolean) => void;
 }
 
 export function TemplateDrawer({

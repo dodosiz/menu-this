@@ -24,7 +24,7 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(() => {
         setLoading(false);
       })
       .catch((error) => {
@@ -36,10 +36,10 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     signInWithPopup(auth, provider)
-      .then((value) => {
+      .then(() => {
         setLoading(false);
       })
-      .catch((e) => {
+      .catch(() => {
         setLoading(false);
         setErrorMessage("Failed to login with Google");
       });

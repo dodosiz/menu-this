@@ -72,7 +72,7 @@ export default function Profile() {
       setErrorMessage("User is undefined");
       return;
     }
-    deleteUser(user).catch((e) => {
+    deleteUser(user).catch(() => {
       setErrorMessage("Failed to delete user");
     });
   }

@@ -130,8 +130,8 @@ export function Layout({
 
 interface MenuItemsProps {
   user: User | null;
-  setOpen?: (b: boolean) => void;
-  routeWithConfirm: (r: string) => void;
+  setOpen?: (_b: boolean) => void;
+  routeWithConfirm: (_r: string) => void;
 }
 
 function MenuItems({ user, setOpen, routeWithConfirm }: MenuItemsProps) {

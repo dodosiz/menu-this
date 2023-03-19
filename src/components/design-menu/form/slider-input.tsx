@@ -9,7 +9,7 @@ import {
 
 interface SliderProps {
   value: number;
-  setValue: (n: number) => void;
+  setValue: (_n: number) => void;
   maxValue: number;
 }
 

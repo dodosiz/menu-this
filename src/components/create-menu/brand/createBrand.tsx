@@ -11,8 +11,8 @@ import { FormEvent, useState } from "react";
 
 interface CreateBrandProps {
   userId: string;
-  setErrorMessage: (e: string) => void;
-  setBrand: (b: Brand) => void;
+  setErrorMessage: (_e: string) => void;
+  setBrand: (_b: Brand) => void;
 }
 
 export function CreateBrand(props: CreateBrandProps) {

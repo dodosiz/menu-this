@@ -19,9 +19,9 @@ import { User } from "firebase/auth";
 interface EditBrandProps {
   brand: Brand;
   user: User;
-  setBrand: (b: Brand) => void;
-  setLoading: (b: boolean) => void;
-  setErrorMessage: (e: string) => void;
+  setBrand: (_b: Brand) => void;
+  setLoading: (_b: boolean) => void;
+  setErrorMessage: (_e: string) => void;
 }
 
 export function EditBrand({

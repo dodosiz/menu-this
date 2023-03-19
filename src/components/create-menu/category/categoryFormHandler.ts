@@ -51,12 +51,12 @@ export async function updateCategory(props: UpdateProps) {
 
 interface CreateCategoryProps extends CategoryFormProps {
   categoryTitle: string;
-  setCategoryTitle: (t: string) => void;
+  setCategoryTitle: (_t: string) => void;
   loading: boolean;
-  setLoading: (l: boolean) => void;
-  setTabIndex: (i: number) => void;
+  setLoading: (_l: boolean) => void;
+  setTabIndex: (_i: number) => void;
   categories: Category[];
-  setCategories: (c: Category[]) => void;
+  setCategories: (_c: Category[]) => void;
 }
 
 export async function createCategory(props: CreateCategoryProps) {
@@ -91,11 +91,11 @@ export async function createCategory(props: CreateCategoryProps) {
 interface DeleteProps {
   categoryId: string;
   categories: Category[];
-  setCategories: (c: Category[]) => void;
+  setCategories: (_c: Category[]) => void;
   userId: string;
-  setErrorMessage: (s: string) => void;
-  setLoading: (b: boolean) => void;
-  setCategoryIdToDelete: (s: string | null) => void;
+  setErrorMessage: (_s: string) => void;
+  setLoading: (_b: boolean) => void;
+  setCategoryIdToDelete: (_s: string | null) => void;
 }
 
 export async function handleDelete(props: DeleteProps) {
@@ -130,9 +130,9 @@ interface SwapProps {
   id2: string;
   userId: string;
   categories: Category[];
-  setCategories: (c: Category[]) => void;
+  setCategories: (_c: Category[]) => void;
   updateTabIndex: () => void;
-  setErrorMessage: (s: string) => void;
+  setErrorMessage: (_s: string) => void;
 }
 
 export async function swapDates(props: SwapProps) {

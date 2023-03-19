@@ -7,14 +7,14 @@ import { Category } from "@/lib/data/categories";
 
 interface CategoryTabProps {
   category: Category;
-  setCategories: (c: Category[]) => void;
+  setCategories: (_c: Category[]) => void;
   index: number;
   userId: string;
   categories: Category[];
   editedCategoryId: string;
-  setErrorMessage: (s: string) => void;
-  setEditedCategoryId: (id: string) => void;
-  setTabIndex: (i: number) => void;
+  setErrorMessage: (_s: string) => void;
+  setEditedCategoryId: (_id: string) => void;
+  setTabIndex: (_i: number) => void;
 }
 
 export function CategoryTab(props: CategoryTabProps) {

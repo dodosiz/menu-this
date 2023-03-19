@@ -1,4 +1,4 @@
-import { deleteCategory, DeleteData } from "@/lib/data/categories";
+import { deleteCategory } from "@/lib/data/categories";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -6,7 +6,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "DELETE") {
-    const data = req.body as DeleteData;
+    const data = req.body;
     await deleteCategory(data);
     res.status(200).end();
   }

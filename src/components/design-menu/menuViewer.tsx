@@ -23,7 +23,6 @@ import {
 } from "@chakra-ui/react";
 import styles from "@/styles/components/design-menu/designMenuViewer.module.css";
 import { BACKGROUND_IMG, templateToMenu } from "@/lib/data/template-data";
-import { ProductMapView } from "@/lib/data/menu-view";
 import { HiOutlinePhotograph } from "react-icons/hi";
 import { ChoosePhotoModal } from "./choosePhotoModal";
 import { Brand } from "@/lib/data/brand";
@@ -33,7 +32,7 @@ import { Product } from "@/lib/data/products";
 
 interface DesignMenuViewer {
   categories: Category[];
-  setBackground?: (categoryId: string, background: string | null) => void;
+  setBackground?: (_categoryId: string, _background: string | null) => void;
   products: Product[];
   menu: Menu;
   inEdit?: boolean;
@@ -87,7 +86,7 @@ export function MenuViewer({
       </Center>
       {categories
         .sort((c1, c2) => c1.createdAt - c2.createdAt)
-        .map((category, i) => (
+        .map((category) => (
           <>
             {category.background && (
               <Image

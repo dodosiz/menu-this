@@ -9,14 +9,14 @@ import { Category } from "@/lib/data/categories";
 
 export interface CategoryFormProps {
   categories: Category[];
-  setCategories: (c: Category[]) => void;
+  setCategories: (_c: Category[]) => void;
   categoryInEdit?: Category;
   user: User;
-  setCreateNewCategory: (b: boolean) => void;
+  setCreateNewCategory: (_b: boolean) => void;
   handleCancel: () => void;
-  setErrorMessage: (s: string) => void;
-  setEditedCategoryId: (id: string) => void;
-  setTabIndex: (i: number) => void;
+  setErrorMessage: (_s: string) => void;
+  setEditedCategoryId: (_id: string) => void;
+  setTabIndex: (_i: number) => void;
 }
 
 export function CategoryForm(props: CategoryFormProps) {

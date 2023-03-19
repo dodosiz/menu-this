@@ -15,11 +15,11 @@ interface ProductsListProps {
   categoryId: string;
   products: Product[];
   userId: string;
-  setErrorMessage: (s: string) => void;
-  addProduct: (p: Product) => void;
-  mergeProduct: (p: UpdateProductResult) => void;
-  removeProduct: (id: string) => void;
-  swapProducts: (r: SwapResult) => void;
+  setErrorMessage: (_s: string) => void;
+  addProduct: (_p: Product) => void;
+  mergeProduct: (_p: UpdateProductResult) => void;
+  removeProduct: (_id: string) => void;
+  swapProducts: (_r: SwapResult) => void;
 }
 
 export function ProductsList({

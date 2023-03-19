@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   ButtonGroup,
   FormControl,
@@ -44,7 +43,7 @@ interface CategoryMobileFormProps extends CategoryFormProps {
   tabIndex: number;
   onMoveUp?: () => void;
   onMoveDown?: () => void;
-  setTabIndex: (n: number) => void;
+  setTabIndex: (_n: number) => void;
 }
 
 export function CategoryMobileForm(props: CategoryMobileFormProps) {

@@ -16,10 +16,10 @@ interface AccordionWithProductFormProps {
   products: Product[];
   expanded: number;
   userId: string;
-  setErrorMessage: (s: string) => void;
-  setExpanded: (n: number) => void;
-  addProduct: (p: Product) => void;
-  mergeProduct: (p: UpdateProductResult) => void;
+  setErrorMessage: (_s: string) => void;
+  setExpanded: (_n: number) => void;
+  addProduct: (_p: Product) => void;
+  mergeProduct: (_p: UpdateProductResult) => void;
 }
 
 export function AccordionWithProductForm(props: AccordionWithProductFormProps) {
