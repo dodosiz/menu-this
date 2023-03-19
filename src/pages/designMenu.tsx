@@ -14,7 +14,7 @@ import { BASE_MENU, templateToMenu } from "@/lib/data/template-data";
 import styles from "@/styles/designMenu.module.css";
 import Image from "next/image";
 import { ActionPage } from "@/components/commons/actionPage";
-import { auth } from "@/lib/core/firebase";
+import { auth } from "@/lib/config/firebase";
 import { Brand, getBrandDocumentReference } from "@/lib/data/brand";
 import { onSnapshot, Unsubscribe } from "firebase/firestore";
 import { DesignMenuData } from "./api/menu/get-menu-design/[userId]";

@@ -7,7 +7,7 @@ import { validateEmail } from "@/components/utils";
 import { useState, FormEvent } from "react";
 import { Notification } from "@/components/commons/notification";
 import { FcGoogle } from "react-icons/fc";
-import { auth, provider } from "@/lib/core/firebase";
+import { auth, provider } from "@/lib/config/firebase";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 
 export default function Login() {

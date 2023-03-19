@@ -8,7 +8,7 @@ import { FaArrowRight } from "react-icons/fa";
 import { Router, useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { LoadingPage } from "@/components/commons/loadingPage";
-import { auth } from "@/lib/core/firebase";
+import { auth } from "@/lib/config/firebase";
 import { Notification } from "@/components/commons/notification";
 
 export default function Home() {

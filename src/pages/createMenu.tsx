@@ -29,7 +29,7 @@ import { Router } from "next/router";
 import { CATEGORY_LIMIT } from "@/constants";
 import { CreateBrand } from "@/components/create-menu/brand/createBrand";
 import { EditBrand } from "@/components/create-menu/brand/editBrand";
-import { auth } from "@/lib/core/firebase";
+import { auth } from "@/lib/config/firebase";
 import { onSnapshot, Unsubscribe } from "firebase/firestore";
 import { Brand, getBrandDocumentReference } from "@/lib/data/brand";
 import {

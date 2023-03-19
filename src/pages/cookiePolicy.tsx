@@ -12,7 +12,7 @@ import NextLink from "next/link";
 import { Router } from "next/router";
 import { useEffect, useState } from "react";
 import styles from "@/styles/privacyPolicy.module.css";
-import { auth } from "@/lib/core/firebase";
+import { auth } from "@/lib/config/firebase";
 
 export default function PrivacyPolicy() {
   const user = auth.currentUser;

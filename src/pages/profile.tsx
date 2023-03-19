@@ -20,7 +20,7 @@ import { RiDeleteBin6Line, RiLockPasswordFill } from "react-icons/ri";
 import { GoSignOut } from "react-icons/go";
 import styles from "@/styles/profile.module.css";
 import { CATEGORY_LIMIT, PRODUCT_LIMIT } from "@/constants";
-import { auth } from "@/lib/core/firebase";
+import { auth } from "@/lib/config/firebase";
 import { deleteUser } from "firebase/auth";
 
 export default function Profile() {

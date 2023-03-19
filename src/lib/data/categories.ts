@@ -13,7 +13,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { v4 } from "uuid";
-import { db } from "../core/firebase";
+import { db } from "../config/firebase";
 
 export const CATEGORY_COLLECTION = "categories";
 export const USER_DATA_COLLECTION = "userData";

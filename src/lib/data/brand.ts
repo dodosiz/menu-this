@@ -5,7 +5,7 @@ import {
   updateDoc,
   getDoc,
 } from "firebase/firestore";
-import { db } from "../core/firebase";
+import { db } from "../config/firebase";
 
 const BRANDS_COLLECTION = "brands";
 

@@ -14,7 +14,7 @@ import {
   where,
 } from "firebase/firestore";
 import { v4 } from "uuid";
-import { db } from "../core/firebase";
+import { db } from "../config/firebase";
 import { USER_DATA_COLLECTION } from "./categories";
 
 const PRODUCT_COLLECTION = "products";

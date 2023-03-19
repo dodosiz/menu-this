@@ -12,7 +12,7 @@ import {
   sendEmailVerification,
   signInWithPopup,
 } from "firebase/auth";
-import { auth, provider } from "@/lib/core/firebase";
+import { auth, provider } from "@/lib/config/firebase";
 
 export default function SignUp() {
   const router = useRouter();

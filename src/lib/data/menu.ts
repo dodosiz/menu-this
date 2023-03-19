@@ -5,7 +5,7 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
-import { db } from "../core/firebase";
+import { db } from "../config/firebase";
 import { Category, getCategoryDocumentReference } from "./categories";
 import { templateToMenu } from "./template-data";
 

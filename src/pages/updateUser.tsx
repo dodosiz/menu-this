@@ -4,7 +4,7 @@ import styles from "@/styles/signup.module.css";
 import { PasswordInput } from "@/components/commons/passwordInput";
 import { useState, FormEvent } from "react";
 import { Notification } from "@/components/commons/notification";
-import { auth } from "@/lib/core/firebase";
+import { auth } from "@/lib/config/firebase";
 import { signInWithEmailAndPassword, updatePassword } from "firebase/auth";
 import { UnauthorizedPage } from "@/components/commons/unauthorizedPage";
 
