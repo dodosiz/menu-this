@@ -7,7 +7,7 @@ export default async function handler(
 ) {
   if (req.method === "POST") {
     const data = req.body as BrandDTO;
-    await createBrand(data);
-    res.status(200).end();
+    const result = await createBrand(data);
+    res.status(200).json(result);
   }
 }

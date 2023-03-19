@@ -3,13 +3,23 @@ import styles from "@/styles/components/create-menu/product/productsList.module.
 import { useState } from "react";
 import { ContextMenu } from "../contextMenu";
 import { ProductForm } from "./productForm";
-import { DeleteData, Product, SwapData } from "@/lib/data/products";
+import {
+  DeleteData,
+  Product,
+  SwapData,
+  SwapResult,
+  UpdateProductResult,
+} from "@/lib/data/products";
 
 interface ProductsListProps {
   categoryId: string;
   products: Product[];
   userId: string;
   setErrorMessage: (s: string) => void;
+  addProduct: (p: Product) => void;
+  mergeProduct: (p: UpdateProductResult) => void;
+  removeProduct: (id: string) => void;
+  swapProducts: (r: SwapResult) => void;
 }
 
 export function ProductsList({
@@ -17,6 +27,10 @@ export function ProductsList({
   categoryId,
   userId,
   setErrorMessage,
+  addProduct,
+  mergeProduct,
+  removeProduct,
+  swapProducts,
 }: ProductsListProps) {
   const [productIdToDelete, setProductIdToDelete] = useState<string | null>(
     null
@@ -38,7 +52,9 @@ export function ProductsList({
     };
     setProductIdToDelete(null);
     const response = await fetch("/api/product/delete", options);
-    if (response.status === 500) {
+    if (response.status === 200) {
+      removeProduct(productId);
+    } else if (response.status === 500) {
       setErrorMessage("Failed to delete product");
     }
   }
@@ -58,7 +74,10 @@ export function ProductsList({
       body: JSONdata,
     };
     const response = await fetch("/api/product/swap", options);
-    if (response.status === 500) {
+    if (response.status === 200) {
+      const result: SwapResult = await response.json();
+      swapProducts(result);
+    } else if (response.status === 500) {
       setErrorMessage("Failed to update the product order");
     }
   }
@@ -79,6 +98,8 @@ export function ProductsList({
                   editedProduct={product}
                   userId={userId}
                   setEditedProductId={setEditedProductId}
+                  addProduct={addProduct}
+                  mergeProduct={mergeProduct}
                 />
               )}
               {editedProductId !== product.id && (

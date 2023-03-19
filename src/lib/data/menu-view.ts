@@ -43,6 +43,6 @@ export async function getMenuViewData(userId: string): Promise<MenuViewData> {
       ...c,
     })),
     products: products.map((p) => ({ ...p })),
-    brand: { title: brand.title },
+    brand: { title: brand ? brand.title : "" },
   };
 }

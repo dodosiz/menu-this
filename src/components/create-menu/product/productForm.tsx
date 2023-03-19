@@ -17,9 +17,9 @@ import styles from "@/styles/components/create-menu/product/productForm.module.c
 import { FormEvent, useState } from "react";
 import {
   CreateProductData,
-  CreateProductResult,
   Product,
   UpdateProductData,
+  UpdateProductResult,
 } from "@/lib/data/products";
 import { RxCross2 } from "react-icons/rx";
 import { PRODUCT_LIMIT } from "@/constants";
@@ -31,6 +31,8 @@ interface ProductFormProps {
   userId: string;
   setErrorMessage: (s: string) => void;
   setEditedProductId?: (p: string) => void;
+  addProduct: (p: Product) => void;
+  mergeProduct: (p: UpdateProductResult) => void;
 }
 
 export function ProductForm({
@@ -40,6 +42,8 @@ export function ProductForm({
   userId,
   setErrorMessage,
   setEditedProductId,
+  addProduct,
+  mergeProduct,
 }: ProductFormProps) {
   const [price, setPrice] = useState(
     editedProduct ? editedProduct.price.toString() : ""
@@ -87,6 +91,8 @@ export function ProductForm({
     setLoading(true);
     const response = await fetch("/api/product/update", options);
     if (response.status === 200) {
+      const result: UpdateProductResult = await response.json();
+      mergeProduct(result);
       setLoading(false);
       setEditedProductId?.("");
     } else if (response.status === 500) {
@@ -118,15 +124,8 @@ export function ProductForm({
     setLoading(true);
     const response = await fetch("/api/product/create", options);
     if (response.status === 200) {
-      const result = (await response.json()) as CreateProductResult;
-      const newProduct: Product = {
-        id: result.id,
-        description: data.description,
-        name: data.name,
-        price: parseFloat(data.price),
-        createdAt: result.createdAt,
-        categoryId,
-      };
+      const result: Product = await response.json();
+      addProduct(result);
       setLoading(false);
       scrollToBottom();
     } else if (response.status === 500) {

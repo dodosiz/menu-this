@@ -35,10 +35,7 @@ export function getBrandDocumentReference(userId: string) {
 export async function getBrand(userId: string) {
   const document = await getDoc(getBrandDocumentReference(userId));
   const brand = document.data();
-  if (!brand) {
-    throw new Error("Brand not found");
-  }
-  return brand;
+  return brand ? brand : null;
 }
 
 export interface BrandDTO {
@@ -51,11 +48,12 @@ export interface CreateBrandData {
   userId: string;
 }
 
-export async function createBrand(data: CreateBrandData) {
+export async function createBrand(data: CreateBrandData): Promise<Brand> {
   const document: Brand = {
     title: data.title,
   };
   await setDoc(doc(db, BRANDS_COLLECTION, data.userId), document);
+  return { title: data.title };
 }
 
 export interface UpdateBrandData {

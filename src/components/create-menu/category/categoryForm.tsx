@@ -9,6 +9,7 @@ import { Category } from "@/lib/data/categories";
 
 export interface CategoryFormProps {
   categories: Category[];
+  setCategories: (c: Category[]) => void;
   categoryInEdit?: Category;
   user: User;
   setCreateNewCategory: (b: boolean) => void;

@@ -3,6 +3,7 @@ import {
   CreateCategoryData,
   DeleteData,
   SwapData,
+  SwapResult,
   UpdateCategoryData,
 } from "@/lib/data/categories";
 import { CategoryFormProps } from "./categoryForm";
@@ -29,6 +30,16 @@ export async function updateCategory(props: UpdateProps) {
   props.setLoading(true);
   const response = await fetch("/api/category/update", options);
   if (response.status === 200) {
+    const updatedCategories = props.categories.map((c) => {
+      if (c.id === data.categoryId) {
+        return {
+          ...c,
+          title: data.title,
+        };
+      }
+      return c;
+    });
+    props.setCategories(updatedCategories);
     props.setLoading(false);
     props.setEditedCategoryId(""); // close the form
   } else if (response.status === 500) {
@@ -44,6 +55,8 @@ interface CreateCategoryProps extends CategoryFormProps {
   loading: boolean;
   setLoading: (l: boolean) => void;
   setTabIndex: (i: number) => void;
+  categories: Category[];
+  setCategories: (c: Category[]) => void;
 }
 
 export async function createCategory(props: CreateCategoryProps) {
@@ -63,6 +76,8 @@ export async function createCategory(props: CreateCategoryProps) {
   props.setLoading(true);
   const response = await fetch("/api/category/create", options);
   if (response.status === 200) {
+    const result: Category = await response.json();
+    props.setCategories([...props.categories, result]);
     props.setLoading(false);
     props.setCreateNewCategory(false); // close the form
     props.setTabIndex(props.categories.length);
@@ -76,6 +91,7 @@ export async function createCategory(props: CreateCategoryProps) {
 interface DeleteProps {
   categoryId: string;
   categories: Category[];
+  setCategories: (c: Category[]) => void;
   userId: string;
   setErrorMessage: (s: string) => void;
   setLoading: (b: boolean) => void;
@@ -99,6 +115,9 @@ export async function handleDelete(props: DeleteProps) {
   props.setCategoryIdToDelete(null);
   const response = await fetch("/api/category/delete", options);
   if (response.status === 200) {
+    props.setCategories(
+      props.categories.filter((c) => c.id !== data.categoryId)
+    );
     props.setLoading(false);
   } else if (response.status === 500) {
     props.setLoading(false);
@@ -111,6 +130,7 @@ interface SwapProps {
   id2: string;
   userId: string;
   categories: Category[];
+  setCategories: (c: Category[]) => void;
   updateTabIndex: () => void;
   setErrorMessage: (s: string) => void;
 }
@@ -131,7 +151,18 @@ export async function swapDates(props: SwapProps) {
   };
   props.updateTabIndex();
   const response = await fetch("/api/category/swap", options);
-  if (response.status === 500) {
+  if (response.status === 200) {
+    const result: SwapResult = await response.json();
+    const updatedCategories = props.categories.map((c) => {
+      if (c.id === result.id1) {
+        return { ...c, createdAt: result.createdAt1 };
+      } else if (c.id === result.id2) {
+        return { ...c, createdAt: result.createdAt2 };
+      }
+      return c;
+    });
+    props.setCategories(updatedCategories);
+  } else if (response.status === 500) {
     props.setErrorMessage("Failed to update the category order");
   }
 }

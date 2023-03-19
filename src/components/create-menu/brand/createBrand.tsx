@@ -1,4 +1,4 @@
-import { BrandDTO } from "@/lib/data/brand";
+import { Brand, BrandDTO } from "@/lib/data/brand";
 import {
   Button,
   Center,
@@ -12,6 +12,7 @@ import { FormEvent, useState } from "react";
 interface CreateBrandProps {
   userId: string;
   setErrorMessage: (e: string) => void;
+  setBrand: (b: Brand) => void;
 }
 
 export function CreateBrand(props: CreateBrandProps) {
@@ -31,7 +32,10 @@ export function CreateBrand(props: CreateBrandProps) {
       body: JSONdata,
     };
     const response = await fetch("/api/brand/create", options);
-    if (response.status === 500) {
+    if (response.status === 200) {
+      const result: Brand = await response.json();
+      props.setBrand(result);
+    } else if (response.status === 500) {
       props.setErrorMessage("Failed to create brand");
     }
   }

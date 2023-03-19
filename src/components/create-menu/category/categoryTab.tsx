@@ -7,6 +7,7 @@ import { Category } from "@/lib/data/categories";
 
 interface CategoryTabProps {
   category: Category;
+  setCategories: (c: Category[]) => void;
   index: number;
   userId: string;
   categories: Category[];
@@ -49,6 +50,7 @@ export function CategoryTab(props: CategoryTabProps) {
                       id1: props.category.id,
                       id2: props.categories[props.index - 1].id,
                       categories: props.categories,
+                      setCategories: props.setCategories,
                       userId: props.userId,
                       setErrorMessage: props.setErrorMessage,
                       updateTabIndex: () => props.setTabIndex(props.index - 1),
@@ -62,6 +64,7 @@ export function CategoryTab(props: CategoryTabProps) {
                       id1: props.category.id,
                       id2: props.categories[props.index + 1].id,
                       categories: props.categories,
+                      setCategories: props.setCategories,
                       userId: props.userId,
                       setErrorMessage: props.setErrorMessage,
                       updateTabIndex: () => props.setTabIndex(props.index + 1),

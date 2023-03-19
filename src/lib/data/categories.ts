@@ -81,11 +81,6 @@ export async function getCategories(userId: string) {
   return categories;
 }
 
-export interface CreateCategoryResult {
-  id: string;
-  createdAt: number;
-}
-
 export interface CreateCategoryData {
   userId: string;
   title: string;
@@ -93,7 +88,7 @@ export interface CreateCategoryData {
 
 export async function createCategory(
   data: CreateCategoryData
-): Promise<CreateCategoryResult> {
+): Promise<Category> {
   const col = getCategoryCollectionReference(data.userId);
   const snapshot = await getCountFromServer(col);
   const categoryCount = snapshot.data().count;
@@ -108,7 +103,12 @@ export async function createCategory(
     createdAt: currentTimestamp,
     background: null,
   });
-  return { id: newCategoryId, createdAt: currentTimestamp };
+  return {
+    id: newCategoryId,
+    title: data.title,
+    background: null,
+    createdAt: currentTimestamp,
+  };
 }
 
 export interface UpdateCategoryData {
@@ -138,7 +138,14 @@ export interface SwapData {
   userId: string;
 }
 
-export async function swap(data: SwapData) {
+export interface SwapResult {
+  id1: string;
+  id2: string;
+  createdAt1: number;
+  createdAt2: number;
+}
+
+export async function swap(data: SwapData): Promise<SwapResult | undefined> {
   const categorySnap1 = await getDoc(
     getCategoryDocumentReference(data.userId, data.id1)
   );
@@ -156,5 +163,12 @@ export async function swap(data: SwapData) {
     await updateDoc(getCategoryDocumentReference(data.userId, data.id2), {
       createdAt: category1.createdAt,
     });
+    return {
+      id1: data.id1,
+      id2: data.id2,
+      createdAt1: category2.createdAt,
+      createdAt2: category1.createdAt,
+    };
   }
+  return;
 }

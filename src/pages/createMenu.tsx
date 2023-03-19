@@ -30,13 +30,10 @@ import { CATEGORY_LIMIT } from "@/constants";
 import { CreateBrand } from "@/components/create-menu/brand/createBrand";
 import { EditBrand } from "@/components/create-menu/brand/editBrand";
 import { auth } from "@/lib/config/firebase";
-import { onSnapshot, Unsubscribe } from "firebase/firestore";
-import { Brand, getBrandDocumentReference } from "@/lib/data/brand";
-import {
-  Category,
-  getCategoryCollectionReference,
-} from "@/lib/data/categories";
-import { getProductCollectionReference, Product } from "@/lib/data/products";
+import { Brand } from "@/lib/data/brand";
+import { Category } from "@/lib/data/categories";
+import { Product, SwapResult, UpdateProductResult } from "@/lib/data/products";
+import { MenuData } from "./api/menu/get-menu-data/[userId]";
 
 export default function CreateMenu() {
   const [isLoading, setLoading] = useState(false);
@@ -49,69 +46,33 @@ export default function CreateMenu() {
   const [errorMessage, setErrorMessage] = useState("");
   const [expanded, setExpanded] = useState(0);
   const [tabIndex, setTabIndex] = useState(0);
-  const [brandLoaded, setBrandLoaded] = useState(false);
-  const [categoriesLoaded, setCategoriesLoaded] = useState(false);
-  const [productsLoaded, setProductsLoaded] = useState(false);
   const user = auth.currentUser;
 
   function pendingLoading() {
     if (!user) {
       return false;
     }
-    return (
-      isLoading ||
-      !brandLoaded ||
-      !categoriesLoaded ||
-      !productsLoaded ||
-      isRouteLoading
-    );
+    return isLoading || isRouteLoading;
   }
 
   useEffect(() => {
-    let unsubscribeBrand: Unsubscribe;
-    let unsubscribeCategory: Unsubscribe;
-    let unsubscribeProducts: Unsubscribe;
+    setLoading(true);
     if (user) {
-      unsubscribeBrand = onSnapshot(
-        getBrandDocumentReference(user.uid),
-        (d) => {
-          const data = d.data();
-          if (data) {
-            setBrand(data);
-          }
-          setBrandLoaded(true);
-        }
-      );
-      unsubscribeCategory = onSnapshot(
-        getCategoryCollectionReference(user.uid),
-        (c) => {
-          const categories: Category[] = [];
-          c.forEach((r) => categories.push(r.data()));
-          setCategories(categories);
-          setCategoriesLoaded(true);
-        }
-      );
-      unsubscribeProducts = onSnapshot(
-        getProductCollectionReference(user.uid),
-        (p) => {
-          const products: Product[] = [];
-          p.forEach((r) => products.push(r.data()));
-          setProducts(products);
-          setProductsLoaded(true);
-        }
-      );
+      fetch(`/api/menu/get-menu-data/${user.uid}`)
+        .then((res) => res.json())
+        .then((data: MenuData) => {
+          setCategories(data.categories);
+          setProducts(data.products);
+          setBrand(data.brand);
+          setLoading(false);
+        })
+        .catch(() => {
+          setErrorMessage("Failed to fetch menu data");
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
     }
-    return () => {
-      if (!!unsubscribeBrand) {
-        unsubscribeBrand();
-      }
-      if (!!unsubscribeCategory) {
-        unsubscribeCategory();
-      }
-      if (!!unsubscribeProducts) {
-        unsubscribeProducts();
-      }
-    };
   }, [user]);
 
   useEffect(() => {
@@ -127,6 +88,48 @@ export default function CreateMenu() {
       setRouteLoading(false);
     });
   });
+
+  function addProduct(p: Product) {
+    setProducts([...products, p]);
+  }
+
+  function removeProduct(id: string) {
+    const newProducts = products.filter((p) => p.id !== id);
+    setProducts(newProducts);
+  }
+
+  function mergeProduct(r: UpdateProductResult) {
+    const updatedProducts = products.map((p) => {
+      if (p.id === r.productId) {
+        return {
+          ...p,
+          name: r.name,
+          description: r.description,
+          price: r.price,
+        };
+      }
+      return p;
+    });
+    setProducts(updatedProducts);
+  }
+
+  function swapProducts(r: SwapResult) {
+    const updatedProducts = products.map((p) => {
+      if (p.id === r.id1) {
+        return {
+          ...p,
+          createdAt: r.createdAt1,
+        };
+      } else if (p.id === r.id2) {
+        return {
+          ...p,
+          createdAt: r.createdAt2,
+        };
+      }
+      return p;
+    });
+    setProducts(updatedProducts);
+  }
 
   return (
     <Layout user={user}>
@@ -144,7 +147,11 @@ export default function CreateMenu() {
             <UnauthorizedPage />
           )}
           {user && !pendingLoading() && !brand && (
-            <CreateBrand setErrorMessage={setErrorMessage} userId={user.uid} />
+            <CreateBrand
+              setErrorMessage={setErrorMessage}
+              userId={user.uid}
+              setBrand={setBrand}
+            />
           )}
           {user && !pendingLoading() && !!brand && (
             <>
@@ -168,6 +175,7 @@ export default function CreateMenu() {
                 )}
                 <CategoryMobileForm
                   categories={categories}
+                  setCategories={setCategories}
                   handleCancel={() => setCreateNewCategory(false)}
                   setCreateNewCategory={setCreateNewCategory}
                   setErrorMessage={setErrorMessage}
@@ -189,6 +197,7 @@ export default function CreateMenu() {
                             id2: categories[tabIndex - 1].id,
                             userId: user.uid,
                             categories: categories,
+                            setCategories: setCategories,
                             setErrorMessage: setErrorMessage,
                             updateTabIndex: () => setTabIndex(tabIndex - 1),
                           })
@@ -201,6 +210,7 @@ export default function CreateMenu() {
                             id1: categories[tabIndex].id,
                             id2: categories[tabIndex + 1].id,
                             categories: categories,
+                            setCategories: setCategories,
                             userId: user.uid,
                             setErrorMessage: setErrorMessage,
                             updateTabIndex: () => setTabIndex(tabIndex + 1),
@@ -223,6 +233,7 @@ export default function CreateMenu() {
                         return (
                           <CategoryForm
                             categories={categories}
+                            setCategories={setCategories}
                             handleCancel={() => setEditedCategoryId("")}
                             setCreateNewCategory={setCreateNewCategory}
                             setErrorMessage={setErrorMessage}
@@ -237,6 +248,7 @@ export default function CreateMenu() {
                         return (
                           <CategoryTab
                             categories={categories}
+                            setCategories={setCategories}
                             category={category}
                             index={index}
                             userId={user.uid}
@@ -252,6 +264,7 @@ export default function CreateMenu() {
                   {isCreateNewCategory && (
                     <CategoryForm
                       categories={categories}
+                      setCategories={setCategories}
                       handleCancel={() => setCreateNewCategory(false)}
                       setCreateNewCategory={setCreateNewCategory}
                       setErrorMessage={setErrorMessage}
@@ -303,6 +316,8 @@ export default function CreateMenu() {
                           setErrorMessage={setErrorMessage}
                           userId={user.uid}
                           setExpanded={setExpanded}
+                          addProduct={addProduct}
+                          mergeProduct={mergeProduct}
                         />
                         <Heading size="md" as="h3">
                           Products of category{" "}
@@ -321,6 +336,10 @@ export default function CreateMenu() {
                           userId={user.uid}
                           categoryId={category.id}
                           setErrorMessage={setErrorMessage}
+                          addProduct={addProduct}
+                          mergeProduct={mergeProduct}
+                          removeProduct={removeProduct}
+                          swapProducts={swapProducts}
                         />
                       </TabPanel>
                     );

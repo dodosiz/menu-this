@@ -7,7 +7,7 @@ export default async function handler(
 ) {
   if (req.method === "PUT") {
     const data = req.body as UpdateProductData;
-    await updateProduct(data);
-    res.status(200).end();
+    const result = await updateProduct(data);
+    res.status(200).json(result);
   }
 }

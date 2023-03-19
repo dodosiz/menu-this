@@ -15,9 +15,8 @@ import styles from "@/styles/designMenu.module.css";
 import Image from "next/image";
 import { ActionPage } from "@/components/commons/actionPage";
 import { auth } from "@/lib/config/firebase";
-import { Brand, getBrandDocumentReference } from "@/lib/data/brand";
-import { onSnapshot, Unsubscribe } from "firebase/firestore";
-import { DesignMenuData } from "./api/menu/get-menu-design/[userId]";
+import { Brand } from "@/lib/data/brand";
+import { MenuData } from "./api/menu/get-menu-data/[userId]";
 import { Category } from "@/lib/data/categories";
 import { Product } from "@/lib/data/products";
 
@@ -35,42 +34,21 @@ export default function DesignMenu() {
   const [isCustomDirty, setCustomDirty] = useState(false);
   const [isTemplateDirty, setTemplateDirty] = useState(false);
   const [isBackgroundDirty, setBackgroundDirty] = useState(false);
-  const [brandLoaded, setBrandLoaded] = useState(false);
 
   function pendingLoading() {
-    return isLoading || !brandLoaded || isRouteLoading;
+    return isLoading || isRouteLoading;
   }
-
-  useEffect(() => {
-    let unsubscribeBrand: Unsubscribe | undefined;
-    if (user) {
-      unsubscribeBrand = onSnapshot(
-        getBrandDocumentReference(user.uid),
-        (d) => {
-          const data = d.data();
-          if (data) {
-            setBrand(data);
-          }
-          setBrandLoaded(true);
-        }
-      );
-    }
-    return () => {
-      if (!!unsubscribeBrand) {
-        unsubscribeBrand();
-      }
-    };
-  });
 
   useEffect(() => {
     setLoading(true);
     if (user) {
-      fetch(`/api/menu/get-menu-design/${user.uid}`)
+      fetch(`/api/menu/get-menu-data/${user.uid}`)
         .then((res) => res.json())
-        .then((data: DesignMenuData) => {
+        .then((data: MenuData) => {
           setCategories(data.categories);
           setProducts(data.products);
           setMenu(data.menu);
+          setBrand(data.brand);
           setLoading(false);
         })
         .catch(() => {

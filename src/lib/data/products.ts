@@ -86,11 +86,6 @@ export function getProductCollectionReference(userId: string) {
   ).withConverter(productConverter);
 }
 
-export interface CreateProductResult {
-  id: string;
-  createdAt: number;
-}
-
 export interface CreateProductData {
   name: string;
   price: string;
@@ -99,9 +94,7 @@ export interface CreateProductData {
   userId: string;
 }
 
-export async function createProduct(
-  data: CreateProductData
-): Promise<CreateProductResult> {
+export async function createProduct(data: CreateProductData): Promise<Product> {
   const col = getProductCollectionReference(data.userId);
   const snapshot = await getCountFromServer(col);
   const productCount = snapshot.data().count;
@@ -120,6 +113,10 @@ export async function createProduct(
   });
   return {
     id: newProductId,
+    categoryId: data.categoryId,
+    name: data.name,
+    price: parseFloat(data.price),
+    description: data.description,
     createdAt: currentTimestamp,
   };
 }
@@ -141,12 +138,27 @@ export interface UpdateProductData {
   userId: string;
 }
 
-export async function updateProduct(data: UpdateProductData) {
+export interface UpdateProductResult {
+  productId: string;
+  name: string;
+  price: number;
+  description: string;
+}
+
+export async function updateProduct(
+  data: UpdateProductData
+): Promise<UpdateProductResult> {
   await updateDoc(getProductDocumentReference(data.userId, data.productId), {
     name: data.name,
     price: parseFloat(data.price),
     description: data.description,
   });
+  return {
+    productId: data.productId,
+    name: data.name,
+    price: parseFloat(data.price),
+    description: data.description,
+  };
 }
 
 export async function getProducts(userId: string) {
@@ -172,7 +184,14 @@ export interface SwapData {
   userId: string;
 }
 
-export async function swap(data: SwapData) {
+export interface SwapResult {
+  id1: string;
+  id2: string;
+  createdAt1: number;
+  createdAt2: number;
+}
+
+export async function swap(data: SwapData): Promise<SwapResult | undefined> {
   const productSnap1 = await getDoc(
     getProductDocumentReference(data.userId, data.id1)
   );
@@ -189,5 +208,12 @@ export async function swap(data: SwapData) {
     await updateDoc(getProductDocumentReference(data.userId, data.id2), {
       createdAt: product1.createdAt,
     });
+    return {
+      id1: data.id1,
+      id2: data.id2,
+      createdAt1: product2.createdAt,
+      createdAt2: product1.createdAt,
+    };
   }
+  return;
 }

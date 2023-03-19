@@ -122,6 +122,7 @@ export function CategoryMobileForm(props: CategoryMobileFormProps) {
                     onClick={async () => {
                       await handleDelete({
                         categories: props.categories,
+                        setCategories: props.setCategories,
                         categoryId: props.currentCategory!.id,
                         userId: props.user.uid,
                         setCategoryIdToDelete: () => {},

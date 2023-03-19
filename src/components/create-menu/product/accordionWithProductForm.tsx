@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { ProductForm } from "./productForm";
 import styles from "@/styles/components/create-menu/product/accordionWithProductForm.module.css";
-import { Product } from "@/lib/data/products";
+import { Product, UpdateProductResult } from "@/lib/data/products";
 
 interface AccordionWithProductFormProps {
   categoryId: string;
@@ -18,6 +18,8 @@ interface AccordionWithProductFormProps {
   userId: string;
   setErrorMessage: (s: string) => void;
   setExpanded: (n: number) => void;
+  addProduct: (p: Product) => void;
+  mergeProduct: (p: UpdateProductResult) => void;
 }
 
 export function AccordionWithProductForm(props: AccordionWithProductFormProps) {
@@ -47,6 +49,8 @@ export function AccordionWithProductForm(props: AccordionWithProductFormProps) {
             categoryId={props.categoryId}
             setErrorMessage={props.setErrorMessage}
             userId={props.userId}
+            addProduct={props.addProduct}
+            mergeProduct={props.mergeProduct}
           />
         </AccordionPanel>
       </AccordionItem>
