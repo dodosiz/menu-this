@@ -15,11 +15,11 @@ import {
 import { IoMdAdd, IoMdCheckmark } from "react-icons/io";
 import styles from "@/styles/components/create-menu/product/productForm.module.css";
 import { FormEvent, useState } from "react";
-import { Product } from "@prisma/client";
 import { ProductMap } from "@/pages/api/menu/get-menu-data/[userId]";
 import {
   CreateProductData,
   CreateProductResult,
+  Product,
   UpdateProductData,
 } from "@/lib/data/products";
 import { RxCross2 } from "react-icons/rx";
@@ -29,6 +29,7 @@ interface ProductFormProps {
   categoryId: string;
   productMap: ProductMap;
   editedProduct?: Product;
+  userId: string;
   setProductMap: (pm: ProductMap) => void;
   setErrorMessage: (s: string) => void;
   setEditedProductId?: (p: string) => void;
@@ -38,6 +39,7 @@ export function ProductForm({
   categoryId,
   productMap,
   editedProduct,
+  userId,
   setProductMap,
   setErrorMessage,
   setEditedProductId,
@@ -75,6 +77,8 @@ export function ProductForm({
       description,
       price,
       productId: editedProduct.id,
+      categoryId,
+      userId,
     };
     const JSONdata = JSON.stringify(data);
     const options = {
@@ -115,6 +119,7 @@ export function ProductForm({
       description: description,
       price: price,
       categoryId: categoryId,
+      userId: userId,
     };
     const JSONdata = JSON.stringify(data);
     const options = {
@@ -133,11 +138,10 @@ export function ProductForm({
       const result = (await response.json()) as CreateProductResult;
       const newProduct: Product = {
         id: result.id,
-        categoryId,
         description: data.description,
         name: data.name,
         price: parseFloat(data.price),
-        created_at: result.created_at,
+        createdAt: result.createdAt,
       };
       setLoading(false);
       setProductMap({

@@ -15,8 +15,8 @@ import {
 import { v4 } from "uuid";
 import { db } from "../core/firebase";
 
-const CATEGORY_COLLECTION = "categories";
-const USER_DATA_COLLECTION = "userData";
+export const CATEGORY_COLLECTION = "categories";
+export const USER_DATA_COLLECTION = "userData";
 
 export class Category {
   id: string;

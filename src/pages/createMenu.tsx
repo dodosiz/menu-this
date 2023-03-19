@@ -287,6 +287,7 @@ export default function CreateMenu() {
                           setProductMap={setProductMap}
                           categoryId={category.id}
                           setErrorMessage={setErrorMessage}
+                          userId={user.uid}
                           setExpanded={setExpanded}
                         />
                         <Heading size="md" as="h3">
@@ -304,6 +305,7 @@ export default function CreateMenu() {
                         <ProductsList
                           productMap={productMap}
                           products={productMap[category.id]}
+                          userId={user.uid}
                           categoryId={category.id}
                           setProductMap={setProductMap}
                           setErrorMessage={setErrorMessage}

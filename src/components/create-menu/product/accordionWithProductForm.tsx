@@ -15,6 +15,7 @@ interface AccordionWithProductFormProps {
   categoryId: string;
   productMap: ProductMap;
   expanded: number;
+  userId: string;
   setProductMap: (pm: ProductMap) => void;
   setErrorMessage: (s: string) => void;
   setExpanded: (n: number) => void;
@@ -47,6 +48,7 @@ export function AccordionWithProductForm(props: AccordionWithProductFormProps) {
             setProductMap={props.setProductMap}
             categoryId={props.categoryId}
             setErrorMessage={props.setErrorMessage}
+            userId={props.userId}
           />
         </AccordionPanel>
       </AccordionItem>

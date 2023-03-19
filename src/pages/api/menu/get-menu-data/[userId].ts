@@ -1,6 +1,5 @@
 import { Category, getCategories } from "@/lib/data/categories";
-import { getProductsInCategories } from "@/lib/data/products";
-import { Product } from "@prisma/client";
+import { getProductsInCategory, Product } from "@/lib/data/products";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export interface MenuData {
@@ -16,14 +15,12 @@ export default async function handler(
 ) {
   const { userId } = req.query;
   const initialCategories = await getCategories(userId as string);
-  const categoryIds = initialCategories.map((c) => c.id);
-  const products = await getProductsInCategories(categoryIds);
   const initialProductMap: ProductMap = {};
   for (const category of initialCategories) {
-    const productsInCategory = products.filter(
-      (p) => p.categoryId === category.id
+    initialProductMap[category.id] = await getProductsInCategory(
+      category.id,
+      userId as string
     );
-    initialProductMap[category.id] = productsInCategory;
   }
   res.status(200).json({ initialCategories, initialProductMap });
 }

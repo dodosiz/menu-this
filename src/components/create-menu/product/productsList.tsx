@@ -1,16 +1,16 @@
 import { Box, Divider, Grid, GridItem, Heading, Text } from "@chakra-ui/react";
-import { Product } from "@prisma/client";
 import styles from "@/styles/components/create-menu/product/productsList.module.css";
 import { useState } from "react";
 import { ContextMenu } from "../contextMenu";
 import { ProductForm } from "./productForm";
 import { ProductMap } from "@/pages/api/menu/get-menu-data/[userId]";
-import { LoadingPage } from "@/components/commons/loadingPage";
+import { DeleteData, Product, SwapData } from "@/lib/data/products";
 
 interface ProductsListProps {
   categoryId: string;
   products: Product[];
   productMap: ProductMap;
+  userId: string;
   setProductMap: (pm: ProductMap) => void;
   setErrorMessage: (s: string) => void;
 }
@@ -19,6 +19,7 @@ export function ProductsList({
   products,
   productMap,
   categoryId,
+  userId,
   setProductMap,
   setErrorMessage,
 }: ProductsListProps) {
@@ -28,7 +29,12 @@ export function ProductsList({
   const [editedProductId, setEditedProductId] = useState("");
 
   async function handleDelete(productId: string) {
-    const JSONdata = JSON.stringify({ id: productId });
+    const data: DeleteData = {
+      categoryId,
+      userId,
+      productId,
+    };
+    const JSONdata = JSON.stringify(data);
     const options = {
       method: "DELETE",
       headers: {
@@ -47,7 +53,13 @@ export function ProductsList({
   }
 
   async function swapDates(id1: string, id2: string) {
-    const JSONdata = JSON.stringify({ id1, id2 });
+    const data: SwapData = {
+      id1,
+      id2,
+      userId,
+      categoryId,
+    };
+    const JSONdata = JSON.stringify(data);
     const options = {
       method: "PUT",
       headers: {
@@ -63,12 +75,12 @@ export function ProductsList({
         if (p.id === id1 && p2 && p1) {
           return {
             ...p1,
-            created_at: p2?.created_at,
+            createdAt: p2?.createdAt,
           };
         } else if (p.id === id2 && p2 && p1) {
           return {
             ...p2,
-            created_at: p1?.created_at,
+            createdAt: p1?.createdAt,
           };
         }
         return p;
@@ -83,10 +95,7 @@ export function ProductsList({
   return (
     <>
       {products
-        .sort(
-          (p1, p2) =>
-            Date.parse(`${p1.created_at}`) - Date.parse(`${p2.created_at}`)
-        )
+        .sort((p1, p2) => p1.createdAt - p2.createdAt)
         .map((product, index) => {
           return (
             <Box key={"pd-" + product.id} className={styles.product_box}>
@@ -98,6 +107,7 @@ export function ProductsList({
                   setErrorMessage={setErrorMessage}
                   setProductMap={setProductMap}
                   editedProduct={product}
+                  userId={userId}
                   setEditedProductId={setEditedProductId}
                 />
               )}

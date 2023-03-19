@@ -1,4 +1,4 @@
-import { deleteProduct } from "@/lib/data/products";
+import { DeleteData, deleteProduct } from "@/lib/data/products";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -6,8 +6,8 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "DELETE") {
-    const data = req.body as { id: string };
-    await deleteProduct(data.id);
+    const data = req.body as DeleteData;
+    await deleteProduct(data);
     res.status(200).end();
   }
 }
