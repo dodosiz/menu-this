@@ -22,7 +22,7 @@ const firebaseConfig = {
 };
 
 // change this to activate emulation
-const dev = true;
+const dev = false;
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
