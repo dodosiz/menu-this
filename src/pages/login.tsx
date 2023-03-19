@@ -41,7 +41,7 @@ export default function Login() {
       })
       .catch((e) => {
         setLoading(false);
-        setErrorMessage(e.message);
+        setErrorMessage("Failed to login with Google");
       });
   }
   function isSubmitDisabled() {

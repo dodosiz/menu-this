@@ -49,7 +49,23 @@ export default function CreateMenu() {
   const [errorMessage, setErrorMessage] = useState("");
   const [expanded, setExpanded] = useState(0);
   const [tabIndex, setTabIndex] = useState(0);
+  const [brandLoaded, setBrandLoaded] = useState(false);
+  const [categoriesLoaded, setCategoriesLoaded] = useState(false);
+  const [productsLoaded, setProductsLoaded] = useState(false);
   const user = auth.currentUser;
+
+  function pendingLoading() {
+    if (!user) {
+      return false;
+    }
+    return (
+      isLoading ||
+      !brandLoaded ||
+      !categoriesLoaded ||
+      !productsLoaded ||
+      isRouteLoading
+    );
+  }
 
   useEffect(() => {
     let unsubscribeBrand: Unsubscribe;
@@ -63,6 +79,7 @@ export default function CreateMenu() {
           if (data) {
             setBrand(data);
           }
+          setBrandLoaded(true);
         }
       );
       unsubscribeCategory = onSnapshot(
@@ -71,6 +88,7 @@ export default function CreateMenu() {
           const categories: Category[] = [];
           c.forEach((r) => categories.push(r.data()));
           setCategories(categories);
+          setCategoriesLoaded(true);
         }
       );
       unsubscribeProducts = onSnapshot(
@@ -79,6 +97,7 @@ export default function CreateMenu() {
           const products: Product[] = [];
           p.forEach((r) => products.push(r.data()));
           setProducts(products);
+          setProductsLoaded(true);
         }
       );
     }
@@ -120,14 +139,14 @@ export default function CreateMenu() {
           />
         )}
         <div className={styles.create_menu}>
-          {(isLoading || isRouteLoading) && <LoadingPage fullHeight={true} />}
-          {(!user || !user.emailVerified) && !isLoading && !isRouteLoading && (
+          {pendingLoading() && <LoadingPage fullHeight={true} />}
+          {(!user || !user.emailVerified) && !pendingLoading() && (
             <UnauthorizedPage />
           )}
-          {user && !isLoading && !isRouteLoading && !brand && (
+          {user && !pendingLoading() && !brand && (
             <CreateBrand setErrorMessage={setErrorMessage} userId={user.uid} />
           )}
-          {user && !isLoading && !isRouteLoading && !!brand && (
+          {user && !pendingLoading() && !!brand && (
             <>
               <Heading size="xl" as="h1">
                 Menu of &quot;{brand.title}&quot;

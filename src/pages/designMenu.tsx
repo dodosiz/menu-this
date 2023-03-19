@@ -35,6 +35,11 @@ export default function DesignMenu() {
   const [isCustomDirty, setCustomDirty] = useState(false);
   const [isTemplateDirty, setTemplateDirty] = useState(false);
   const [isBackgroundDirty, setBackgroundDirty] = useState(false);
+  const [brandLoaded, setBrandLoaded] = useState(false);
+
+  function pendingLoading() {
+    return isLoading || !brandLoaded || isRouteLoading;
+  }
 
   useEffect(() => {
     let unsubscribeBrand: Unsubscribe | undefined;
@@ -46,6 +51,7 @@ export default function DesignMenu() {
           if (data) {
             setBrand(data);
           }
+          setBrandLoaded(true);
         }
       );
     }
@@ -251,31 +257,26 @@ export default function DesignMenu() {
           />
         )}
         <div>
-          {(isLoading || isRouteLoading) && <LoadingPage fullHeight={true} />}
-          {(!user || !user.emailVerified) && !isLoading && !isRouteLoading && (
+          {pendingLoading() && <LoadingPage fullHeight={true} />}
+          {(!user || !user.emailVerified) && !pendingLoading() && (
             <UnauthorizedPage />
           )}
-          {user && !isLoading && !isRouteLoading && !brand && (
+          {user && !pendingLoading() && !brand && (
             <ActionPage
               action="Create your brand"
               title="You need to create your brand first"
               destination="/createMenu"
             />
           )}
-          {user &&
-            !isLoading &&
-            !isRouteLoading &&
-            brand &&
-            !categories.length && (
-              <ActionPage
-                action="Add categories"
-                title="Maybe add some categories with products first?"
-                destination="/createMenu"
-              />
-            )}
+          {user && !pendingLoading() && brand && !categories.length && (
+            <ActionPage
+              action="Add categories"
+              title="Maybe add some categories with products first?"
+              destination="/createMenu"
+            />
+          )}
           {!menu &&
-            !isLoading &&
-            !isRouteLoading &&
+            !pendingLoading() &&
             user &&
             brand &&
             !!categories.length && (
@@ -314,8 +315,7 @@ export default function DesignMenu() {
               </>
             )}
           {user &&
-            !isLoading &&
-            !isRouteLoading &&
+            !pendingLoading() &&
             menu &&
             brand &&
             !!categories.length && (

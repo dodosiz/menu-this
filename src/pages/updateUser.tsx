@@ -33,7 +33,7 @@ export default function UpdateUser() {
         });
       })
       .catch((e) => {
-        setErrorMessage(e.message);
+        setErrorMessage("Failed to update user");
         setLoading(false);
       });
   }

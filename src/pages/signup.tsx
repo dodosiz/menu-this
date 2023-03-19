@@ -59,7 +59,7 @@ export default function SignUp() {
       })
       .catch((e) => {
         setLoading(false);
-        setErrorMessage(e.message);
+        setErrorMessage("Failed to sign up");
       });
   }
   return (

@@ -73,7 +73,7 @@ export default function Profile() {
       return;
     }
     deleteUser(user).catch((e) => {
-      setErrorMessage(e.message);
+      setErrorMessage("Failed to delete user");
     });
   }
 
