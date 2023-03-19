@@ -29,11 +29,12 @@ import { ChoosePhotoModal } from "./choosePhotoModal";
 import { Brand } from "@/lib/data/brand";
 import { Menu } from "@/lib/data/menu";
 import { Category } from "@/lib/data/categories";
+import { Product } from "@/lib/data/products";
 
 interface DesignMenuViewer {
   categories: Category[];
   setBackground?: (categoryId: string, background: string | null) => void;
-  productMap: ProductMapView;
+  products: Product[];
   menu: Menu;
   inEdit?: boolean;
   brand: Brand;
@@ -41,7 +42,7 @@ interface DesignMenuViewer {
 
 export function MenuViewer({
   categories,
-  productMap,
+  products,
   menu,
   inEdit,
   brand,
@@ -126,48 +127,50 @@ export function MenuViewer({
                 )}
               </Heading>
               <Grid templateColumns="repeat(5, 1fr)">
-                {productMap[category.id].map((product, i) => (
-                  <Fragment key={`gi-${product.id}`}>
-                    <GridItem
-                      marginTop={i > 0 ? nameMargin : nameTitleMargin}
-                      colSpan={{ base: 3, md: 4 }}
-                    >
-                      <Heading
-                        fontFamily={contentFont}
-                        color={nameColor}
-                        as="h2"
-                        size={nameSize}
+                {products
+                  .filter((p) => p.categoryId === category.id)
+                  .map((product, i) => (
+                    <Fragment key={`gi-${product.id}`}>
+                      <GridItem
+                        marginTop={i > 0 ? nameMargin : nameTitleMargin}
+                        colSpan={{ base: 3, md: 4 }}
                       >
-                        {product.name}
-                      </Heading>
-                    </GridItem>
-                    <GridItem
-                      marginTop={i > 0 ? nameMargin : nameTitleMargin}
-                      colSpan={{ base: 2, md: 1 }}
-                    >
-                      <Heading
-                        display="flex"
-                        fontFamily={contentFont}
-                        justifyContent="flex-end"
-                        color={nameColor}
-                        as="h2"
-                        size={nameSize}
+                        <Heading
+                          fontFamily={contentFont}
+                          color={nameColor}
+                          as="h2"
+                          size={nameSize}
+                        >
+                          {product.name}
+                        </Heading>
+                      </GridItem>
+                      <GridItem
+                        marginTop={i > 0 ? nameMargin : nameTitleMargin}
+                        colSpan={{ base: 2, md: 1 }}
                       >
-                        € {product.price.toFixed(2)}
-                      </Heading>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 3, md: 4 }}>
-                      <Text
-                        fontFamily={contentFont}
-                        fontSize={descriptionSize}
-                        color={descriptionColor}
-                      >
-                        {product.description}
-                      </Text>
-                    </GridItem>
-                    <GridItem colSpan={{ base: 2, md: 1 }}></GridItem>
-                  </Fragment>
-                ))}
+                        <Heading
+                          display="flex"
+                          fontFamily={contentFont}
+                          justifyContent="flex-end"
+                          color={nameColor}
+                          as="h2"
+                          size={nameSize}
+                        >
+                          € {product.price.toFixed(2)}
+                        </Heading>
+                      </GridItem>
+                      <GridItem colSpan={{ base: 3, md: 4 }}>
+                        <Text
+                          fontFamily={contentFont}
+                          fontSize={descriptionSize}
+                          color={descriptionColor}
+                        >
+                          {product.description}
+                        </Text>
+                      </GridItem>
+                      <GridItem colSpan={{ base: 2, md: 1 }}></GridItem>
+                    </Fragment>
+                  ))}
               </Grid>
             </Box>
           </>

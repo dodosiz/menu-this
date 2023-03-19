@@ -63,13 +63,8 @@ export async function createCategory(props: CreateCategoryProps) {
   props.setLoading(true);
   const response = await fetch("/api/category/create", options);
   if (response.status === 200) {
-    const result = await response.json();
     props.setLoading(false);
     props.setCreateNewCategory(false); // close the form
-    props.setProductMap({
-      ...props.productMap,
-      [result.id]: [],
-    });
     props.setTabIndex(props.categories.length);
   } else if (response.status === 500) {
     props.setLoading(false);

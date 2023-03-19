@@ -1,7 +1,6 @@
 import { Notification } from "@/components/commons/notification";
 import { Layout } from "@/components/commons/layout";
 import { useEffect, useState } from "react";
-import { ProductMap } from "./api/menu/get-menu-data/[userId]";
 import { LoadingPage } from "@/components/commons/loadingPage";
 import { UnauthorizedPage } from "@/components/commons/unauthorizedPage";
 import { Box, Grid, GridItem, Heading, Tooltip } from "@chakra-ui/react";
@@ -20,6 +19,7 @@ import { Brand, getBrandDocumentReference } from "@/lib/data/brand";
 import { onSnapshot, Unsubscribe } from "firebase/firestore";
 import { DesignMenuData } from "./api/menu/get-menu-design/[userId]";
 import { Category } from "@/lib/data/categories";
+import { Product } from "@/lib/data/products";
 
 export default function DesignMenu() {
   const user = auth.currentUser;
@@ -27,7 +27,7 @@ export default function DesignMenu() {
   const [isRouteLoading, setRouteLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [categories, setCategories] = useState<Category[]>([]);
-  const [productMap, setProductMap] = useState<ProductMap>({});
+  const [products, setProducts] = useState<Product[]>([]);
   const [brand, setBrand] = useState<Brand | null>(null);
   const [menu, setMenu] = useState<Menu | null>(null);
   const [isCustomDrawerOpen, setCustomDrawerOpen] = useState(false);
@@ -63,7 +63,7 @@ export default function DesignMenu() {
         .then((res) => res.json())
         .then((data: DesignMenuData) => {
           setCategories(data.categories);
-          setProductMap(data.productMap);
+          setProducts(data.products);
           setMenu(data.menu);
           setLoading(false);
         })
@@ -324,7 +324,7 @@ export default function DesignMenu() {
                   <MenuViewer
                     categories={categories}
                     setBackground={setBackground}
-                    productMap={productMap}
+                    products={products}
                     menu={menu}
                     inEdit={true}
                     brand={brand}

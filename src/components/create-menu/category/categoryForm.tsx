@@ -3,7 +3,6 @@ import styles from "@/styles/components/create-menu/category/categoryForm.module
 import { FormEvent, useState, useEffect } from "react";
 import { FiCheck } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
-import { ProductMap } from "@/pages/api/menu/get-menu-data/[userId]";
 import { createCategory, updateCategory } from "./categoryFormHandler";
 import { User } from "firebase/auth";
 import { Category } from "@/lib/data/categories";
@@ -12,8 +11,6 @@ export interface CategoryFormProps {
   categories: Category[];
   categoryInEdit?: Category;
   user: User;
-  productMap: ProductMap;
-  setProductMap: (pm: ProductMap) => void;
   setCreateNewCategory: (b: boolean) => void;
   handleCancel: () => void;
   setErrorMessage: (s: string) => void;

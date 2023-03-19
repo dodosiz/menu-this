@@ -19,7 +19,7 @@ export const getServerSideProps: GetServerSideProps<
 export default function MenuView({
   menu,
   categories,
-  productMap,
+  products,
   brand,
 }: MenuViewData) {
   return (
@@ -35,7 +35,7 @@ export default function MenuView({
       </Head>
       <MenuViewer
         categories={categories}
-        productMap={productMap}
+        products={products}
         menu={menu}
         brand={brand}
       />

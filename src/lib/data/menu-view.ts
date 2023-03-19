@@ -1,12 +1,12 @@
 import { Category, getCategories } from "./categories";
-import { getProductsInCategory, Product } from "./products";
+import { getProducts, Product } from "./products";
 import { Brand, getBrand } from "./brand";
 import { getMenuOrThrow, Menu } from "./menu";
 
 export interface MenuViewData {
   menu: Menu;
   categories: Category[];
-  productMap: ProductMapView;
+  products: Product[];
   brand: Brand;
 }
 
@@ -17,12 +17,7 @@ export type ProductMapView = {
 export async function getMenuViewData(userId: string): Promise<MenuViewData> {
   const menu = await getMenuOrThrow(userId);
   const categories = await getCategories(userId);
-  const productMap: ProductMapView = {};
-  for (const category of categories) {
-    productMap[category.id] = (
-      await getProductsInCategory(category.id, userId)
-    ).map((p) => ({ ...p }));
-  }
+  const products = await getProducts(userId);
   const brand = await getBrand(userId);
   return {
     menu: {
@@ -47,7 +42,7 @@ export async function getMenuViewData(userId: string): Promise<MenuViewData> {
     categories: categories.map((c) => ({
       ...c,
     })),
-    productMap,
+    products: products.map((p) => ({ ...p })),
     brand: { title: brand.title },
   };
 }

@@ -3,24 +3,19 @@ import styles from "@/styles/components/create-menu/product/productsList.module.
 import { useState } from "react";
 import { ContextMenu } from "../contextMenu";
 import { ProductForm } from "./productForm";
-import { ProductMap } from "@/pages/api/menu/get-menu-data/[userId]";
 import { DeleteData, Product, SwapData } from "@/lib/data/products";
 
 interface ProductsListProps {
   categoryId: string;
   products: Product[];
-  productMap: ProductMap;
   userId: string;
-  setProductMap: (pm: ProductMap) => void;
   setErrorMessage: (s: string) => void;
 }
 
 export function ProductsList({
   products,
-  productMap,
   categoryId,
   userId,
-  setProductMap,
   setErrorMessage,
 }: ProductsListProps) {
   const [productIdToDelete, setProductIdToDelete] = useState<string | null>(
@@ -30,7 +25,6 @@ export function ProductsList({
 
   async function handleDelete(productId: string) {
     const data: DeleteData = {
-      categoryId,
       userId,
       productId,
     };
@@ -44,10 +38,7 @@ export function ProductsList({
     };
     setProductIdToDelete(null);
     const response = await fetch("/api/product/delete", options);
-    if (response.status === 200) {
-      const newProducts = products.filter((p) => p.id !== productId);
-      setProductMap({ ...productMap, [categoryId]: newProducts });
-    } else if (response.status === 500) {
+    if (response.status === 500) {
       setErrorMessage("Failed to delete product");
     }
   }
@@ -57,7 +48,6 @@ export function ProductsList({
       id1,
       id2,
       userId,
-      categoryId,
     };
     const JSONdata = JSON.stringify(data);
     const options = {
@@ -67,25 +57,6 @@ export function ProductsList({
       },
       body: JSONdata,
     };
-    const p1 = products.find((p) => p.id === id1);
-    const p2 = products.find((p) => p.id === id2);
-    setProductMap({
-      ...productMap,
-      [categoryId]: products.map((p) => {
-        if (p.id === id1 && p2 && p1) {
-          return {
-            ...p1,
-            createdAt: p2?.createdAt,
-          };
-        } else if (p.id === id2 && p2 && p1) {
-          return {
-            ...p2,
-            createdAt: p1?.createdAt,
-          };
-        }
-        return p;
-      }),
-    });
     const response = await fetch("/api/product/swap", options);
     if (response.status === 500) {
       setErrorMessage("Failed to update the product order");
@@ -103,9 +74,8 @@ export function ProductsList({
               {editedProductId === product.id && (
                 <ProductForm
                   categoryId={categoryId}
-                  productMap={productMap}
                   setErrorMessage={setErrorMessage}
-                  setProductMap={setProductMap}
+                  products={products}
                   editedProduct={product}
                   userId={userId}
                   setEditedProductId={setEditedProductId}

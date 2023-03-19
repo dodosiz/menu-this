@@ -18,7 +18,6 @@ import { CategoryForm } from "@/components/create-menu/category/categoryForm";
 import { CategoryTab } from "@/components/create-menu/category/categoryTab";
 import { UnauthorizedPage } from "@/components/commons/unauthorizedPage";
 import { ProductsList } from "@/components/create-menu/product/productsList";
-import { MenuData, ProductMap } from "./api/menu/get-menu-data/[userId]";
 import { LoadingPage } from "@/components/commons/loadingPage";
 import { Notification } from "@/components/commons/notification";
 import { AiOutlineArrowRight } from "react-icons/ai";
@@ -37,13 +36,14 @@ import {
   Category,
   getCategoryCollectionReference,
 } from "@/lib/data/categories";
+import { getProductCollectionReference, Product } from "@/lib/data/products";
 
 export default function CreateMenu() {
   const [isLoading, setLoading] = useState(false);
   const [isRouteLoading, setRouteLoading] = useState(false);
   const [isCreateNewCategory, setCreateNewCategory] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [productMap, setProductMap] = useState<ProductMap>({});
+  const [products, setProducts] = useState<Product[]>([]);
   const [brand, setBrand] = useState<Brand | null>(null);
   const [editedCategoryId, setEditedCategoryId] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -54,7 +54,7 @@ export default function CreateMenu() {
   useEffect(() => {
     let unsubscribeBrand: Unsubscribe;
     let unsubscribeCategory: Unsubscribe;
-    setLoading(true);
+    let unsubscribeProducts: Unsubscribe;
     if (user) {
       unsubscribeBrand = onSnapshot(
         getBrandDocumentReference(user.uid),
@@ -73,18 +73,14 @@ export default function CreateMenu() {
           setCategories(categories);
         }
       );
-      fetch(`/api/menu/get-menu-data/${user.uid}`)
-        .then((res) => res.json())
-        .then((data: MenuData) => {
-          setProductMap(data.initialProductMap);
-          setLoading(false);
-        })
-        .catch(() => {
-          setErrorMessage("Failed to fetch menu data");
-          setLoading(false);
-        });
-    } else {
-      setLoading(false);
+      unsubscribeProducts = onSnapshot(
+        getProductCollectionReference(user.uid),
+        (p) => {
+          const products: Product[] = [];
+          p.forEach((r) => products.push(r.data()));
+          setProducts(products);
+        }
+      );
     }
     return () => {
       if (!!unsubscribeBrand) {
@@ -92,6 +88,9 @@ export default function CreateMenu() {
       }
       if (!!unsubscribeCategory) {
         unsubscribeCategory();
+      }
+      if (!!unsubscribeProducts) {
+        unsubscribeProducts();
       }
     };
   }, [user]);
@@ -150,8 +149,6 @@ export default function CreateMenu() {
                 )}
                 <CategoryMobileForm
                   categories={categories}
-                  productMap={productMap}
-                  setProductMap={setProductMap}
                   handleCancel={() => setCreateNewCategory(false)}
                   setCreateNewCategory={setCreateNewCategory}
                   setErrorMessage={setErrorMessage}
@@ -207,8 +204,6 @@ export default function CreateMenu() {
                         return (
                           <CategoryForm
                             categories={categories}
-                            productMap={productMap}
-                            setProductMap={setProductMap}
                             handleCancel={() => setEditedCategoryId("")}
                             setCreateNewCategory={setCreateNewCategory}
                             setErrorMessage={setErrorMessage}
@@ -238,8 +233,6 @@ export default function CreateMenu() {
                   {isCreateNewCategory && (
                     <CategoryForm
                       categories={categories}
-                      productMap={productMap}
-                      setProductMap={setProductMap}
                       handleCancel={() => setCreateNewCategory(false)}
                       setCreateNewCategory={setCreateNewCategory}
                       setErrorMessage={setErrorMessage}
@@ -279,12 +272,14 @@ export default function CreateMenu() {
                 <Divider />
                 <TabPanels>
                   {categories.map((category) => {
+                    const productsForCategory = products.filter(
+                      (p) => p.categoryId === category.id
+                    );
                     return (
                       <TabPanel key={"panel-" + category.id}>
                         <AccordionWithProductForm
                           expanded={expanded}
-                          productMap={productMap}
-                          setProductMap={setProductMap}
+                          products={productsForCategory}
                           categoryId={category.id}
                           setErrorMessage={setErrorMessage}
                           userId={user.uid}
@@ -296,18 +291,16 @@ export default function CreateMenu() {
                             &ldquo;{category.title}&ldquo;
                           </span>
                         </Heading>
-                        {!productMap[category.id].length && (
+                        {!productsForCategory.length && (
                           <Text className={styles.explanatory} fontSize="md">
                             No products yet, use the above form to create your
                             fist products for this category.
                           </Text>
                         )}
                         <ProductsList
-                          productMap={productMap}
-                          products={productMap[category.id]}
+                          products={productsForCategory}
                           userId={user.uid}
                           categoryId={category.id}
-                          setProductMap={setProductMap}
                           setErrorMessage={setErrorMessage}
                         />
                       </TabPanel>

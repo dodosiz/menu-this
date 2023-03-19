@@ -15,7 +15,6 @@ import {
 import { IoMdAdd, IoMdCheckmark } from "react-icons/io";
 import styles from "@/styles/components/create-menu/product/productForm.module.css";
 import { FormEvent, useState } from "react";
-import { ProductMap } from "@/pages/api/menu/get-menu-data/[userId]";
 import {
   CreateProductData,
   CreateProductResult,
@@ -27,20 +26,18 @@ import { PRODUCT_LIMIT } from "@/constants";
 
 interface ProductFormProps {
   categoryId: string;
-  productMap: ProductMap;
+  products: Product[];
   editedProduct?: Product;
   userId: string;
-  setProductMap: (pm: ProductMap) => void;
   setErrorMessage: (s: string) => void;
   setEditedProductId?: (p: string) => void;
 }
 
 export function ProductForm({
   categoryId,
-  productMap,
+  products,
   editedProduct,
   userId,
-  setProductMap,
   setErrorMessage,
   setEditedProductId,
 }: ProductFormProps) {
@@ -77,7 +74,6 @@ export function ProductForm({
       description,
       price,
       productId: editedProduct.id,
-      categoryId,
       userId,
     };
     const JSONdata = JSON.stringify(data);
@@ -91,21 +87,8 @@ export function ProductForm({
     setLoading(true);
     const response = await fetch("/api/product/update", options);
     if (response.status === 200) {
-      const updatedProduct: Product = {
-        ...editedProduct,
-        name,
-        description,
-        price: parseFloat(price),
-      };
-      const updatedProducts = productMap[categoryId].map((p) =>
-        p.id === updatedProduct.id ? updatedProduct : p
-      );
       setLoading(false);
       setEditedProductId?.("");
-      setProductMap({
-        ...productMap,
-        [categoryId]: updatedProducts,
-      });
     } else if (response.status === 500) {
       setLoading(false);
       setEditedProductId?.("");
@@ -142,12 +125,9 @@ export function ProductForm({
         name: data.name,
         price: parseFloat(data.price),
         createdAt: result.createdAt,
+        categoryId,
       };
       setLoading(false);
-      setProductMap({
-        ...productMap,
-        [categoryId]: [...productMap[categoryId], newProduct],
-      });
       scrollToBottom();
     } else if (response.status === 500) {
       setLoading(false);
@@ -202,7 +182,7 @@ export function ProductForm({
           <GridItem colSpan={{ base: 5, sm: 5, md: 1 }}>
             <Tooltip
               label={
-                productMap[categoryId].length >= PRODUCT_LIMIT
+                products.length >= PRODUCT_LIMIT
                   ? `Maximum limit of ${PRODUCT_LIMIT} products reached`
                   : undefined
               }
@@ -211,8 +191,7 @@ export function ProductForm({
                 isDisabled={
                   !name.length ||
                   !price.length ||
-                  (!editedProduct &&
-                    productMap[categoryId].length >= PRODUCT_LIMIT)
+                  (!editedProduct && products.length >= PRODUCT_LIMIT)
                 }
                 type="submit"
                 leftIcon={editedProduct ? <IoMdCheckmark /> : <IoMdAdd />}

@@ -11,27 +11,31 @@ import {
   query,
   setDoc,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { v4 } from "uuid";
 import { db } from "../core/firebase";
-import { CATEGORY_COLLECTION, USER_DATA_COLLECTION } from "./categories";
+import { USER_DATA_COLLECTION } from "./categories";
 
 const PRODUCT_COLLECTION = "products";
 
 export class Product {
   id: string;
+  categoryId: string;
   name: string;
   price: number;
   description: string;
   createdAt: number;
   constructor(
     id: string,
+    categoryId: string,
     name: string,
     price: number,
     description: string,
     createdAt: number
   ) {
     this.id = id;
+    this.categoryId = categoryId;
     this.name = name;
     this.price = price;
     this.description = description;
@@ -43,6 +47,7 @@ const productConverter: FirestoreDataConverter<Product> = {
   toFirestore: (product) => {
     return {
       id: product.id,
+      categoryId: product.categoryId,
       name: product.name,
       price: product.price,
       description: product.description,
@@ -53,6 +58,7 @@ const productConverter: FirestoreDataConverter<Product> = {
     const data = snapshot.data(options);
     return new Product(
       data.id,
+      data.categoryId,
       data.name,
       data.price,
       data.description,
@@ -61,32 +67,21 @@ const productConverter: FirestoreDataConverter<Product> = {
   },
 };
 
-export function getProductDocumentReference(
-  userId: string,
-  categoryId: string,
-  productId: string
-) {
+export function getProductDocumentReference(userId: string, productId: string) {
   return doc(
     db,
     USER_DATA_COLLECTION,
     userId,
-    CATEGORY_COLLECTION,
-    categoryId,
     PRODUCT_COLLECTION,
     productId
   ).withConverter(productConverter);
 }
 
-export function getProductCollectionReference(
-  userId: string,
-  categoryId: string
-) {
+export function getProductCollectionReference(userId: string) {
   return collection(
     db,
     USER_DATA_COLLECTION,
     userId,
-    CATEGORY_COLLECTION,
-    categoryId,
     PRODUCT_COLLECTION
   ).withConverter(productConverter);
 }
@@ -107,7 +102,7 @@ export interface CreateProductData {
 export async function createProduct(
   data: CreateProductData
 ): Promise<CreateProductResult> {
-  const col = getProductCollectionReference(data.userId, data.categoryId);
+  const col = getProductCollectionReference(data.userId);
   const snapshot = await getCountFromServer(col);
   const productCount = snapshot.data().count;
   if (productCount >= PRODUCT_LIMIT) {
@@ -115,16 +110,14 @@ export async function createProduct(
   }
   const newProductId = v4();
   const currentTimestamp = Date.now();
-  await setDoc(
-    getProductDocumentReference(data.userId, data.categoryId, newProductId),
-    {
-      id: newProductId,
-      name: data.name,
-      price: parseFloat(data.price),
-      description: data.description,
-      createdAt: currentTimestamp,
-    }
-  );
+  await setDoc(getProductDocumentReference(data.userId, newProductId), {
+    id: newProductId,
+    name: data.name,
+    price: parseFloat(data.price),
+    description: data.description,
+    createdAt: currentTimestamp,
+    categoryId: data.categoryId,
+  });
   return {
     id: newProductId,
     createdAt: currentTimestamp,
@@ -132,8 +125,11 @@ export async function createProduct(
 }
 
 export async function countProducts(userId: string, categoryId: string) {
-  const col = getProductCollectionReference(userId, categoryId);
-  const snapshot = await getCountFromServer(col);
+  const q = query(
+    getProductCollectionReference(userId),
+    where("categoryId", "==", categoryId)
+  );
+  const snapshot = await getCountFromServer(q);
   return snapshot.data().count;
 }
 
@@ -143,28 +139,18 @@ export interface UpdateProductData {
   description: string;
   productId: string;
   userId: string;
-  categoryId: string;
 }
 
 export async function updateProduct(data: UpdateProductData) {
-  await updateDoc(
-    getProductDocumentReference(data.userId, data.categoryId, data.productId),
-    {
-      name: data.name,
-      price: parseFloat(data.price),
-      description: data.description,
-    }
-  );
+  await updateDoc(getProductDocumentReference(data.userId, data.productId), {
+    name: data.name,
+    price: parseFloat(data.price),
+    description: data.description,
+  });
 }
 
-export async function getProductsInCategory(
-  categoryId: string,
-  userId: string
-) {
-  const q = query(
-    getProductCollectionReference(userId, categoryId),
-    orderBy("createdAt")
-  );
+export async function getProducts(userId: string) {
+  const q = query(getProductCollectionReference(userId), orderBy("createdAt"));
   const querySnapshot = await getDocs(q);
   const products: Product[] = [];
   querySnapshot.forEach((doc) => products.push(doc.data()));
@@ -173,45 +159,35 @@ export async function getProductsInCategory(
 
 export interface DeleteData {
   userId: string;
-  categoryId: string;
   productId: string;
 }
 
 export async function deleteProduct(data: DeleteData) {
-  await deleteDoc(
-    getProductDocumentReference(data.userId, data.categoryId, data.productId)
-  );
+  await deleteDoc(getProductDocumentReference(data.userId, data.productId));
 }
 
 export interface SwapData {
   id1: string;
   id2: string;
   userId: string;
-  categoryId: string;
 }
 
 export async function swap(data: SwapData) {
   const productSnap1 = await getDoc(
-    getProductDocumentReference(data.userId, data.categoryId, data.id1)
+    getProductDocumentReference(data.userId, data.id1)
   );
   const productSnap2 = await getDoc(
-    getProductDocumentReference(data.userId, data.categoryId, data.id2)
+    getProductDocumentReference(data.userId, data.id2)
   );
   const product1 = productSnap1.data();
   const product2 = productSnap2.data();
 
   if (product1 && product2) {
-    await updateDoc(
-      getProductDocumentReference(data.userId, data.categoryId, data.id1),
-      {
-        createdAt: product2.createdAt,
-      }
-    );
-    await updateDoc(
-      getProductDocumentReference(data.userId, data.categoryId, data.id2),
-      {
-        createdAt: product1.createdAt,
-      }
-    );
+    await updateDoc(getProductDocumentReference(data.userId, data.id1), {
+      createdAt: product2.createdAt,
+    });
+    await updateDoc(getProductDocumentReference(data.userId, data.id2), {
+      createdAt: product1.createdAt,
+    });
   }
 }
