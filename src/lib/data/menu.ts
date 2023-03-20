@@ -1,4 +1,5 @@
 import {
+  deleteDoc,
   doc,
   FirestoreDataConverter,
   getDoc,
@@ -209,4 +210,8 @@ export async function updateDesign(data: UpdateDesignData) {
       background: c.background,
     });
   }
+}
+
+export async function deleteMenu(userId: string) {
+  await deleteDoc(getMenuDocumentReference(userId));
 }

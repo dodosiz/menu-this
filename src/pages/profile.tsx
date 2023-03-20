@@ -72,9 +72,31 @@ export default function Profile() {
       setErrorMessage("User is undefined");
       return;
     }
-    deleteUser(user).catch(() => {
-      setErrorMessage("Failed to delete user");
-    });
+    setShowDeleteUserConfirm(false);
+    setLoading(true);
+    deleteUser(user)
+      .then(() => {
+        const options = {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+        fetch(`/api/user/${user.uid}`, options)
+          .then(() => {
+            setLoading(false);
+          })
+          .catch(() => {
+            setErrorMessage(
+              "Failed to delete user data, they will be deleted by the system"
+            );
+            setLoading(false);
+          });
+      })
+      .catch(() => {
+        setErrorMessage("Failed to delete user, try to log in again");
+        setLoading(false);
+      });
   }
 
   async function handleLogout() {
@@ -163,8 +185,8 @@ export default function Profile() {
         )}
         {showDeleteUserConfirm && user && (
           <LeaveAlert
-            title="Delete user"
-            confirmMessage="Are you sure you want to delete this user?"
+            title="Delete Profile"
+            confirmMessage="Are you sure you want to delete your profile? All your data will be lost."
             isOpen={showDeleteUserConfirm}
             onClose={() => setShowDeleteUserConfirm(false)}
             onConfirm={() => {

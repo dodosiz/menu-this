@@ -4,6 +4,7 @@ import {
   FirestoreDataConverter,
   updateDoc,
   getDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../config/firebase";
 
@@ -65,4 +66,8 @@ export async function updateBrand(data: UpdateBrandData) {
   await updateDoc(getBrandDocumentReference(data.userId), {
     title: data.title,
   });
+}
+
+export async function deleteBrand(userId: string) {
+  await deleteDoc(getBrandDocumentReference(userId));
 }

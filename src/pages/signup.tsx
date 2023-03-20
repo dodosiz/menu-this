@@ -6,13 +6,11 @@ import styles from "@/styles/signup.module.css";
 import { PasswordInput } from "@/components/commons/passwordInput";
 import { Notification } from "@/components/commons/notification";
 import { validateEmail } from "@/components/utils";
-import { FcGoogle } from "react-icons/fc";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
-  signInWithPopup,
 } from "firebase/auth";
-import { auth, provider } from "@/lib/config/firebase";
+import { auth } from "@/lib/config/firebase";
 
 export default function SignUp() {
   const router = useRouter();
@@ -48,18 +46,6 @@ export default function SignUp() {
       .catch((error) => {
         setErrorMessage(error.message);
         setLoading(false);
-      });
-  }
-  function signUpWithGoogle(e: FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    signInWithPopup(auth, provider)
-      .then(() => {
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-        setErrorMessage("Failed to sign up");
       });
   }
   return (
@@ -111,14 +97,6 @@ export default function SignUp() {
                 type="submit"
               >
                 Sign up
-              </Button>
-              <Button
-                leftIcon={<FcGoogle />}
-                variant="outline"
-                colorScheme="teal"
-                onClick={signUpWithGoogle}
-              >
-                Sign up with Google
               </Button>
             </form>
           </Container>
