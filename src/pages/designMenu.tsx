@@ -1,35 +1,32 @@
 import { Notification } from "@/components/commons/notification";
 import { Layout } from "@/components/commons/layout";
-import { Brand, Category, Menu } from "@prisma/client";
-import { Auth } from "@supabase/auth-ui-react";
 import { useEffect, useState } from "react";
-import { ProductMap } from "./api/menu/get-menu-data/[userId]";
 import { LoadingPage } from "@/components/commons/loadingPage";
 import { UnauthorizedPage } from "@/components/commons/unauthorizedPage";
 import { Box, Grid, GridItem, Heading, Tooltip } from "@chakra-ui/react";
 import { CustomizeDrawer } from "@/components/design-menu/customizeDrawer";
 import { MenuViewer } from "@/components/design-menu/menuViewer";
-import { DesignMenuData } from "./api/menu/get-menu-design/[userId]";
 import { TemplateDrawer } from "@/components/design-menu/templateDrawer";
 import { ViewMenuButtons } from "@/components/design-menu/viewMenuButtons";
-import {
-  CreateMenuData,
-  UpdateDesignData,
-  UpdateMenuData,
-} from "@/lib/data/menu";
+import { Menu, MenuDTO, UpdateDesignData } from "@/lib/data/menu";
 import { Router } from "next/router";
 import { BASE_MENU, templateToMenu } from "@/lib/data/template-data";
 import styles from "@/styles/designMenu.module.css";
 import Image from "next/image";
 import { ActionPage } from "@/components/commons/actionPage";
+import { auth } from "@/lib/config/firebase";
+import { Brand } from "@/lib/data/brand";
+import { MenuData } from "./api/menu/get-menu-data/[userId]";
+import { Category } from "@/lib/data/categories";
+import { Product } from "@/lib/data/products";
 
 export default function DesignMenu() {
-  const { user } = Auth.useUser();
+  const user = auth.currentUser;
   const [isLoading, setLoading] = useState(false);
   const [isRouteLoading, setRouteLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [categories, setCategories] = useState<Category[]>([]);
-  const [productMap, setProductMap] = useState<ProductMap>({});
+  const [products, setProducts] = useState<Product[]>([]);
   const [brand, setBrand] = useState<Brand | null>(null);
   const [menu, setMenu] = useState<Menu | null>(null);
   const [isCustomDrawerOpen, setCustomDrawerOpen] = useState(false);
@@ -38,14 +35,18 @@ export default function DesignMenu() {
   const [isTemplateDirty, setTemplateDirty] = useState(false);
   const [isBackgroundDirty, setBackgroundDirty] = useState(false);
 
+  function pendingLoading() {
+    return isLoading || isRouteLoading;
+  }
+
   useEffect(() => {
     setLoading(true);
     if (user) {
-      fetch(`/api/menu/get-menu-design/${user.id}`)
+      fetch(`/api/menu/get-menu-data/${user.uid}`)
         .then((res) => res.json())
-        .then((data: DesignMenuData) => {
+        .then((data: MenuData) => {
           setCategories(data.categories);
-          setProductMap(data.productMap);
+          setProducts(data.products);
           setMenu(data.menu);
           setBrand(data.brand);
           setLoading(false);
@@ -112,27 +113,27 @@ export default function DesignMenu() {
   });
 
   async function updateDesign() {
-    if (!menu) {
+    if (!menu || !user) {
       return;
     }
-    const updateMenuData: UpdateMenuData = {
-      menuId: menu.id,
-      brandColor: menu.brand_color,
-      titleColor: menu.title_color,
-      nameColor: menu.name_color,
-      descriptionColor: menu.description_color,
-      backgroundColor: menu.background_color,
-      brandMargin: menu.brand_margin,
-      titleMargin: menu.title_margin,
-      nameMargin: menu.name_margin,
-      nameTitleMargin: menu.name_title_margin,
-      brandSize: menu.brand_size,
-      titleSize: menu.title_size,
-      nameSize: menu.name_size,
-      descriptionSize: menu.description_size,
-      brandFont: menu.brand_font,
-      titleFont: menu.title_font,
-      contentFont: menu.content_font,
+    const updateMenuData: MenuDTO = {
+      brandColor: menu.brandColor,
+      titleColor: menu.titleColor,
+      nameColor: menu.nameColor,
+      descriptionColor: menu.descriptionColor,
+      backgroundColor: menu.backgroundColor,
+      brandMargin: menu.brandMargin,
+      titleMargin: menu.titleMargin,
+      nameMargin: menu.nameMargin,
+      nameTitleMargin: menu.nameTitleMargin,
+      brandSize: menu.brandSize,
+      titleSize: menu.titleSize,
+      nameSize: menu.nameSize,
+      descriptionSize: menu.descriptionSize,
+      brandFont: menu.brandFont,
+      titleFont: menu.titleFont,
+      contentFont: menu.contentFont,
+      userId: user.uid,
     };
     const data: UpdateDesignData = {
       categories,
@@ -164,25 +165,24 @@ export default function DesignMenu() {
     if (!user) {
       return;
     }
-    const data: CreateMenuData = {
-      menuId: menu.id,
-      brandColor: menu.brand_color,
-      titleColor: menu.title_color,
-      nameColor: menu.name_color,
-      descriptionColor: menu.description_color,
-      backgroundColor: menu.background_color,
-      brandMargin: menu.brand_margin,
-      titleMargin: menu.title_margin,
-      nameMargin: menu.name_margin,
-      nameTitleMargin: menu.name_title_margin,
-      brandSize: menu.brand_size,
-      titleSize: menu.title_size,
-      nameSize: menu.name_size,
-      descriptionSize: menu.description_size,
-      brandFont: menu.brand_font,
-      titleFont: menu.title_font,
-      contentFont: menu.content_font,
-      userId: user.id,
+    const data: MenuDTO = {
+      brandColor: menu.brandColor,
+      titleColor: menu.titleColor,
+      nameColor: menu.nameColor,
+      descriptionColor: menu.descriptionColor,
+      backgroundColor: menu.backgroundColor,
+      brandMargin: menu.brandMargin,
+      titleMargin: menu.titleMargin,
+      nameMargin: menu.nameMargin,
+      nameTitleMargin: menu.nameTitleMargin,
+      brandSize: menu.brandSize,
+      titleSize: menu.titleSize,
+      nameSize: menu.nameSize,
+      descriptionSize: menu.descriptionSize,
+      brandFont: menu.brandFont,
+      titleFont: menu.titleFont,
+      contentFont: menu.contentFont,
+      userId: user.uid,
     };
     const JSONdata = JSON.stringify(data);
     const options = {
@@ -193,13 +193,7 @@ export default function DesignMenu() {
       body: JSONdata,
     };
     const response = await fetch("/api/menu/create-menu", options);
-    if (response.status === 200) {
-      const result = await response.json();
-      setMenu({
-        ...menu,
-        id: result.id,
-      });
-    } else if (response.status === 500) {
+    if (response.status === 500) {
       setErrorMessage("Failed to create menu");
     }
   }
@@ -241,29 +235,26 @@ export default function DesignMenu() {
           />
         )}
         <div>
-          {(isLoading || isRouteLoading) && <LoadingPage fullHeight={true} />}
-          {!user && !isLoading && !isRouteLoading && <UnauthorizedPage />}
-          {user && !isLoading && !isRouteLoading && !brand && (
+          {pendingLoading() && <LoadingPage fullHeight={true} />}
+          {(!user || !user.emailVerified) && !pendingLoading() && (
+            <UnauthorizedPage />
+          )}
+          {user && !pendingLoading() && !brand && (
             <ActionPage
               action="Create your brand"
               title="You need to create your brand first"
               destination="/createMenu"
             />
           )}
-          {user &&
-            !isLoading &&
-            !isRouteLoading &&
-            brand &&
-            !categories.length && (
-              <ActionPage
-                action="Add categories"
-                title="Maybe add some categories with products first?"
-                destination="/createMenu"
-              />
-            )}
+          {user && !pendingLoading() && brand && !categories.length && (
+            <ActionPage
+              action="Add categories"
+              title="Maybe add some categories with products first?"
+              destination="/createMenu"
+            />
+          )}
           {!menu &&
-            !isLoading &&
-            !isRouteLoading &&
+            !pendingLoading() &&
             user &&
             brand &&
             !!categories.length && (
@@ -285,7 +276,7 @@ export default function DesignMenu() {
                             onClick={() => {
                               const newMenu = {
                                 id: "",
-                                userId: user.id,
+                                userId: user.uid,
                                 ...BASE_MENU,
                                 ...templateToMenu[templateName],
                                 template: templateName,
@@ -302,8 +293,7 @@ export default function DesignMenu() {
               </>
             )}
           {user &&
-            !isLoading &&
-            !isRouteLoading &&
+            !pendingLoading() &&
             menu &&
             brand &&
             !!categories.length && (
@@ -312,7 +302,7 @@ export default function DesignMenu() {
                   <MenuViewer
                     categories={categories}
                     setBackground={setBackground}
-                    productMap={productMap}
+                    products={products}
                     menu={menu}
                     inEdit={true}
                     brand={brand}
@@ -334,7 +324,7 @@ export default function DesignMenu() {
                     setCustomDirty={setCustomDirty}
                   />
                   <ViewMenuButtons
-                    menuId={menu.id}
+                    userId={user.uid}
                     updateDesign={updateDesign}
                   />
                 </GridItem>

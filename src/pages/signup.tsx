@@ -1,5 +1,3 @@
-import { supabase } from "@/lib/core/supabase";
-import { Auth } from "@supabase/auth-ui-react";
 import { useRouter } from "next/router";
 import { Button, Container, Heading, Input } from "@chakra-ui/react";
 import { Layout } from "@/components/commons/layout";
@@ -8,18 +6,21 @@ import styles from "@/styles/signup.module.css";
 import { PasswordInput } from "@/components/commons/passwordInput";
 import { Notification } from "@/components/commons/notification";
 import { validateEmail } from "@/components/utils";
-import { FcGoogle } from "react-icons/fc";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
+import { auth } from "@/lib/config/firebase";
 
 export default function SignUp() {
   const router = useRouter();
-  const [user, setUser] = useState(Auth.useUser().user);
-  const [session, setSession] = useState(Auth.useUser().session);
+  const [user, setUser] = useState(auth.currentUser);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  if (user && session) {
+  if (user && user.emailVerified) {
     router.push("/");
   }
   function isSubmitDisabled() {
@@ -29,33 +30,23 @@ export default function SignUp() {
       password.length < 6
     );
   }
-  async function signUp(e: FormEvent) {
+  function signUp(e: FormEvent) {
     e.preventDefault();
     if (isSubmitDisabled()) {
       return;
     }
     setLoading(true);
-    const { data, error } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-    });
-    setUser(data.user);
-    setSession(data.session);
-    setLoading(false);
-    if (error) {
-      setErrorMessage(error.message);
-    }
-  }
-  async function signUpWithGoogle(e: FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-    });
-    setLoading(false);
-    if (error) {
-      setErrorMessage(error.message);
-    }
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((value) => {
+        sendEmailVerification(value.user).then(() => {
+          setUser(value.user);
+          setLoading(false);
+        });
+      })
+      .catch((error) => {
+        setErrorMessage(error.message);
+        setLoading(false);
+      });
   }
   return (
     <Layout user={user}>
@@ -67,12 +58,12 @@ export default function SignUp() {
             onClose={() => setErrorMessage("")}
           />
         )}
-        {!!user && !session && (
+        {!!user && !user.emailVerified && (
           <Heading className={styles.signup_heading} size="xl" as="h1">
             Please confirm your email address.
           </Heading>
         )}
-        {!user && !session && (
+        {!user && (
           <Container alignContent="center">
             <Heading className={styles.signup_heading} size="xl" as="h1">
               Sign Up
@@ -106,14 +97,6 @@ export default function SignUp() {
                 type="submit"
               >
                 Sign up
-              </Button>
-              <Button
-                leftIcon={<FcGoogle />}
-                variant="outline"
-                colorScheme="teal"
-                onClick={signUpWithGoogle}
-              >
-                Sign up with Google
               </Button>
             </form>
           </Container>

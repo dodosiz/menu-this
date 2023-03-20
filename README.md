@@ -14,34 +14,10 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-# Tastings App
+## Run Firebase emulator
 
-## Migrations
-
-Run the migrations:
+To run the emulators:
 
 ```
-npx prisma migrate dev --name migration_name
-```
-
-Apply to the prisma client:
-
-```
-npx prisma generate
-```
-
-## Run locally
-
-Make sure docker is running then run:
-
-```
-npx supabase start
-```
-
-Then you can visit http://localhost:54323/projects to configure supabase or query tables.
-
-To stop the services:
-
-```
-npx supabase stop
+firebase emulators:start
 ```

@@ -1,4 +1,3 @@
-import { ProductMap } from "@/pages/api/menu/get-menu-data/[userId]";
 import { SECONDARY_COLOR, MAIN_COLOR } from "@/constants";
 import {
   Accordion,
@@ -10,14 +9,17 @@ import {
 } from "@chakra-ui/react";
 import { ProductForm } from "./productForm";
 import styles from "@/styles/components/create-menu/product/accordionWithProductForm.module.css";
+import { Product, UpdateProductResult } from "@/lib/data/products";
 
 interface AccordionWithProductFormProps {
   categoryId: string;
-  productMap: ProductMap;
+  products: Product[];
   expanded: number;
-  setProductMap: (pm: ProductMap) => void;
-  setErrorMessage: (s: string) => void;
-  setExpanded: (n: number) => void;
+  userId: string;
+  setErrorMessage: (_s: string) => void;
+  setExpanded: (_n: number) => void;
+  addProduct: (_p: Product) => void;
+  mergeProduct: (_p: UpdateProductResult) => void;
 }
 
 export function AccordionWithProductForm(props: AccordionWithProductFormProps) {
@@ -43,10 +45,12 @@ export function AccordionWithProductForm(props: AccordionWithProductFormProps) {
         </h2>
         <AccordionPanel paddingLeft={0} pb={4}>
           <ProductForm
-            productMap={props.productMap}
-            setProductMap={props.setProductMap}
+            products={props.products}
             categoryId={props.categoryId}
             setErrorMessage={props.setErrorMessage}
+            userId={props.userId}
+            addProduct={props.addProduct}
+            mergeProduct={props.mergeProduct}
           />
         </AccordionPanel>
       </AccordionItem>

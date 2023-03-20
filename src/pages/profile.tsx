@@ -1,9 +1,6 @@
-import { Auth } from "@supabase/auth-ui-react";
 import {
   Avatar,
-  Box,
   Button,
-  Container,
   Grid,
   GridItem,
   Heading,
@@ -18,22 +15,18 @@ import { CategoryProductCount, UserStatus } from "@/lib/data/user";
 import { LeaveAlert } from "@/components/commons/leave-alert";
 import { Notification } from "@/components/commons/notification";
 import { LoadingPage } from "@/components/commons/loadingPage";
-import { supabase } from "@/lib/core/supabase";
 import { Router, useRouter } from "next/router";
 import { RiDeleteBin6Line, RiLockPasswordFill } from "react-icons/ri";
 import { GoSignOut } from "react-icons/go";
-import { TiCancel } from "react-icons/ti";
 import styles from "@/styles/profile.module.css";
 import { CATEGORY_LIMIT, PRODUCT_LIMIT } from "@/constants";
+import { auth } from "@/lib/config/firebase";
+import { deleteUser } from "firebase/auth";
 
 export default function Profile() {
-  const { user } = Auth.useUser();
-  const [deletionRequested, setDeletionRequested] = useState(false);
+  const user = auth.currentUser;
   const [categoryProductCount, setCategoryProductCount] =
     useState<CategoryProductCount>({});
-  const [showDeleteNotification, setShowDeleteNotification] = useState(false);
-  const [showCancelDeleteNotification, setShowCancelDeleteNotification] =
-    useState(false);
   const [showDeleteUserConfirm, setShowDeleteUserConfirm] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isRouteLoading, setRouteLoading] = useState(false);
@@ -47,10 +40,9 @@ export default function Profile() {
   useEffect(() => {
     setLoading(true);
     if (user) {
-      fetch(`/api/user/${user.id}`)
+      fetch(`/api/user/${user.uid}`)
         .then((res) => res.json())
         .then((data: UserStatus) => {
-          setDeletionRequested(data.requested);
           setCategoryProductCount(data.categoryProductCount);
           setLoading(false);
         })
@@ -75,41 +67,40 @@ export default function Profile() {
     });
   });
 
-  async function handleDeleteUser(userId: string) {
-    const JSONdata = JSON.stringify({ id: userId });
-    const options = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSONdata,
-    };
+  function handleDeleteUser() {
+    if (!user) {
+      setErrorMessage("User is undefined");
+      return;
+    }
     setShowDeleteUserConfirm(false);
-    const response = await fetch("/api/user/request-delete", options);
-    if (response.status === 200) {
-      setDeletionRequested(true);
-      setShowDeleteNotification(true);
-    }
-  }
-
-  async function handleCancelDeleteUser(userId: string) {
-    const JSONdata = JSON.stringify({ id: userId });
-    const options = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSONdata,
-    };
-    const response = await fetch("/api/user/cancel-delete", options);
-    if (response.status === 200) {
-      setDeletionRequested(false);
-      setShowCancelDeleteNotification(true);
-    }
+    setLoading(true);
+    deleteUser(user)
+      .then(() => {
+        const options = {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+        fetch(`/api/user/${user.uid}`, options)
+          .then(() => {
+            setLoading(false);
+          })
+          .catch(() => {
+            setErrorMessage(
+              "Failed to delete user data, they will be deleted by the system"
+            );
+            setLoading(false);
+          });
+      })
+      .catch(() => {
+        setErrorMessage("Failed to delete user, try to log in again");
+        setLoading(false);
+      });
   }
 
   async function handleLogout() {
-    await supabase.auth.signOut();
+    await auth.signOut();
     router.push("/api/logout");
   }
 
@@ -117,7 +108,9 @@ export default function Profile() {
     <Layout user={user}>
       <>
         {(isLoading || isRouteLoading) && <LoadingPage fullHeight={true} />}
-        {!user && !isLoading && !isRouteLoading && <UnauthorizedPage />}
+        {(!user || !user.emailVerified) && !isLoading && !isRouteLoading && (
+          <UnauthorizedPage />
+        )}
         {user && !isLoading && !isRouteLoading && (
           <Grid templateColumns="repeat(6, 1fr)" gap={4}>
             <GridItem className={styles.grid_item} colSpan={{ base: 6, md: 2 }}>
@@ -128,22 +121,14 @@ export default function Profile() {
                 </Text>
                 <Button
                   width="100%"
-                  color={deletionRequested ? "teal.500" : "red.500"}
+                  color="red.500"
                   variant="outline"
-                  leftIcon={
-                    deletionRequested ? <TiCancel /> : <RiDeleteBin6Line />
-                  }
+                  leftIcon={<RiDeleteBin6Line />}
                   onClick={() => {
-                    if (deletionRequested) {
-                      handleCancelDeleteUser(user.id);
-                    } else {
-                      setShowDeleteUserConfirm(true);
-                    }
+                    setShowDeleteUserConfirm(true);
                   }}
                 >
-                  {deletionRequested
-                    ? "Cancel delete profile request"
-                    : "Request delete profile"}
+                  Delete User
                 </Button>
                 <Button
                   width="100%"
@@ -200,27 +185,13 @@ export default function Profile() {
         )}
         {showDeleteUserConfirm && user && (
           <LeaveAlert
-            title="Request delete profile"
-            confirmMessage="Are you sure you want to request a profile deletion?"
+            title="Delete Profile"
+            confirmMessage="Are you sure you want to delete your profile? All your data will be lost."
             isOpen={showDeleteUserConfirm}
             onClose={() => setShowDeleteUserConfirm(false)}
             onConfirm={() => {
-              handleDeleteUser(user.id);
+              handleDeleteUser();
             }}
-          />
-        )}
-        {showDeleteNotification && user && (
-          <Notification
-            status="info"
-            message="Your profile will be deleted in the next hours, you can change your decission anytime before."
-            onClose={() => setShowDeleteNotification(false)}
-          />
-        )}
-        {showCancelDeleteNotification && user && (
-          <Notification
-            status="info"
-            message="The profile deletion has been canceled, we are happy to have you back!"
-            onClose={() => setShowCancelDeleteNotification(false)}
           />
         )}
         {!!errorMessage.length && (

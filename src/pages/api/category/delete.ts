@@ -6,8 +6,8 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "DELETE") {
-    const data = req.body as { id: string };
-    await deleteCategory(data.id);
+    const data = req.body;
+    await deleteCategory(data);
     res.status(200).end();
   }
 }

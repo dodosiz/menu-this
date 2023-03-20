@@ -21,17 +21,19 @@ import {
   Image,
   Text,
 } from "@chakra-ui/react";
-import { Brand, Menu } from "@prisma/client";
 import styles from "@/styles/components/design-menu/designMenuViewer.module.css";
 import { BACKGROUND_IMG, templateToMenu } from "@/lib/data/template-data";
-import { CategoryView, ProductMapView } from "@/lib/data/menu-view";
 import { HiOutlinePhotograph } from "react-icons/hi";
 import { ChoosePhotoModal } from "./choosePhotoModal";
+import { Brand } from "@/lib/data/brand";
+import { Menu } from "@/lib/data/menu";
+import { Category } from "@/lib/data/categories";
+import { Product } from "@/lib/data/products";
 
 interface DesignMenuViewer {
-  categories: CategoryView[];
-  setBackground?: (categoryId: string, background: string | null) => void;
-  productMap: ProductMapView;
+  categories: Category[];
+  setBackground?: (_categoryId: string, _background: string | null) => void;
+  products: Product[];
   menu: Menu;
   inEdit?: boolean;
   brand: Brand;
@@ -39,29 +41,29 @@ interface DesignMenuViewer {
 
 export function MenuViewer({
   categories,
-  productMap,
+  products,
   menu,
   inEdit,
   brand,
   setBackground,
 }: DesignMenuViewer) {
   const {
-    background_color,
-    content_font,
-    description_color,
-    description_size,
-    name_color,
-    name_margin,
-    name_size,
-    name_title_margin,
-    brand_color,
-    brand_margin,
-    brand_size,
-    brand_font,
-    title_color,
-    title_font,
-    title_margin,
-    title_size,
+    backgroundColor,
+    contentFont,
+    descriptionColor,
+    descriptionSize,
+    nameColor,
+    nameMargin,
+    nameSize,
+    nameTitleMargin,
+    brandColor,
+    brandMargin,
+    brandSize,
+    brandFont,
+    titleColor,
+    titleFont,
+    titleMargin,
+    titleSize,
   } = menu.template ? { ...templateToMenu[menu.template], ...menu } : menu;
   const [categoryId, setCategoryId] = useState<string | undefined>(undefined);
   return (
@@ -69,101 +71,109 @@ export function MenuViewer({
       paddingLeft={0}
       paddingRight={0}
       className={styles.menu}
-      backgroundColor={background_color}
+      backgroundColor={backgroundColor}
     >
       <Center>
         <Heading
-          color={brand_color}
-          size={brand_size}
+          color={brandColor}
+          size={brandSize}
           as="h1"
-          fontFamily={brand_font}
-          marginTop={brand_margin}
+          fontFamily={brandFont}
+          marginTop={brandMargin}
         >
           {brand.title}
         </Heading>
       </Center>
-      {categories.map((category, i) => (
-        <>
-          {category.background && (
-            <Image
-              marginTop={title_margin}
-              position="relative"
-              marginBottom={name_margin}
-              width="100vw"
-              src={BACKGROUND_IMG[category.background].path}
-              alt={BACKGROUND_IMG[category.background].alt}
-            />
-          )}
-          <Box paddingLeft="20px" paddingRight="20px" key={`cb-${category.id}`}>
-            <Heading
-              marginTop={!category.background ? title_margin : 0}
-              color={title_color}
-              size={title_size}
-              as="h1"
-              fontFamily={title_font}
+      {categories
+        .sort((c1, c2) => c1.createdAt - c2.createdAt)
+        .map((category) => (
+          <>
+            {category.background && (
+              <Image
+                marginTop={titleMargin}
+                position="relative"
+                marginBottom={nameMargin}
+                width="100vw"
+                src={BACKGROUND_IMG[category.background].path}
+                alt={BACKGROUND_IMG[category.background].alt}
+              />
+            )}
+            <Box
+              paddingLeft="20px"
+              paddingRight="20px"
+              key={`cb-${category.id}`}
             >
-              {category.title}
-              {inEdit && (
-                <IconButton
-                  icon={<HiOutlinePhotograph />}
-                  color={title_color}
-                  aria-label="design"
-                  variant="outline"
-                  size="md"
-                  onClick={() => setCategoryId(category.id)}
-                  _hover={{ background: title_color, color: background_color }}
-                  borderRadius="50%"
-                  float="right"
-                />
-              )}
-            </Heading>
-            <Grid templateColumns="repeat(5, 1fr)">
-              {productMap[category.id].map((product, i) => (
-                <Fragment key={`gi-${product.id}`}>
-                  <GridItem
-                    marginTop={i > 0 ? name_margin : name_title_margin}
-                    colSpan={{ base: 3, md: 4 }}
-                  >
-                    <Heading
-                      fontFamily={content_font}
-                      color={name_color}
-                      as="h2"
-                      size={name_size}
-                    >
-                      {product.name}
-                    </Heading>
-                  </GridItem>
-                  <GridItem
-                    marginTop={i > 0 ? name_margin : name_title_margin}
-                    colSpan={{ base: 2, md: 1 }}
-                  >
-                    <Heading
-                      display="flex"
-                      fontFamily={content_font}
-                      justifyContent="flex-end"
-                      color={name_color}
-                      as="h2"
-                      size={name_size}
-                    >
-                      € {product.price.toFixed(2)}
-                    </Heading>
-                  </GridItem>
-                  <GridItem colSpan={{ base: 3, md: 4 }}>
-                    <Text
-                      fontFamily={content_font}
-                      fontSize={description_size}
-                      color={description_color}
-                    >
-                      {product.description}
-                    </Text>
-                  </GridItem>
-                  <GridItem colSpan={{ base: 2, md: 1 }}></GridItem>
-                </Fragment>
-              ))}
-            </Grid>
-          </Box>
-        </>
-      ))}
+              <Heading
+                marginTop={!category.background ? titleMargin : 0}
+                color={titleColor}
+                size={titleSize}
+                as="h1"
+                fontFamily={titleFont}
+              >
+                {category.title}
+                {inEdit && (
+                  <IconButton
+                    icon={<HiOutlinePhotograph />}
+                    color={titleColor}
+                    aria-label="design"
+                    variant="outline"
+                    size="md"
+                    onClick={() => setCategoryId(category.id)}
+                    _hover={{ background: titleColor, color: backgroundColor }}
+                    borderRadius="50%"
+                    float="right"
+                  />
+                )}
+              </Heading>
+              <Grid templateColumns="repeat(5, 1fr)">
+                {products
+                  .filter((p) => p.categoryId === category.id)
+                  .map((product, i) => (
+                    <Fragment key={`gi-${product.id}`}>
+                      <GridItem
+                        marginTop={i > 0 ? nameMargin : nameTitleMargin}
+                        colSpan={{ base: 3, md: 4 }}
+                      >
+                        <Heading
+                          fontFamily={contentFont}
+                          color={nameColor}
+                          as="h2"
+                          size={nameSize}
+                        >
+                          {product.name}
+                        </Heading>
+                      </GridItem>
+                      <GridItem
+                        marginTop={i > 0 ? nameMargin : nameTitleMargin}
+                        colSpan={{ base: 2, md: 1 }}
+                      >
+                        <Heading
+                          display="flex"
+                          fontFamily={contentFont}
+                          justifyContent="flex-end"
+                          color={nameColor}
+                          as="h2"
+                          size={nameSize}
+                        >
+                          € {product.price.toFixed(2)}
+                        </Heading>
+                      </GridItem>
+                      <GridItem colSpan={{ base: 3, md: 4 }}>
+                        <Text
+                          fontFamily={contentFont}
+                          fontSize={descriptionSize}
+                          color={descriptionColor}
+                        >
+                          {product.description}
+                        </Text>
+                      </GridItem>
+                      <GridItem colSpan={{ base: 2, md: 1 }}></GridItem>
+                    </Fragment>
+                  ))}
+              </Grid>
+            </Box>
+          </>
+        ))}
       {categoryId !== undefined && (
         <ChoosePhotoModal
           categories={categories}

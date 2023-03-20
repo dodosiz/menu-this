@@ -14,16 +14,13 @@ import {
 import { useState, useEffect } from "react";
 import styles from "@/styles/createMenu.module.css";
 import { IoMdAdd } from "react-icons/io";
-import { Brand, Category } from "@prisma/client";
 import { CategoryForm } from "@/components/create-menu/category/categoryForm";
 import { CategoryTab } from "@/components/create-menu/category/categoryTab";
 import { UnauthorizedPage } from "@/components/commons/unauthorizedPage";
 import { ProductsList } from "@/components/create-menu/product/productsList";
-import { Auth } from "@supabase/auth-ui-react";
-import { MenuData, ProductMap } from "./api/menu/get-menu-data/[userId]";
 import { LoadingPage } from "@/components/commons/loadingPage";
 import { Notification } from "@/components/commons/notification";
-import { AiOutlineArrowRight, AiOutlineArrowUp } from "react-icons/ai";
+import { AiOutlineArrowRight } from "react-icons/ai";
 import { AccordionWithProductForm } from "@/components/create-menu/product/accordionWithProductForm";
 import { CategoryMobileForm } from "@/components/create-menu/category/categoryMobileForm";
 import { CategoryMobileMenu } from "@/components/create-menu/category/categoryMobileMenu";
@@ -32,28 +29,40 @@ import { Router } from "next/router";
 import { CATEGORY_LIMIT } from "@/constants";
 import { CreateBrand } from "@/components/create-menu/brand/createBrand";
 import { EditBrand } from "@/components/create-menu/brand/editBrand";
+import { auth } from "@/lib/config/firebase";
+import { Brand } from "@/lib/data/brand";
+import { Category } from "@/lib/data/categories";
+import { Product, SwapResult, UpdateProductResult } from "@/lib/data/products";
+import { MenuData } from "./api/menu/get-menu-data/[userId]";
 
 export default function CreateMenu() {
   const [isLoading, setLoading] = useState(false);
   const [isRouteLoading, setRouteLoading] = useState(false);
   const [isCreateNewCategory, setCreateNewCategory] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [productMap, setProductMap] = useState<ProductMap>({});
+  const [products, setProducts] = useState<Product[]>([]);
   const [brand, setBrand] = useState<Brand | null>(null);
   const [editedCategoryId, setEditedCategoryId] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [expanded, setExpanded] = useState(0);
   const [tabIndex, setTabIndex] = useState(0);
-  const { user } = Auth.useUser();
+  const user = auth.currentUser;
+
+  function pendingLoading() {
+    if (!user) {
+      return false;
+    }
+    return isLoading || isRouteLoading;
+  }
 
   useEffect(() => {
     setLoading(true);
     if (user) {
-      fetch(`/api/menu/get-menu-data/${user.id}`)
+      fetch(`/api/menu/get-menu-data/${user.uid}`)
         .then((res) => res.json())
         .then((data: MenuData) => {
-          setCategories(data.initialCategories);
-          setProductMap(data.initialProductMap);
+          setCategories(data.categories);
+          setProducts(data.products);
           setBrand(data.brand);
           setLoading(false);
         })
@@ -80,6 +89,48 @@ export default function CreateMenu() {
     });
   });
 
+  function addProduct(p: Product) {
+    setProducts([...products, p]);
+  }
+
+  function removeProduct(id: string) {
+    const newProducts = products.filter((p) => p.id !== id);
+    setProducts(newProducts);
+  }
+
+  function mergeProduct(r: UpdateProductResult) {
+    const updatedProducts = products.map((p) => {
+      if (p.id === r.productId) {
+        return {
+          ...p,
+          name: r.name,
+          description: r.description,
+          price: r.price,
+        };
+      }
+      return p;
+    });
+    setProducts(updatedProducts);
+  }
+
+  function swapProducts(r: SwapResult) {
+    const updatedProducts = products.map((p) => {
+      if (p.id === r.id1) {
+        return {
+          ...p,
+          createdAt: r.createdAt1,
+        };
+      } else if (p.id === r.id2) {
+        return {
+          ...p,
+          createdAt: r.createdAt2,
+        };
+      }
+      return p;
+    });
+    setProducts(updatedProducts);
+  }
+
   return (
     <Layout user={user}>
       <>
@@ -91,22 +142,24 @@ export default function CreateMenu() {
           />
         )}
         <div className={styles.create_menu}>
-          {(isLoading || isRouteLoading) && <LoadingPage fullHeight={true} />}
-          {!user && !isLoading && !isRouteLoading && <UnauthorizedPage />}
-          {user && !isLoading && !isRouteLoading && !brand && (
+          {pendingLoading() && <LoadingPage fullHeight={true} />}
+          {(!user || !user.emailVerified) && !pendingLoading() && (
+            <UnauthorizedPage />
+          )}
+          {user && !pendingLoading() && !brand && (
             <CreateBrand
-              setBrand={setBrand}
               setErrorMessage={setErrorMessage}
-              setLoading={setLoading}
-              userId={user.id}
+              userId={user.uid}
+              setBrand={setBrand}
             />
           )}
-          {user && !isLoading && !isRouteLoading && !!brand && (
+          {user && !pendingLoading() && !!brand && (
             <>
               <Heading size="xl" as="h1">
                 Menu of &quot;{brand.title}&quot;
                 <EditBrand
                   brand={brand}
+                  user={user}
                   setBrand={setBrand}
                   setErrorMessage={setErrorMessage}
                   setLoading={setLoading}
@@ -122,10 +175,8 @@ export default function CreateMenu() {
                 )}
                 <CategoryMobileForm
                   categories={categories}
-                  productMap={productMap}
-                  setProductMap={setProductMap}
-                  handleCancel={() => setCreateNewCategory(false)}
                   setCategories={setCategories}
+                  handleCancel={() => setCreateNewCategory(false)}
                   setCreateNewCategory={setCreateNewCategory}
                   setErrorMessage={setErrorMessage}
                   categoryInEdit={
@@ -144,6 +195,7 @@ export default function CreateMenu() {
                           swapDates({
                             id1: categories[tabIndex].id,
                             id2: categories[tabIndex - 1].id,
+                            userId: user.uid,
                             categories: categories,
                             setCategories: setCategories,
                             setErrorMessage: setErrorMessage,
@@ -159,6 +211,7 @@ export default function CreateMenu() {
                             id2: categories[tabIndex + 1].id,
                             categories: categories,
                             setCategories: setCategories,
+                            userId: user.uid,
                             setErrorMessage: setErrorMessage,
                             updateTabIndex: () => setTabIndex(tabIndex + 1),
                           })
@@ -174,20 +227,14 @@ export default function CreateMenu() {
               >
                 <TabList className={styles.tablist}>
                   {categories
-                    .sort(
-                      (c1, c2) =>
-                        Date.parse(`${c1.created_at}`) -
-                        Date.parse(`${c2.created_at}`)
-                    )
+                    .sort((c1, c2) => c1.createdAt - c2.createdAt)
                     .map((category, index) => {
                       if (category.id === editedCategoryId) {
                         return (
                           <CategoryForm
                             categories={categories}
-                            productMap={productMap}
-                            setProductMap={setProductMap}
-                            handleCancel={() => setEditedCategoryId("")}
                             setCategories={setCategories}
+                            handleCancel={() => setEditedCategoryId("")}
                             setCreateNewCategory={setCreateNewCategory}
                             setErrorMessage={setErrorMessage}
                             setTabIndex={setTabIndex}
@@ -201,9 +248,10 @@ export default function CreateMenu() {
                         return (
                           <CategoryTab
                             categories={categories}
+                            setCategories={setCategories}
                             category={category}
                             index={index}
-                            setCategories={setCategories}
+                            userId={user.uid}
                             key={"tab-" + category.id}
                             editedCategoryId={editedCategoryId}
                             setErrorMessage={setErrorMessage}
@@ -216,10 +264,8 @@ export default function CreateMenu() {
                   {isCreateNewCategory && (
                     <CategoryForm
                       categories={categories}
-                      productMap={productMap}
-                      setProductMap={setProductMap}
-                      handleCancel={() => setCreateNewCategory(false)}
                       setCategories={setCategories}
+                      handleCancel={() => setCreateNewCategory(false)}
                       setCreateNewCategory={setCreateNewCategory}
                       setErrorMessage={setErrorMessage}
                       setEditedCategoryId={setEditedCategoryId}
@@ -258,15 +304,20 @@ export default function CreateMenu() {
                 <Divider />
                 <TabPanels>
                   {categories.map((category) => {
+                    const productsForCategory = products.filter(
+                      (p) => p.categoryId === category.id
+                    );
                     return (
                       <TabPanel key={"panel-" + category.id}>
                         <AccordionWithProductForm
                           expanded={expanded}
-                          productMap={productMap}
-                          setProductMap={setProductMap}
+                          products={productsForCategory}
                           categoryId={category.id}
                           setErrorMessage={setErrorMessage}
+                          userId={user.uid}
                           setExpanded={setExpanded}
+                          addProduct={addProduct}
+                          mergeProduct={mergeProduct}
                         />
                         <Heading size="md" as="h3">
                           Products of category{" "}
@@ -274,18 +325,21 @@ export default function CreateMenu() {
                             &ldquo;{category.title}&ldquo;
                           </span>
                         </Heading>
-                        {!productMap[category.id].length && (
+                        {!productsForCategory.length && (
                           <Text className={styles.explanatory} fontSize="md">
                             No products yet, use the above form to create your
                             fist products for this category.
                           </Text>
                         )}
                         <ProductsList
-                          productMap={productMap}
-                          products={productMap[category.id]}
+                          products={productsForCategory}
+                          userId={user.uid}
                           categoryId={category.id}
-                          setProductMap={setProductMap}
                           setErrorMessage={setErrorMessage}
+                          addProduct={addProduct}
+                          mergeProduct={mergeProduct}
+                          removeProduct={removeProduct}
+                          swapProducts={swapProducts}
                         />
                       </TabPanel>
                     );

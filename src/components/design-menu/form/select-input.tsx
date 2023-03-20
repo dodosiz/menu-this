@@ -4,7 +4,7 @@ interface SelectProps {
   options: string[];
   value: string;
   displayOption?: { [k: string]: string };
-  setValue: (v: string) => void;
+  setValue: (_v: string) => void;
 }
 
 export function SelectInput({

@@ -1,45 +1,48 @@
-import { Brand, Category, Menu, Product } from "@prisma/client";
-import { getCategories } from "./categories";
-import { prisma } from "../core/prisma";
-import { getProductsInCategories } from "./products";
+import { Category, getCategories } from "./categories";
+import { getProducts, Product } from "./products";
+import { Brand, getBrand } from "./brand";
+import { getMenuOrThrow, Menu } from "./menu";
 
 export interface MenuViewData {
   menu: Menu;
-  categories: CategoryView[];
-  productMap: ProductMapView;
+  categories: Category[];
+  products: Product[];
   brand: Brand;
 }
 
-export type CategoryView = Omit<Category, "created_at">;
-
 export type ProductMapView = {
-  [categoryId: string]: Omit<Product, "created_at">[];
+  [categoryId: string]: Product[];
 };
 
-export async function getMenuViewData(menuId: string): Promise<MenuViewData> {
-  const menu = await prisma.menu.findUniqueOrThrow({ where: { id: menuId } });
-  const categories = await getCategories(menu.userId);
-  const products = await getProductsInCategories(categories.map((c) => c.id));
-  const productMap: ProductMapView = {};
-  for (const category of categories) {
-    const productsInCategory = products.filter(
-      (p) => p.categoryId === category.id
-    );
-    productMap[category.id] = productsInCategory.map((p) => ({
-      ...p,
-      created_at: null,
-    }));
-  }
-  const brand = await prisma.brand.findFirstOrThrow({
-    where: { userId: menu.userId },
-  });
+export async function getMenuViewData(userId: string): Promise<MenuViewData> {
+  const menu = await getMenuOrThrow(userId);
+  const categories = await getCategories(userId);
+  const products = await getProducts(userId);
+  const brand = await getBrand(userId);
   return {
-    menu,
+    menu: {
+      brandColor: menu.brandColor,
+      titleColor: menu.titleColor,
+      nameColor: menu.nameColor,
+      descriptionColor: menu.descriptionColor,
+      backgroundColor: menu.backgroundColor,
+      brandMargin: menu.brandMargin,
+      titleMargin: menu.titleMargin,
+      nameMargin: menu.nameMargin,
+      nameTitleMargin: menu.nameTitleMargin,
+      brandSize: menu.brandSize,
+      titleSize: menu.titleSize,
+      nameSize: menu.nameSize,
+      descriptionSize: menu.descriptionSize,
+      brandFont: menu.brandFont,
+      titleFont: menu.titleFont,
+      contentFont: menu.contentFont,
+      template: menu.template,
+    },
     categories: categories.map((c) => ({
       ...c,
-      created_at: null,
     })),
-    productMap,
-    brand,
+    products: products.map((p) => ({ ...p })),
+    brand: { title: brand ? brand.title : "" },
   };
 }

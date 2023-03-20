@@ -13,7 +13,7 @@ interface PasswordInputProps {
   isRepeat?: boolean;
   placeholder: string;
   value: string;
-  setValue: (v: string) => void;
+  setValue: (_v: string) => void;
 }
 
 export function PasswordInput(props: PasswordInputProps) {

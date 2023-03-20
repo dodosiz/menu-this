@@ -1,4 +1,3 @@
-import { Auth } from "@supabase/auth-ui-react";
 import { useRouter } from "next/router";
 import { Button, Container, Heading, Input } from "@chakra-ui/react";
 import { Layout } from "@/components/commons/layout";
@@ -7,11 +6,12 @@ import { PasswordInput } from "@/components/commons/passwordInput";
 import { validateEmail } from "@/components/utils";
 import { useState, FormEvent } from "react";
 import { Notification } from "@/components/commons/notification";
-import { supabase } from "@/lib/core/supabase";
 import { FcGoogle } from "react-icons/fc";
+import { auth, provider } from "@/lib/config/firebase";
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 
 export default function Login() {
-  const { user } = Auth.useUser();
+  const user = auth.currentUser;
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,28 +20,29 @@ export default function Login() {
   if (user) {
     router.push("/");
   }
-  async function logIn(e: FormEvent) {
+  function logIn(e: FormEvent) {
     e.preventDefault();
     setLoading(true);
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
-    });
-    setLoading(false);
-    if (error) {
-      setErrorMessage(error.message);
-    }
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        setLoading(false);
+      })
+      .catch((error) => {
+        setLoading(false);
+        setErrorMessage(error.message);
+      });
   }
-  async function logInWithGoogle(e: FormEvent) {
+  function logInWithGoogle(e: FormEvent) {
     e.preventDefault();
     setLoading(true);
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-    });
-    setLoading(false);
-    if (error) {
-      setErrorMessage(error.message);
-    }
+    signInWithPopup(auth, provider)
+      .then(() => {
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+        setErrorMessage("Failed to login with Google");
+      });
   }
   function isSubmitDisabled() {
     return !validateEmail(email) || password.length < 6;

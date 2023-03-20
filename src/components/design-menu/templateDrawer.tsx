@@ -11,16 +11,16 @@ import {
 } from "@chakra-ui/react";
 import { HiTemplate } from "react-icons/hi";
 import styles from "@/styles/components/design-menu/templateDrawer.module.css";
-import { Menu } from "@prisma/client";
 import { RadioCard } from "./form/radio-card";
 import { templateToMenu } from "@/lib/data/template-data";
+import { Menu } from "@/lib/data/menu";
 
 interface TemplateDrawerProps {
   menu: Menu;
   isTemplateDrawerOpen: boolean;
-  setTemplateDrawerOpen: (b: boolean) => void;
-  setMenu: (m: Menu) => void;
-  setTemplateDirty: (b: boolean) => void;
+  setTemplateDrawerOpen: (_b: boolean) => void;
+  setMenu: (_m: Menu) => void;
+  setTemplateDirty: (_b: boolean) => void;
 }
 
 export function TemplateDrawer({

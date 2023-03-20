@@ -9,7 +9,7 @@ import {
 interface RadioCardProps {
   value: string | null;
   options: string[];
-  setValue: (s: string) => void;
+  setValue: (_s: string) => void;
 }
 
 export function RadioCard({ options, value, setValue }: RadioCardProps) {

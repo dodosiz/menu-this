@@ -9,13 +9,13 @@ import {
   UnorderedList,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { Auth } from "@supabase/auth-ui-react";
 import { Router } from "next/router";
 import { useEffect, useState } from "react";
 import styles from "@/styles/privacyPolicy.module.css";
+import { auth } from "@/lib/config/firebase";
 
 export default function PrivacyPolicy() {
-  const { user } = Auth.useUser();
+  const user = auth.currentUser;
   const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {

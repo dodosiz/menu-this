@@ -1,32 +1,25 @@
-import { getBrand } from "@/lib/data/brand";
-import { getCategories } from "@/lib/data/categories";
-import { getProductsInCategories } from "@/lib/data/products";
-import { Brand, Category, Product } from "@prisma/client";
+import { Brand, getBrand } from "@/lib/data/brand";
+import { Category, getCategories } from "@/lib/data/categories";
+import { getMenu, Menu } from "@/lib/data/menu";
+import { getProducts, Product } from "@/lib/data/products";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export interface MenuData {
-  initialCategories: Category[];
-  initialProductMap: ProductMap;
-  brand: Brand;
+  menu: Menu | null;
+  categories: Category[];
+  products: Product[];
+  brand: Brand | null;
 }
-
-export type ProductMap = { [categoryId: string]: Product[] };
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   const { userId } = req.query;
-  const initialCategories = await getCategories(userId as string);
-  const categoryIds = initialCategories.map((c) => c.id);
-  const products = await getProductsInCategories(categoryIds);
-  const initialProductMap: ProductMap = {};
-  for (const category of initialCategories) {
-    const productsInCategory = products.filter(
-      (p) => p.categoryId === category.id
-    );
-    initialProductMap[category.id] = productsInCategory;
-  }
+  const menu = await getMenu(userId as string);
+  const categories = await getCategories(userId as string);
+  const products = await getProducts(userId as string);
   const brand = await getBrand(userId as string);
-  res.status(200).json({ initialCategories, initialProductMap, brand });
+  const data: MenuData = { menu, categories, products, brand };
+  res.status(200).json(data);
 }

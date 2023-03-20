@@ -1,4 +1,4 @@
-import { createMenu, CreateMenuData } from "@/lib/data/menu";
+import { createMenu, MenuDTO } from "@/lib/data/menu";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -6,8 +6,8 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const data = req.body as CreateMenuData;
-    const menu = await createMenu(data);
-    res.status(200).json({ id: menu.id });
+    const data = req.body as MenuDTO;
+    await createMenu(data);
+    res.status(200).end();
   }
 }

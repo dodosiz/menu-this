@@ -1,48 +1,41 @@
-import { Auth } from "@supabase/auth-ui-react";
 import { Button, Container, Heading } from "@chakra-ui/react";
 import { Layout } from "@/components/commons/layout";
 import styles from "@/styles/signup.module.css";
 import { PasswordInput } from "@/components/commons/passwordInput";
 import { useState, FormEvent } from "react";
 import { Notification } from "@/components/commons/notification";
-import { supabase } from "@/lib/core/supabase";
+import { auth } from "@/lib/config/firebase";
+import { signInWithEmailAndPassword, updatePassword } from "firebase/auth";
+import { UnauthorizedPage } from "@/components/commons/unauthorizedPage";
 
 export default function UpdateUser() {
-  const { user } = Auth.useUser();
+  const user = auth.currentUser;
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [repeatNewPassword, setRepeatNewPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  async function update(e: FormEvent) {
+  function update(e: FormEvent) {
     e.preventDefault();
     if (isSubmitDisabled()) {
       return;
     }
     setLoading(true);
-    const { error: loginError } = await supabase.auth.signInWithPassword({
-      email: user!!.email || "",
-      password: password,
-    });
-    if (loginError) {
-      setErrorMessage(loginError.message);
-      setLoading(false);
-      return;
-    }
-    const { error } = await supabase.auth.updateUser({
-      password: newPassword,
-    });
-    setLoading(false);
-
-    if (error) {
-      setErrorMessage(error.message);
-    } else {
-      setShowSuccess(true);
-      setPassword("");
-      setRepeatNewPassword("");
-      setNewPassword("");
-    }
+    signInWithEmailAndPassword(auth, user!!.email || "", password)
+      .then((value) => {
+        updatePassword(value.user, newPassword).then(() => {
+          setLoading(false);
+          setShowSuccess(true);
+          setPassword("");
+          setRepeatNewPassword("");
+          setNewPassword("");
+        });
+      })
+      .catch(() => {
+        setErrorMessage("Failed to update user");
+        setLoading(false);
+      });
   }
   function isSubmitDisabled() {
     return newPassword !== repeatNewPassword || newPassword.length < 6;
@@ -50,6 +43,7 @@ export default function UpdateUser() {
   return (
     <Layout user={user}>
       <>
+        {(!user || !user.emailVerified) && !loading && <UnauthorizedPage />}
         {!!errorMessage.length && (
           <Notification
             status="error"

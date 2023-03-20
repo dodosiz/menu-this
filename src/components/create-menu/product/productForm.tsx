@@ -15,32 +15,35 @@ import {
 import { IoMdAdd, IoMdCheckmark } from "react-icons/io";
 import styles from "@/styles/components/create-menu/product/productForm.module.css";
 import { FormEvent, useState } from "react";
-import { Product } from "@prisma/client";
-import { ProductMap } from "@/pages/api/menu/get-menu-data/[userId]";
 import {
   CreateProductData,
-  CreateProductResult,
+  Product,
   UpdateProductData,
+  UpdateProductResult,
 } from "@/lib/data/products";
 import { RxCross2 } from "react-icons/rx";
 import { PRODUCT_LIMIT } from "@/constants";
 
 interface ProductFormProps {
   categoryId: string;
-  productMap: ProductMap;
+  products: Product[];
   editedProduct?: Product;
-  setProductMap: (pm: ProductMap) => void;
-  setErrorMessage: (s: string) => void;
-  setEditedProductId?: (p: string) => void;
+  userId: string;
+  setErrorMessage: (_s: string) => void;
+  setEditedProductId?: (_p: string) => void;
+  addProduct: (_p: Product) => void;
+  mergeProduct: (_p: UpdateProductResult) => void;
 }
 
 export function ProductForm({
   categoryId,
-  productMap,
+  products,
   editedProduct,
-  setProductMap,
+  userId,
   setErrorMessage,
   setEditedProductId,
+  addProduct,
+  mergeProduct,
 }: ProductFormProps) {
   const [price, setPrice] = useState(
     editedProduct ? editedProduct.price.toString() : ""
@@ -75,6 +78,7 @@ export function ProductForm({
       description,
       price,
       productId: editedProduct.id,
+      userId,
     };
     const JSONdata = JSON.stringify(data);
     const options = {
@@ -87,21 +91,10 @@ export function ProductForm({
     setLoading(true);
     const response = await fetch("/api/product/update", options);
     if (response.status === 200) {
-      const updatedProduct: Product = {
-        ...editedProduct,
-        name,
-        description,
-        price: parseFloat(price),
-      };
-      const updatedProducts = productMap[categoryId].map((p) =>
-        p.id === updatedProduct.id ? updatedProduct : p
-      );
+      const result: UpdateProductResult = await response.json();
+      mergeProduct(result);
       setLoading(false);
       setEditedProductId?.("");
-      setProductMap({
-        ...productMap,
-        [categoryId]: updatedProducts,
-      });
     } else if (response.status === 500) {
       setLoading(false);
       setEditedProductId?.("");
@@ -115,6 +108,7 @@ export function ProductForm({
       description: description,
       price: price,
       categoryId: categoryId,
+      userId: userId,
     };
     const JSONdata = JSON.stringify(data);
     const options = {
@@ -130,20 +124,9 @@ export function ProductForm({
     setLoading(true);
     const response = await fetch("/api/product/create", options);
     if (response.status === 200) {
-      const result = (await response.json()) as CreateProductResult;
-      const newProduct: Product = {
-        id: result.id,
-        categoryId,
-        description: data.description,
-        name: data.name,
-        price: parseFloat(data.price),
-        created_at: result.created_at,
-      };
+      const result: Product = await response.json();
+      addProduct(result);
       setLoading(false);
-      setProductMap({
-        ...productMap,
-        [categoryId]: [...productMap[categoryId], newProduct],
-      });
       scrollToBottom();
     } else if (response.status === 500) {
       setLoading(false);
@@ -198,7 +181,7 @@ export function ProductForm({
           <GridItem colSpan={{ base: 5, sm: 5, md: 1 }}>
             <Tooltip
               label={
-                productMap[categoryId].length >= PRODUCT_LIMIT
+                products.length >= PRODUCT_LIMIT
                   ? `Maximum limit of ${PRODUCT_LIMIT} products reached`
                   : undefined
               }
@@ -207,8 +190,7 @@ export function ProductForm({
                 isDisabled={
                   !name.length ||
                   !price.length ||
-                  (!editedProduct &&
-                    productMap[categoryId].length >= PRODUCT_LIMIT)
+                  (!editedProduct && products.length >= PRODUCT_LIMIT)
                 }
                 type="submit"
                 leftIcon={editedProduct ? <IoMdCheckmark /> : <IoMdAdd />}

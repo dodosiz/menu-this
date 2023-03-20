@@ -7,7 +7,7 @@ export default async function handler(
 ) {
   if (req.method === "PUT") {
     const data = req.body as SwapData;
-    await swap(data);
-    res.status(200).end();
+    const result = await swap(data);
+    res.status(200).json(result);
   }
 }

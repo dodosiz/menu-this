@@ -5,7 +5,7 @@ import styles from "@/styles/components/design-menu/form/color-picker.module.css
 
 interface ColorPickerProps {
   value: string;
-  setValue: (v: string) => void;
+  setValue: (_v: string) => void;
 }
 
 export function ColorPicker({ value, setValue }: ColorPickerProps) {

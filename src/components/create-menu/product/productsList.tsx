@@ -1,26 +1,36 @@
 import { Box, Divider, Grid, GridItem, Heading, Text } from "@chakra-ui/react";
-import { Product } from "@prisma/client";
 import styles from "@/styles/components/create-menu/product/productsList.module.css";
 import { useState } from "react";
 import { ContextMenu } from "../contextMenu";
 import { ProductForm } from "./productForm";
-import { ProductMap } from "@/pages/api/menu/get-menu-data/[userId]";
-import { LoadingPage } from "@/components/commons/loadingPage";
+import {
+  DeleteData,
+  Product,
+  SwapData,
+  SwapResult,
+  UpdateProductResult,
+} from "@/lib/data/products";
 
 interface ProductsListProps {
   categoryId: string;
   products: Product[];
-  productMap: ProductMap;
-  setProductMap: (pm: ProductMap) => void;
-  setErrorMessage: (s: string) => void;
+  userId: string;
+  setErrorMessage: (_s: string) => void;
+  addProduct: (_p: Product) => void;
+  mergeProduct: (_p: UpdateProductResult) => void;
+  removeProduct: (_id: string) => void;
+  swapProducts: (_r: SwapResult) => void;
 }
 
 export function ProductsList({
   products,
-  productMap,
   categoryId,
-  setProductMap,
+  userId,
   setErrorMessage,
+  addProduct,
+  mergeProduct,
+  removeProduct,
+  swapProducts,
 }: ProductsListProps) {
   const [productIdToDelete, setProductIdToDelete] = useState<string | null>(
     null
@@ -28,7 +38,11 @@ export function ProductsList({
   const [editedProductId, setEditedProductId] = useState("");
 
   async function handleDelete(productId: string) {
-    const JSONdata = JSON.stringify({ id: productId });
+    const data: DeleteData = {
+      userId,
+      productId,
+    };
+    const JSONdata = JSON.stringify(data);
     const options = {
       method: "DELETE",
       headers: {
@@ -39,15 +53,19 @@ export function ProductsList({
     setProductIdToDelete(null);
     const response = await fetch("/api/product/delete", options);
     if (response.status === 200) {
-      const newProducts = products.filter((p) => p.id !== productId);
-      setProductMap({ ...productMap, [categoryId]: newProducts });
+      removeProduct(productId);
     } else if (response.status === 500) {
       setErrorMessage("Failed to delete product");
     }
   }
 
   async function swapDates(id1: string, id2: string) {
-    const JSONdata = JSON.stringify({ id1, id2 });
+    const data: SwapData = {
+      id1,
+      id2,
+      userId,
+    };
+    const JSONdata = JSON.stringify(data);
     const options = {
       method: "PUT",
       headers: {
@@ -55,27 +73,11 @@ export function ProductsList({
       },
       body: JSONdata,
     };
-    const p1 = products.find((p) => p.id === id1);
-    const p2 = products.find((p) => p.id === id2);
-    setProductMap({
-      ...productMap,
-      [categoryId]: products.map((p) => {
-        if (p.id === id1 && p2 && p1) {
-          return {
-            ...p1,
-            created_at: p2?.created_at,
-          };
-        } else if (p.id === id2 && p2 && p1) {
-          return {
-            ...p2,
-            created_at: p1?.created_at,
-          };
-        }
-        return p;
-      }),
-    });
     const response = await fetch("/api/product/swap", options);
-    if (response.status === 500) {
+    if (response.status === 200) {
+      const result: SwapResult = await response.json();
+      swapProducts(result);
+    } else if (response.status === 500) {
       setErrorMessage("Failed to update the product order");
     }
   }
@@ -83,10 +85,7 @@ export function ProductsList({
   return (
     <>
       {products
-        .sort(
-          (p1, p2) =>
-            Date.parse(`${p1.created_at}`) - Date.parse(`${p2.created_at}`)
-        )
+        .sort((p1, p2) => p1.createdAt - p2.createdAt)
         .map((product, index) => {
           return (
             <Box key={"pd-" + product.id} className={styles.product_box}>
@@ -94,11 +93,13 @@ export function ProductsList({
               {editedProductId === product.id && (
                 <ProductForm
                   categoryId={categoryId}
-                  productMap={productMap}
                   setErrorMessage={setErrorMessage}
-                  setProductMap={setProductMap}
+                  products={products}
                   editedProduct={product}
+                  userId={userId}
                   setEditedProductId={setEditedProductId}
+                  addProduct={addProduct}
+                  mergeProduct={mergeProduct}
                 />
               )}
               {editedProductId !== product.id && (

@@ -1,8 +1,47 @@
-import { prisma } from "../core/prisma";
+import {
+  doc,
+  setDoc,
+  FirestoreDataConverter,
+  updateDoc,
+  getDoc,
+  deleteDoc,
+} from "firebase/firestore";
+import { db } from "../config/firebase";
+
+const BRANDS_COLLECTION = "brands";
+
+export class Brand {
+  title: string;
+  constructor(title: string) {
+    this.title = title;
+  }
+}
+
+const brandConverter: FirestoreDataConverter<Brand> = {
+  toFirestore: (brand) => {
+    return {
+      title: brand.title,
+    };
+  },
+  fromFirestore: (snapshot, options) => {
+    const data = snapshot.data(options);
+    return new Brand(data.title);
+  },
+};
+
+export function getBrandDocumentReference(userId: string) {
+  return doc(db, BRANDS_COLLECTION, userId).withConverter(brandConverter);
+}
 
 export async function getBrand(userId: string) {
-  const brand = await prisma.brand.findFirst({ where: { userId } });
-  return brand;
+  const document = await getDoc(getBrandDocumentReference(userId));
+  const brand = document.data();
+  return brand ? brand : null;
+}
+
+export interface BrandDTO {
+  title: string;
+  userId: string;
 }
 
 export interface CreateBrandData {
@@ -10,23 +49,25 @@ export interface CreateBrandData {
   userId: string;
 }
 
-export async function createBrand(data: CreateBrandData) {
-  const newBrand = await prisma.brand.create({
-    data: { title: data.title, userId: data.userId },
-  });
-  return newBrand;
+export async function createBrand(data: CreateBrandData): Promise<Brand> {
+  const document: Brand = {
+    title: data.title,
+  };
+  await setDoc(doc(db, BRANDS_COLLECTION, data.userId), document);
+  return { title: data.title };
 }
 
 export interface UpdateBrandData {
-  brandId: string;
+  userId: string;
   title: string;
 }
 
 export async function updateBrand(data: UpdateBrandData) {
-  await prisma.brand.update({
-    data: {
-      title: data.title,
-    },
-    where: { id: data.brandId },
+  await updateDoc(getBrandDocumentReference(data.userId), {
+    title: data.title,
   });
+}
+
+export async function deleteBrand(userId: string) {
+  await deleteDoc(getBrandDocumentReference(userId));
 }

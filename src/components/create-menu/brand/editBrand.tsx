@@ -13,18 +13,20 @@ import {
 } from "@chakra-ui/react";
 import { RiEditLine } from "react-icons/ri";
 import { useState, FormEvent } from "react";
-import { Brand } from "@prisma/client";
-import { UpdateBrandData } from "@/lib/data/brand";
+import { Brand, BrandDTO } from "@/lib/data/brand";
+import { User } from "firebase/auth";
 
 interface EditBrandProps {
   brand: Brand;
-  setBrand: (b: Brand) => void;
-  setLoading: (b: boolean) => void;
-  setErrorMessage: (e: string) => void;
+  user: User;
+  setBrand: (_b: Brand) => void;
+  setLoading: (_b: boolean) => void;
+  setErrorMessage: (_e: string) => void;
 }
 
 export function EditBrand({
   brand,
+  user,
   setBrand,
   setLoading,
   setErrorMessage,
@@ -37,8 +39,8 @@ export function EditBrand({
   };
   async function updateBrand(e: FormEvent) {
     e.preventDefault();
-    const data: UpdateBrandData = {
-      brandId: brand.id,
+    const data: BrandDTO = {
+      userId: user.uid,
       title: brandName,
     };
     const JSONdata = JSON.stringify(data);
