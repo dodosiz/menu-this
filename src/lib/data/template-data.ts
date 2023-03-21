@@ -112,77 +112,107 @@ export const templateToMenu: { [key: string]: Partial<Menu> } = {
   },
 };
 
-export const BACKGROUND_IMG: { [k: string]: { path: string; alt: string } } = {
-  burger: {
-    path: "/background/burger.jpg",
-    alt: "A juicy burger",
+interface ImageData {
+  path: string;
+  alt: string;
+}
+type ImageDataMap = { [k: string]: ImageData };
+
+export const BACKGROUND_IMG: { [k: string]: ImageDataMap } = {
+  Burger: {
+    burger: {
+      path: "/background/burger.jpg",
+      alt: "A juicy burger",
+    },
+    burger_2: {
+      path: "/background/burger_2.jpg",
+      alt: "Double beef burger",
+    },
   },
-  burger_2: {
-    path: "/background/burger_2.jpg",
-    alt: "Double beef burger",
+  "Meat and grill": {
+    steak: {
+      path: "/background/steak.jpg",
+      alt: "Steak",
+    },
+    steak_2: {
+      path: "/background/steak_2.jpg",
+      alt: "Steak",
+    },
+    hot_dog: {
+      path: "/background/hot_dog.jpg",
+      alt: "Hot dogs",
+    },
   },
-  steak: {
-    path: "/background/steak.jpg",
-    alt: "Steak",
+  Italian: {
+    spaghetti: {
+      path: "/background/spaghetti.jpg",
+      alt: "Spaghetti",
+    },
+    risotto: {
+      path: "/background/risotto.jpg",
+      alt: "Risotto",
+    },
+    pizza: {
+      path: "/background/pizza.jpg",
+      alt: "Pizza",
+    },
+    pizza_2: {
+      path: "/background/pizza_2.jpg",
+      alt: "Pizza",
+    },
   },
-  steak_2: {
-    path: "/background/steak_2.jpg",
-    alt: "Steak",
+  Wine: {
+    red_wine: {
+      path: "/background/red_wine.jpg",
+      alt: "Red wine",
+    },
+    white_wine: {
+      path: "/background/white_wine.jpg",
+      alt: "White wine",
+    },
   },
-  hot_dog: {
-    path: "/background/hot_dog.jpg",
-    alt: "Hot dogs",
+  Beer: {
+    beer: {
+      path: "/background/beer.jpg",
+      alt: "Blonde beer",
+    },
+    beer_2: {
+      path: "/background/beer_2.jpg",
+      alt: "Beer variety",
+    },
   },
-  spaghetti: {
-    path: "/background/spaghetti.jpg",
-    alt: "Spaghetti",
+  "Coffee and tea": {
+    coffee: {
+      path: "/background/coffee.jpg",
+      alt: "Cold coffee",
+    },
+    coffee_2: {
+      path: "/background/coffee_2.jpg",
+      alt: "Warm coffee",
+    },
+    tea: {
+      path: "/background/tea.jpg",
+      alt: "Tea",
+    },
   },
-  risotto: {
-    path: "/background/risotto.jpg",
-    alt: "Risotto",
-  },
-  pizza: {
-    path: "/background/pizza.jpg",
-    alt: "Pizza",
-  },
-  pizza_2: {
-    path: "/background/pizza_2.jpg",
-    alt: "Pizza",
-  },
-  red_wine: {
-    path: "/background/red_wine.jpg",
-    alt: "Red wine",
-  },
-  white_wine: {
-    path: "/background/white_wine.jpg",
-    alt: "White wine",
-  },
-  beer: {
-    path: "/background/beer.jpg",
-    alt: "Blonde beer",
-  },
-  beer_2: {
-    path: "/background/beer_2.jpg",
-    alt: "Beer variety",
-  },
-  bread: {
-    path: "/background/bread.jpg",
-    alt: "Healthy bread",
-  },
-  bread_2: {
-    path: "/background/bread_2.jpg",
-    alt: "Healthy bread",
-  },
-  coffee: {
-    path: "/background/coffee.jpg",
-    alt: "Cold coffee",
-  },
-  coffee_2: {
-    path: "/background/coffee_2.jpg",
-    alt: "Warm coffee",
-  },
-  tea: {
-    path: "/background/tea.jpg",
-    alt: "Tea",
+  Bread: {
+    bread: {
+      path: "/background/bread.jpg",
+      alt: "Healthy bread",
+    },
+    bread_2: {
+      path: "/background/bread_2.jpg",
+      alt: "Healthy bread",
+    },
   },
 };
+
+export function getImageData(name: string): ImageData {
+  for (const sectionKey of Object.keys(BACKGROUND_IMG)) {
+    const section = BACKGROUND_IMG[sectionKey];
+    if (!!section[name]) {
+      return section[name];
+    }
+  }
+  return { alt: "", path: "" };
+}

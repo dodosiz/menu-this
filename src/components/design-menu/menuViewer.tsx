@@ -22,7 +22,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import styles from "@/styles/components/design-menu/designMenuViewer.module.css";
-import { BACKGROUND_IMG, templateToMenu } from "@/lib/data/template-data";
+import { getImageData, templateToMenu } from "@/lib/data/template-data";
 import { HiOutlinePhotograph } from "react-icons/hi";
 import { ChoosePhotoModal } from "./choosePhotoModal";
 import { Brand } from "@/lib/data/brand";
@@ -94,8 +94,8 @@ export function MenuViewer({
                 position="relative"
                 marginBottom={nameMargin}
                 width="100vw"
-                src={BACKGROUND_IMG[category.background].path}
-                alt={BACKGROUND_IMG[category.background].alt}
+                src={getImageData(category.background).path}
+                alt={getImageData(category.background).alt}
               />
             )}
             <Box
