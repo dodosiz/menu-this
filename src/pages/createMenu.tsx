@@ -14,7 +14,7 @@ import {
 import { useState, useEffect } from "react";
 import styles from "@/styles/createMenu.module.css";
 import { IoMdAdd } from "react-icons/io";
-import { CategoryForm } from "@/components/create-menu/category/categoryForm";
+import { CategoryInlineForm } from "@/components/create-menu/category/categoryInlineForm";
 import { CategoryTab } from "@/components/create-menu/category/categoryTab";
 import { UnauthorizedPage } from "@/components/commons/unauthorizedPage";
 import { ProductsList } from "@/components/create-menu/product/productsList";
@@ -22,8 +22,8 @@ import { LoadingPage } from "@/components/commons/loadingPage";
 import { Notification } from "@/components/commons/notification";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { AccordionWithProductForm } from "@/components/create-menu/product/accordionWithProductForm";
-import { CategoryMobileForm } from "@/components/create-menu/category/categoryMobileForm";
-import { CategoryMobileMenu } from "@/components/create-menu/category/categoryMobileMenu";
+import { CategoryMobileView } from "@/components/create-menu/category/categoryMobileView";
+import { CategoryMobileSelect } from "@/components/create-menu/category/categoryMobileSelect";
 import { swapDates } from "@/components/create-menu/category/categoryFormHandler";
 import { Router } from "next/router";
 import { CATEGORY_LIMIT } from "@/constants";
@@ -167,13 +167,13 @@ export default function CreateMenu() {
               </Heading>
               <Box className={styles.mobile_categories}>
                 {!!categories.length && (
-                  <CategoryMobileMenu
+                  <CategoryMobileSelect
                     categories={categories}
                     tabIndex={tabIndex}
                     setTabIndex={setTabIndex}
                   />
                 )}
-                <CategoryMobileForm
+                <CategoryMobileView
                   categories={categories}
                   setCategories={setCategories}
                   handleCancel={() => setCreateNewCategory(false)}
@@ -231,7 +231,7 @@ export default function CreateMenu() {
                     .map((category, index) => {
                       if (category.id === editedCategoryId) {
                         return (
-                          <CategoryForm
+                          <CategoryInlineForm
                             categories={categories}
                             setCategories={setCategories}
                             handleCancel={() => setEditedCategoryId("")}
@@ -262,7 +262,7 @@ export default function CreateMenu() {
                       }
                     })}
                   {isCreateNewCategory && (
-                    <CategoryForm
+                    <CategoryInlineForm
                       categories={categories}
                       setCategories={setCategories}
                       handleCancel={() => setCreateNewCategory(false)}

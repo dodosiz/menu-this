@@ -1,5 +1,5 @@
 import { IconButton, Input, Spinner } from "@chakra-ui/react";
-import styles from "@/styles/components/create-menu/category/categoryForm.module.css";
+import styles from "@/styles/components/create-menu/category/categoryInlineForm.module.css";
 import { FormEvent, useState, useEffect } from "react";
 import { FiCheck } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
@@ -7,7 +7,7 @@ import { createCategory, updateCategory } from "./categoryFormHandler";
 import { User } from "firebase/auth";
 import { Category } from "@/lib/data/categories";
 
-export interface CategoryFormProps {
+export interface CategoryInlineFormProps {
   categories: Category[];
   setCategories: (_c: Category[]) => void;
   categoryInEdit?: Category;
@@ -19,7 +19,7 @@ export interface CategoryFormProps {
   setTabIndex: (_i: number) => void;
 }
 
-export function CategoryForm(props: CategoryFormProps) {
+export function CategoryInlineForm(props: CategoryInlineFormProps) {
   const [categoryTitle, setCategoryTitle] = useState("");
   const [isLoading, setLoading] = useState(false);
 
