@@ -7,7 +7,7 @@ interface CategoryMobileMenuProps {
   setTabIndex: (_i: number) => void;
 }
 
-export function CategoryMobileMenu(props: CategoryMobileMenuProps) {
+export function CategoryMobileSelect(props: CategoryMobileMenuProps) {
   return (
     <Select
       bg="teal.500"

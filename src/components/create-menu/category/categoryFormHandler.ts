@@ -6,7 +6,7 @@ import {
   SwapResult,
   UpdateCategoryData,
 } from "@/lib/data/categories";
-import { CategoryFormProps } from "./categoryForm";
+import { CategoryInlineFormProps } from "./categoryInlineForm";
 
 interface UpdateProps extends CreateCategoryProps {
   categoryInEdit: Category;
@@ -49,7 +49,7 @@ export async function updateCategory(props: UpdateProps) {
   }
 }
 
-interface CreateCategoryProps extends CategoryFormProps {
+interface CreateCategoryProps extends CategoryInlineFormProps {
   categoryTitle: string;
   setCategoryTitle: (_t: string) => void;
   loading: boolean;
