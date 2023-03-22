@@ -1,5 +1,5 @@
 import { Layout } from "@/components/commons/layout";
-import { Grid, GridItem, Heading, Image } from "@chakra-ui/react";
+import { Grid, GridItem, Heading } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
 import styles from "@/styles/home.module.css";
 import { Divider } from "@chakra-ui/react";
@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { LoadingPage } from "@/components/commons/loadingPage";
 import { auth } from "@/lib/config/firebase";
 import { Notification } from "@/components/commons/notification";
+import Image from "next/image";
 
 export default function Home() {
   const user = auth.currentUser;
@@ -80,11 +81,11 @@ export default function Home() {
                   className={styles.banner_text + " " + styles.text_justify}
                   fontSize="md"
                 >
-                  Our menu data management system is designed to make category
-                  and product creation, updating, and deletion as easy and
-                  intuitive as possible. With our user-friendly interface, you
-                  will be able to manage your menu items quickly and
-                  efficiently.
+                  Our <strong>menu data management system</strong> is designed
+                  to make category and product creation, updating, and deletion
+                  as easy and intuitive as possible. With our user-friendly
+                  interface, you will be able to manage your menu items quickly
+                  and efficiently.
                 </Text>
               </GridItem>
               <GridItem
@@ -92,9 +93,10 @@ export default function Home() {
                 colSpan={{ base: 3, md: 1 }}
               >
                 <Image
-                  height="400px"
+                  height={400}
+                  width={200}
                   src="/screen/screen1.png"
-                  alt="Online menu data"
+                  alt="View your online menu data"
                 />
               </GridItem>
               <GridItem
@@ -102,9 +104,10 @@ export default function Home() {
                 colSpan={{ base: 3, md: 1 }}
               >
                 <Image
-                  height="400px"
+                  height={400}
+                  width={200}
                   src="/screen/screen2.png"
-                  alt="Online menu data"
+                  alt="Create products for your online menu"
                 />
               </GridItem>
             </Grid>
@@ -119,9 +122,10 @@ export default function Home() {
                 colSpan={{ base: 3, md: 1 }}
               >
                 <Image
-                  height="400px"
+                  height={400}
+                  width={200}
                   src="/screen/screen3.png"
-                  alt="Online menu data"
+                  alt="Choose templates for your online menu"
                 />
               </GridItem>
               <GridItem
@@ -129,9 +133,10 @@ export default function Home() {
                 colSpan={{ base: 3, md: 1 }}
               >
                 <Image
-                  height="400px"
+                  height={400}
+                  width={200}
                   src="/screen/screen4.png"
-                  alt="Online menu data"
+                  alt="View the design of your online menu"
                 />
               </GridItem>
               <GridItem
@@ -142,12 +147,12 @@ export default function Home() {
                   className={styles.banner_text + " " + styles.text_justify}
                   fontSize="md"
                 >
-                  Our templates are designed to make the process of creating a
-                  menu as easy as possible. Simply choose the template that best
-                  fits your needs, add your own content, and customize it to
-                  your liking. With a few clicks, you can have a
-                  professional-looking menu that perfectly represents your
-                  brand.
+                  Our <strong>templates</strong> are designed to make the
+                  process of creating a menu as easy as possible. Simply choose
+                  the template that best fits your needs, add your own content,
+                  and customize it to your liking. With a few clicks, you can
+                  have a professional-looking menu that perfectly represents
+                  your brand.
                 </Text>
               </GridItem>
             </Grid>
@@ -166,16 +171,18 @@ export default function Home() {
                   fontSize="md"
                 >
                   For those who want to take their design to the next level, our
-                  app offers powerful customization tools. You can choose from a
-                  variety of font styles and colors, adjust the layout, and even
-                  add your own images to create a truly unique design.
+                  app offers powerful <strong>customization tools</strong>. You
+                  can choose from a variety of font styles and colors, adjust
+                  the layout, and even add your own images to create a truly
+                  unique design.
                   <br />
                   <br />
-                  Our app also offers the convenience of an autogenerated QR
-                  code for your menu. Simply create your menu, and our app will
-                  generate a unique QR code that your customers can easily scan
-                  with their smartphones. This saves time and makes it easy for
-                  your customers to access your menu quickly and efficiently.
+                  Our app also offers the convenience of an{" "}
+                  <strong>autogenerated QR code</strong> for your menu. Simply
+                  create your menu, and our app will generate a unique QR code
+                  that your customers can easily scan with their smartphones.
+                  This saves time and makes it easy for your customers to access
+                  your menu quickly and efficiently.
                 </Text>
                 <Button
                   className={styles.banner_button}
@@ -194,9 +201,10 @@ export default function Home() {
                 colSpan={{ base: 3, md: 1 }}
               >
                 <Image
-                  height="400px"
+                  height={400}
+                  width={200}
                   src="/screen/screen5.png"
-                  alt="Online menu data"
+                  alt="Edit the design of your online menu"
                 />
               </GridItem>
               <GridItem
@@ -204,9 +212,10 @@ export default function Home() {
                 colSpan={{ base: 3, md: 1 }}
               >
                 <Image
-                  height="400px"
+                  height={400}
+                  width={200}
                   src="/screen/screen6.png"
-                  alt="Online menu data"
+                  alt="Generate the QR code of the online menu"
                 />
               </GridItem>
             </Grid>
