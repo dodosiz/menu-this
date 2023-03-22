@@ -59,13 +59,13 @@ export default function SignUp() {
           />
         )}
         {!!user && !user.emailVerified && (
-          <Heading className={styles.signup_heading} size="xl" as="h1">
+          <Heading className="main_heading" size="xl" as="h1">
             Please confirm your email address.
           </Heading>
         )}
         {!user && (
           <Container alignContent="center">
-            <Heading className={styles.signup_heading} size="xl" as="h1">
+            <Heading className="main_heading" size="xl" as="h1">
               Sign Up
             </Heading>
             <form className={styles.signup_form} onSubmit={signUp}>
