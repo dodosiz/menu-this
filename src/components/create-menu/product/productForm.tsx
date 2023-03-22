@@ -23,6 +23,10 @@ import {
 } from "@/lib/data/products";
 import { RxCross2 } from "react-icons/rx";
 import { PRODUCT_LIMIT } from "@/constants";
+import {
+  createProduct as dbCreateProduct,
+  updateProduct as dbUpdateProduct,
+} from "@/lib/data/products";
 
 interface ProductFormProps {
   categoryId: string;
@@ -73,29 +77,20 @@ export function ProductForm({
   }
 
   async function updateProduct(editedProduct: Product) {
-    const data: UpdateProductData = {
-      name,
-      description,
-      price,
-      productId: editedProduct.id,
-      userId,
-    };
-    const JSONdata = JSON.stringify(data);
-    const options = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSONdata,
-    };
     setLoading(true);
-    const response = await fetch("/api/product/update", options);
-    if (response.status === 200) {
-      const result: UpdateProductResult = await response.json();
+    try {
+      const data: UpdateProductData = {
+        name,
+        description,
+        price,
+        productId: editedProduct.id,
+        userId,
+      };
+      const result = await dbUpdateProduct(data);
       mergeProduct(result);
       setLoading(false);
       setEditedProductId?.("");
-    } else if (response.status === 500) {
+    } catch {
       setLoading(false);
       setEditedProductId?.("");
       setErrorMessage("Failed to update product");
@@ -103,32 +98,23 @@ export function ProductForm({
   }
 
   async function createProduct() {
-    const data: CreateProductData = {
-      name: name,
-      description: description,
-      price: price,
-      categoryId: categoryId,
-      userId: userId,
-    };
-    const JSONdata = JSON.stringify(data);
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSONdata,
-    };
     setPrice("");
     setName("");
     setDescription("");
     setLoading(true);
-    const response = await fetch("/api/product/create", options);
-    if (response.status === 200) {
-      const result: Product = await response.json();
+    try {
+      const data: CreateProductData = {
+        name: name,
+        description: description,
+        price: price,
+        categoryId: categoryId,
+        userId: userId,
+      };
+      const result = await dbCreateProduct(data);
       addProduct(result);
       setLoading(false);
       scrollToBottom();
-    } else if (response.status === 500) {
+    } catch {
       setLoading(false);
       setErrorMessage("Failed to create product");
     }

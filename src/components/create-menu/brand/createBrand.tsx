@@ -1,4 +1,4 @@
-import { Brand, BrandDTO } from "@/lib/data/brand";
+import { Brand, BrandDTO, createBrand } from "@/lib/data/brand";
 import {
   Button,
   Center,
@@ -19,23 +19,14 @@ export function CreateBrand(props: CreateBrandProps) {
   const [brandName, setBrandName] = useState("");
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    const data: BrandDTO = {
-      userId: props.userId,
-      title: brandName,
-    };
-    const JSONdata = JSON.stringify(data);
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSONdata,
-    };
-    const response = await fetch("/api/brand/create", options);
-    if (response.status === 200) {
-      const result: Brand = await response.json();
+    try {
+      const data: BrandDTO = {
+        userId: props.userId,
+        title: brandName,
+      };
+      const result = await createBrand(data);
       props.setBrand(result);
-    } else if (response.status === 500) {
+    } catch {
       props.setErrorMessage("Failed to create brand");
     }
   }

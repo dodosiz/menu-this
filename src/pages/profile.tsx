@@ -11,7 +11,11 @@ import {
 import { Layout } from "@/components/commons/layout";
 import { UnauthorizedPage } from "@/components/commons/unauthorizedPage";
 import { useEffect, useState } from "react";
-import { CategoryProductCount, UserStatus } from "@/lib/data/user";
+import {
+  CategoryProductCount,
+  deleteUserData,
+  UserStatus,
+} from "@/lib/data/user";
 import { LeaveAlert } from "@/components/commons/leave-alert";
 import { Notification } from "@/components/commons/notification";
 import { LoadingPage } from "@/components/commons/loadingPage";
@@ -67,36 +71,21 @@ export default function Profile() {
     });
   });
 
-  function handleDeleteUser() {
+  async function handleDeleteUser() {
     if (!user) {
       setErrorMessage("User is undefined");
       return;
     }
     setShowDeleteUserConfirm(false);
     setLoading(true);
-    deleteUser(user)
-      .then(() => {
-        const options = {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        };
-        fetch(`/api/user/${user.uid}`, options)
-          .then(() => {
-            setLoading(false);
-          })
-          .catch(() => {
-            setErrorMessage(
-              "Failed to delete user data, they will be deleted by the system"
-            );
-            setLoading(false);
-          });
-      })
-      .catch(() => {
-        setErrorMessage("Failed to delete user, try to log in again");
-        setLoading(false);
-      });
+    try {
+      await deleteUserData(user.uid);
+      await deleteUser(user);
+      setLoading(false);
+    } catch {
+      setErrorMessage("Failed to delete user, try to log in again");
+      setLoading(false);
+    }
   }
 
   async function handleLogout() {

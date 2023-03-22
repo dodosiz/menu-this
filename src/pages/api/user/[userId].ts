@@ -1,4 +1,4 @@
-import { deleteUserData, getUserStatus } from "@/lib/data/user";
+import { getUserStatus } from "@/lib/data/user";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
@@ -9,8 +9,5 @@ export default async function handler(
   if (req.method === "GET") {
     const { categoryProductCount } = await getUserStatus(userId as string);
     res.status(200).json({ categoryProductCount });
-  } else if (req.method === "DELETE") {
-    await deleteUserData(userId as string);
-    res.status(200).end();
   }
 }
