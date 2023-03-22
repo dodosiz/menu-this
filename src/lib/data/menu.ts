@@ -1,8 +1,11 @@
 import {
+  collection,
   deleteDoc,
   doc,
   FirestoreDataConverter,
   getDoc,
+  getDocs,
+  query,
   setDoc,
   updateDoc,
 } from "firebase/firestore";
@@ -122,6 +125,14 @@ export async function getMenu(userId: string): Promise<Menu | null> {
   const document = await getDoc(getMenuDocumentReference(userId));
   const menu = document.data();
   return menu ? menu : null;
+}
+
+export async function getMenuIds(): Promise<string[]> {
+  const q = query(collection(db, MENU_COLLECTION));
+  const querySnapshot = await getDocs(q);
+  const ids: string[] = [];
+  querySnapshot.forEach((d) => ids.push(d.id));
+  return ids;
 }
 
 export async function getMenuOrThrow(userId: string): Promise<Menu> {

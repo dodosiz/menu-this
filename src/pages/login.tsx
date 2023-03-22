@@ -58,7 +58,7 @@ export default function Login() {
           />
         )}
         <Container alignContent="center">
-          <Heading className={styles.signup_heading} size="xl" as="h1">
+          <Heading className="main_heading" size="xl" as="h1">
             Log In
           </Heading>
           <form className={styles.signup_form} onSubmit={logIn}>
