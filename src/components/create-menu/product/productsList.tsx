@@ -5,7 +5,9 @@ import { ContextMenu } from "../contextMenu";
 import { ProductForm } from "./productForm";
 import {
   DeleteData,
+  deleteProduct,
   Product,
+  swap,
   SwapData,
   SwapResult,
   UpdateProductResult,
@@ -38,46 +40,31 @@ export function ProductsList({
   const [editedProductId, setEditedProductId] = useState("");
 
   async function handleDelete(productId: string) {
-    const data: DeleteData = {
-      userId,
-      productId,
-    };
-    const JSONdata = JSON.stringify(data);
-    const options = {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSONdata,
-    };
     setProductIdToDelete(null);
-    const response = await fetch("/api/product/delete", options);
-    if (response.status === 200) {
+    try {
+      const data: DeleteData = {
+        userId,
+        productId,
+      };
+      await deleteProduct(data);
       removeProduct(productId);
-    } else if (response.status === 500) {
+    } catch {
       setErrorMessage("Failed to delete product");
     }
   }
 
   async function swapDates(id1: string, id2: string) {
-    const data: SwapData = {
-      id1,
-      id2,
-      userId,
-    };
-    const JSONdata = JSON.stringify(data);
-    const options = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSONdata,
-    };
-    const response = await fetch("/api/product/swap", options);
-    if (response.status === 200) {
-      const result: SwapResult = await response.json();
-      swapProducts(result);
-    } else if (response.status === 500) {
+    try {
+      const data: SwapData = {
+        id1,
+        id2,
+        userId,
+      };
+      const result = await swap(data);
+      if (result) {
+        swapProducts(result);
+      }
+    } catch {
       setErrorMessage("Failed to update the product order");
     }
   }

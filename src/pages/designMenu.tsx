@@ -16,9 +16,13 @@ import Image from "next/image";
 import { ActionPage } from "@/components/commons/actionPage";
 import { auth } from "@/lib/config/firebase";
 import { Brand } from "@/lib/data/brand";
-import { MenuData } from "./api/menu/get-menu-data/[userId]";
+import { MenuData } from "./api/menu/[userId]";
 import { Category } from "@/lib/data/categories";
 import { Product } from "@/lib/data/products";
+import {
+  createMenu as dbCreateMenu,
+  updateDesign as dbUpdateDesign,
+} from "@/lib/data/menu";
 
 export default function DesignMenu() {
   const user = auth.currentUser;
@@ -42,7 +46,7 @@ export default function DesignMenu() {
   useEffect(() => {
     setLoading(true);
     if (user) {
-      fetch(`/api/menu/get-menu-data/${user.uid}`)
+      fetch(`/api/menu/${user.uid}`)
         .then((res) => res.json())
         .then((data: MenuData) => {
           setCategories(data.categories);
@@ -116,46 +120,38 @@ export default function DesignMenu() {
     if (!menu || !user) {
       return;
     }
-    const updateMenuData: MenuDTO = {
-      brandColor: menu.brandColor,
-      titleColor: menu.titleColor,
-      nameColor: menu.nameColor,
-      descriptionColor: menu.descriptionColor,
-      backgroundColor: menu.backgroundColor,
-      brandMargin: menu.brandMargin,
-      titleMargin: menu.titleMargin,
-      nameMargin: menu.nameMargin,
-      nameTitleMargin: menu.nameTitleMargin,
-      brandSize: menu.brandSize,
-      titleSize: menu.titleSize,
-      nameSize: menu.nameSize,
-      descriptionSize: menu.descriptionSize,
-      brandFont: menu.brandFont,
-      titleFont: menu.titleFont,
-      contentFont: menu.contentFont,
-      userId: user.uid,
-    };
-    const data: UpdateDesignData = {
-      categories,
-      menu: updateMenuData,
-      template: menu.template,
-    };
-    const JSONdata = JSON.stringify(data);
-    const options = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSONdata,
-    };
     setLoading(true);
-    const response = await fetch("/api/menu/update-design", options);
-    if (response.status === 200) {
+    try {
+      const updateMenuData: MenuDTO = {
+        brandColor: menu.brandColor,
+        titleColor: menu.titleColor,
+        nameColor: menu.nameColor,
+        descriptionColor: menu.descriptionColor,
+        backgroundColor: menu.backgroundColor,
+        brandMargin: menu.brandMargin,
+        titleMargin: menu.titleMargin,
+        nameMargin: menu.nameMargin,
+        nameTitleMargin: menu.nameTitleMargin,
+        brandSize: menu.brandSize,
+        titleSize: menu.titleSize,
+        nameSize: menu.nameSize,
+        descriptionSize: menu.descriptionSize,
+        brandFont: menu.brandFont,
+        titleFont: menu.titleFont,
+        contentFont: menu.contentFont,
+        userId: user.uid,
+      };
+      const data: UpdateDesignData = {
+        categories,
+        menu: updateMenuData,
+        template: menu.template,
+      };
+      await dbUpdateDesign(data);
       setLoading(false);
       setCustomDirty(false);
       setTemplateDirty(false);
       setBackgroundDirty(false);
-    } else if (response.status === 500) {
+    } catch {
       setErrorMessage("Failed to update menu");
       setLoading(false);
     }
@@ -165,35 +161,28 @@ export default function DesignMenu() {
     if (!user) {
       return;
     }
-    const data: MenuDTO = {
-      brandColor: menu.brandColor,
-      titleColor: menu.titleColor,
-      nameColor: menu.nameColor,
-      descriptionColor: menu.descriptionColor,
-      backgroundColor: menu.backgroundColor,
-      brandMargin: menu.brandMargin,
-      titleMargin: menu.titleMargin,
-      nameMargin: menu.nameMargin,
-      nameTitleMargin: menu.nameTitleMargin,
-      brandSize: menu.brandSize,
-      titleSize: menu.titleSize,
-      nameSize: menu.nameSize,
-      descriptionSize: menu.descriptionSize,
-      brandFont: menu.brandFont,
-      titleFont: menu.titleFont,
-      contentFont: menu.contentFont,
-      userId: user.uid,
-    };
-    const JSONdata = JSON.stringify(data);
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSONdata,
-    };
-    const response = await fetch("/api/menu/create-menu", options);
-    if (response.status === 500) {
+    try {
+      const data: MenuDTO = {
+        brandColor: menu.brandColor,
+        titleColor: menu.titleColor,
+        nameColor: menu.nameColor,
+        descriptionColor: menu.descriptionColor,
+        backgroundColor: menu.backgroundColor,
+        brandMargin: menu.brandMargin,
+        titleMargin: menu.titleMargin,
+        nameMargin: menu.nameMargin,
+        nameTitleMargin: menu.nameTitleMargin,
+        brandSize: menu.brandSize,
+        titleSize: menu.titleSize,
+        nameSize: menu.nameSize,
+        descriptionSize: menu.descriptionSize,
+        brandFont: menu.brandFont,
+        titleFont: menu.titleFont,
+        contentFont: menu.contentFont,
+        userId: user.uid,
+      };
+      await dbCreateMenu(data);
+    } catch {
       setErrorMessage("Failed to create menu");
     }
   }

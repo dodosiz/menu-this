@@ -15,6 +15,7 @@ import { RiEditLine } from "react-icons/ri";
 import { useState, FormEvent } from "react";
 import { Brand, BrandDTO } from "@/lib/data/brand";
 import { User } from "firebase/auth";
+import { updateBrand as dbUpdateBrand } from "@/lib/data/brand";
 
 interface EditBrandProps {
   brand: Brand;
@@ -39,28 +40,20 @@ export function EditBrand({
   };
   async function updateBrand(e: FormEvent) {
     e.preventDefault();
-    const data: BrandDTO = {
-      userId: user.uid,
-      title: brandName,
-    };
-    const JSONdata = JSON.stringify(data);
-    const options = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSONdata,
-    };
     setEditBrandModalOpen(false);
     setLoading(true);
-    const response = await fetch("/api/brand/update", options);
-    if (response.status === 200) {
+    try {
+      const data: BrandDTO = {
+        userId: user.uid,
+        title: brandName,
+      };
+      await dbUpdateBrand(data);
       setLoading(false);
       setBrand({
         ...brand,
         title: brandName,
       });
-    } else if (response.status === 500) {
+    } catch {
       setLoading(false);
       setErrorMessage("Failed to update brand");
     }

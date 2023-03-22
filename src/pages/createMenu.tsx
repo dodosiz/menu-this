@@ -33,7 +33,7 @@ import { auth } from "@/lib/config/firebase";
 import { Brand } from "@/lib/data/brand";
 import { Category } from "@/lib/data/categories";
 import { Product, SwapResult, UpdateProductResult } from "@/lib/data/products";
-import { MenuData } from "./api/menu/get-menu-data/[userId]";
+import { MenuData } from "./api/menu/[userId]";
 
 export default function CreateMenu() {
   const [isLoading, setLoading] = useState(false);
@@ -58,7 +58,7 @@ export default function CreateMenu() {
   useEffect(() => {
     setLoading(true);
     if (user) {
-      fetch(`/api/menu/get-menu-data/${user.uid}`)
+      fetch(`/api/menu/${user.uid}`)
         .then((res) => res.json())
         .then((data: MenuData) => {
           setCategories(data.categories);
