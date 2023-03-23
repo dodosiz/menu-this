@@ -24,6 +24,7 @@ export class Product {
   categoryId: string;
   name: string;
   price: number;
+  secondPrice: number | null;
   description: string;
   createdAt: number;
   constructor(
@@ -31,6 +32,7 @@ export class Product {
     categoryId: string,
     name: string,
     price: number,
+    secondPrice: number | null,
     description: string,
     createdAt: number
   ) {
@@ -38,6 +40,7 @@ export class Product {
     this.categoryId = categoryId;
     this.name = name;
     this.price = price;
+    this.secondPrice = secondPrice ? secondPrice : null;
     this.description = description;
     this.createdAt = createdAt;
   }
@@ -50,6 +53,7 @@ const productConverter: FirestoreDataConverter<Product> = {
       categoryId: product.categoryId,
       name: product.name,
       price: product.price,
+      secondPrice: product.secondPrice,
       description: product.description,
       createdAt: product.createdAt,
     };
@@ -61,6 +65,7 @@ const productConverter: FirestoreDataConverter<Product> = {
       data.categoryId,
       data.name,
       data.price,
+      data.secondPrice,
       data.description,
       data.createdAt
     );
@@ -89,6 +94,7 @@ export function getProductCollectionReference(userId: string) {
 export interface CreateProductData {
   name: string;
   price: string;
+  secondPrice: string | null;
   description: string;
   categoryId: string;
   userId: string;
@@ -107,6 +113,10 @@ export async function createProduct(data: CreateProductData): Promise<Product> {
     id: newProductId,
     name: data.name,
     price: parseFloat(data.price),
+    secondPrice:
+      data.secondPrice && data.secondPrice.length > 0
+        ? parseFloat(data.secondPrice)
+        : null,
     description: data.description,
     createdAt: currentTimestamp,
     categoryId: data.categoryId,
@@ -116,6 +126,10 @@ export async function createProduct(data: CreateProductData): Promise<Product> {
     categoryId: data.categoryId,
     name: data.name,
     price: parseFloat(data.price),
+    secondPrice:
+      data.secondPrice && data.secondPrice.length > 0
+        ? parseFloat(data.secondPrice)
+        : null,
     description: data.description,
     createdAt: currentTimestamp,
   };
@@ -133,6 +147,7 @@ export async function countProducts(userId: string, categoryId: string) {
 export interface UpdateProductData {
   name: string;
   price: string;
+  secondPrice: string | null;
   description: string;
   productId: string;
   userId: string;
@@ -142,6 +157,7 @@ export interface UpdateProductResult {
   productId: string;
   name: string;
   price: number;
+  secondPrice: number | null;
   description: string;
 }
 
@@ -151,12 +167,20 @@ export async function updateProduct(
   await updateDoc(getProductDocumentReference(data.userId, data.productId), {
     name: data.name,
     price: parseFloat(data.price),
+    secondPrice:
+      data.secondPrice && data.secondPrice.length > 0
+        ? parseFloat(data.secondPrice)
+        : null,
     description: data.description,
   });
   return {
     productId: data.productId,
     name: data.name,
     price: parseFloat(data.price),
+    secondPrice:
+      data.secondPrice && data.secondPrice.length > 0
+        ? parseFloat(data.secondPrice)
+        : null,
     description: data.description,
   };
 }

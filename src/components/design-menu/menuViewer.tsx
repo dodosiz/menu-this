@@ -32,6 +32,7 @@ import { Category } from "@/lib/data/categories";
 import { Product } from "@/lib/data/products";
 import Link from "next/link";
 import { TextWithLineBreaks } from "../commons/textWithLineBreaks";
+import { displayProductPrice } from "../utils";
 
 interface DesignMenuViewer {
   categories: Category[];
@@ -107,6 +108,7 @@ export function MenuViewer({
         </Center>
       )}
       <Container
+        maxW="container.sm"
         paddingLeft={0}
         paddingRight={0}
         className={styles.menu}
@@ -186,7 +188,7 @@ export function MenuViewer({
                   )}
                 </Heading>
                 <Grid
-                  templateColumns="repeat(5, 1fr)"
+                  templateColumns="repeat(10, 1fr)"
                   paddingLeft="5px"
                   paddingRight="5px"
                   {...getVariantStyle(
@@ -201,7 +203,7 @@ export function MenuViewer({
                       <Fragment key={`gi-${product.id}`}>
                         <GridItem
                           marginTop={i > 0 ? nameMargin : nameTitleMargin}
-                          colSpan={{ base: 3, md: 4 }}
+                          colSpan={{ base: 4, md: 6 }}
                         >
                           <Heading
                             fontFamily={contentFont}
@@ -213,7 +215,7 @@ export function MenuViewer({
                         </GridItem>
                         <GridItem
                           marginTop={i > 0 ? nameMargin : nameTitleMargin}
-                          colSpan={{ base: 2, md: 1 }}
+                          colSpan={{ base: 6, md: 4 }}
                         >
                           <Heading
                             display="flex"
@@ -222,13 +224,13 @@ export function MenuViewer({
                             as="h2"
                             size={nameSize}
                           >
-                            € {product.price.toFixed(2)}
+                            {displayProductPrice(product)}
                           </Heading>
                         </GridItem>
                         {product.description &&
                           product.description.length > 0 && (
                             <>
-                              <GridItem colSpan={{ base: 3, md: 4 }}>
+                              <GridItem colSpan={{ base: 4, md: 6 }}>
                                 <Text
                                   fontFamily={contentFont}
                                   fontSize={descriptionSize}
@@ -243,7 +245,7 @@ export function MenuViewer({
                                   />
                                 </Text>
                               </GridItem>
-                              <GridItem colSpan={{ base: 2, md: 1 }}></GridItem>
+                              <GridItem colSpan={{ base: 6, md: 4 }}></GridItem>
                             </>
                           )}
                       </Fragment>

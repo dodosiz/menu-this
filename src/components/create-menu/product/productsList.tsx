@@ -13,6 +13,7 @@ import {
   UpdateProductResult,
 } from "@/lib/data/products";
 import { TextWithLineBreaks } from "@/components/commons/textWithLineBreaks";
+import { displayProductPrice } from "@/components/utils";
 
 interface ProductsListProps {
   categoryId: string;
@@ -107,7 +108,7 @@ export function ProductsList({
                       as="h3"
                       className={styles.product_heading}
                     >
-                      € {product.price.toFixed(2)}
+                      {displayProductPrice(product)}
                     </Heading>
                   </GridItem>
                   <GridItem colSpan={{ base: 1, md: 1 }}>
