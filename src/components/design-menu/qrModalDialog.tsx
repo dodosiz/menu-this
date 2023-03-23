@@ -1,4 +1,3 @@
-import { SECONDARY_COLOR } from "@/constants";
 import {
   Button,
   Heading,
@@ -14,7 +13,9 @@ import {
 } from "@chakra-ui/react";
 import { useQRCode } from "next-qrcode";
 import { FiDownload } from "react-icons/fi";
-import html2pdf from "html2pdf.js";
+import { jsPDF } from "jspdf";
+import domtoimage from "dom-to-image";
+import styles from "@/styles/components/design-menu/qrModalDialog.module.css";
 
 interface QrDialogProps {
   brandTitle: string;
@@ -37,16 +38,23 @@ export function QrDialog({
 }: QrDialogProps) {
   const { Canvas } = useQRCode();
   const downloadQR = () => {
-    const element = document.getElementById("qr-code");
-    var opt = {
-      margin: 1,
-      filename: "qr_code.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
-    };
-    html2pdf(element, opt).save();
-    setOpen(false);
+    const qrCode = document.getElementById("qr-code");
+
+    if (qrCode) {
+      const qrCodeHeight = qrCode.clientHeight;
+      const qrCodeWidth = qrCode.clientWidth;
+      const options = {
+        background: "white",
+        width: qrCodeWidth,
+        height: qrCodeHeight,
+      };
+
+      domtoimage.toPng(qrCode, options).then((imgData) => {
+        const doc = new jsPDF("p", "mm", [210, 297]);
+        doc.addImage(imgData, "PNG", 0, 0, 100, 100);
+        doc.save("qr_code.pdf");
+      });
+    }
   };
   return (
     <Modal isOpen={isOpen} onClose={() => setOpen(false)}>
@@ -55,7 +63,7 @@ export function QrDialog({
         <ModalHeader>Menu QR</ModalHeader>
         <ModalCloseButton />
 
-        <ModalBody>
+        <ModalBody className={styles.modal_body}>
           <VStack
             justifyContent="center"
             width={400}
@@ -68,10 +76,10 @@ export function QrDialog({
               color={brandColor}
               as="h2"
               size="2xl"
+              marginBottom={20}
             >
               {brandTitle}
             </Heading>
-            <Text color={brandColor}>Scan the QR code to view our menu.</Text>
             <Canvas
               text={url}
               options={{
@@ -85,10 +93,8 @@ export function QrDialog({
                 },
               }}
             />
+            <Text color={brandColor}>Scan the QR code to view our menu.</Text>
           </VStack>
-          <Text color={SECONDARY_COLOR}>
-            Use this QR code to let customers scan your menu.
-          </Text>
         </ModalBody>
 
         <ModalFooter>
