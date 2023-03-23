@@ -14,6 +14,7 @@ import {
 } from "firebase/firestore";
 import { v4 } from "uuid";
 import { db } from "../config/firebase";
+import { deleteProduct, getProductsForCategory } from "./products";
 
 export const CATEGORY_COLLECTION = "categories";
 export const USER_DATA_COLLECTION = "userData";
@@ -130,6 +131,10 @@ export interface DeleteData {
 
 export async function deleteCategory(data: DeleteData) {
   await deleteDoc(getCategoryDocumentReference(data.userId, data.categoryId));
+  const products = await getProductsForCategory(data.userId, data.categoryId);
+  for (const p of products) {
+    await deleteProduct({ productId: p.id, userId: data.userId });
+  }
 }
 
 export interface SwapData {

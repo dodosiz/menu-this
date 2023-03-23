@@ -169,6 +169,21 @@ export async function getProducts(userId: string) {
   return products;
 }
 
+export async function getProductsForCategory(
+  userId: string,
+  categoryId: string
+) {
+  const q = query(getProductCollectionReference(userId), orderBy("createdAt"));
+  const querySnapshot = await getDocs(q);
+  const products: Product[] = [];
+  querySnapshot.forEach((doc) => {
+    if (doc.data().categoryId === categoryId) {
+      products.push(doc.data());
+    }
+  });
+  return products;
+}
+
 export interface DeleteData {
   userId: string;
   productId: string;
