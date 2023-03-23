@@ -86,7 +86,7 @@ export function MenuViewer({
         className={styles.menu}
         backgroundColor={backgroundColor}
       >
-        <Center>
+        <Center paddingLeft="20px" paddingRight="20px">
           <Heading
             color={brandColor}
             size={brandSize}
