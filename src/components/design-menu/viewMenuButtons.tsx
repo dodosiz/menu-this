@@ -7,12 +7,20 @@ import { QrDialog } from "./qrModalDialog";
 import { FaRegSave } from "react-icons/fa";
 
 interface ViewMenuButtonsProps {
+  brandTitle: string;
   userId: string;
+  brandFont: string;
+  backgroundColor: string;
+  brandColor: string;
   updateDesign: () => {};
 }
 
 export function ViewMenuButtons({
+  brandTitle,
   userId,
+  backgroundColor,
+  brandColor,
+  brandFont,
   updateDesign,
 }: ViewMenuButtonsProps) {
   const router = useRouter();
@@ -20,6 +28,10 @@ export function ViewMenuButtons({
   return (
     <>
       <QrDialog
+        brandTitle={brandTitle}
+        backgroundColor={backgroundColor}
+        brandColor={brandColor}
+        brandFont={brandFont}
         isOpen={showQR}
         setOpen={setShowQR}
         url={`${window.location.origin}/menu/${userId}`}

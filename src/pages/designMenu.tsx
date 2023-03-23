@@ -315,6 +315,10 @@ export default function DesignMenu() {
                   <ViewMenuButtons
                     userId={user.uid}
                     updateDesign={updateDesign}
+                    brandTitle={brand.title}
+                    backgroundColor={menu.backgroundColor}
+                    brandColor={menu.brandColor}
+                    brandFont={menu.brandFont}
                   />
                 </GridItem>
               </Grid>
