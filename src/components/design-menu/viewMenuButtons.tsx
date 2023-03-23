@@ -4,7 +4,8 @@ import { ImEye, ImQrcode } from "react-icons/im";
 import styles from "@/styles/components/design-menu/viewMenuButtons.module.css";
 import { useRouter } from "next/router";
 import { QrDialog } from "./qrModalDialog";
-import { FaRegSave } from "react-icons/fa";
+import { FaRegSave, FaShareSquare } from "react-icons/fa";
+import { ShareDialog } from "./shareDialog";
 
 interface ViewMenuButtonsProps {
   brandTitle: string;
@@ -25,6 +26,7 @@ export function ViewMenuButtons({
 }: ViewMenuButtonsProps) {
   const router = useRouter();
   const [showQR, setShowQR] = useState(false);
+  const [showShare, setShowShare] = useState(false);
   return (
     <>
       <QrDialog
@@ -34,6 +36,11 @@ export function ViewMenuButtons({
         brandFont={brandFont}
         isOpen={showQR}
         setOpen={setShowQR}
+        url={`${window.location.origin}/menu/${userId}`}
+      />
+      <ShareDialog
+        isOpen={showShare}
+        setOpen={setShowShare}
         url={`${window.location.origin}/menu/${userId}`}
       />
       <Button
@@ -61,7 +68,7 @@ export function ViewMenuButtons({
         onClick={() => setShowQR(true)}
         className={`${styles.qr_button} ${styles.qr_button_desktop}`}
       >
-        View
+        Menu QR
       </Button>
       <IconButton
         icon={<ImQrcode />}
@@ -71,6 +78,24 @@ export function ViewMenuButtons({
         size="sm"
         onClick={() => setShowQR(true)}
         className={`${styles.qr_button} ${styles.qr_button_mobile}`}
+      />
+      <Button
+        leftIcon={<FaShareSquare />}
+        colorScheme="teal"
+        variant="outline"
+        onClick={() => setShowShare(true)}
+        className={`${styles.share_button} ${styles.share_button_desktop}`}
+      >
+        Share
+      </Button>
+      <IconButton
+        icon={<FaShareSquare />}
+        colorScheme="teal"
+        aria-label="share"
+        variant="outline"
+        size="sm"
+        onClick={() => setShowShare(true)}
+        className={`${styles.share_button} ${styles.share_button_mobile}`}
       />
       <Button
         leftIcon={<FaRegSave />}

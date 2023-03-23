@@ -1,5 +1,6 @@
 .view_button,
 .qr_button,
+.share_button,
 .save_button {
   background-color: white !important;
   position: fixed !important;
@@ -11,18 +12,24 @@
   top: 210px;
 }
 
-.save_button {
+.share_button {
   top: 260px;
+}
+
+.save_button {
+  top: 310px;
 }
 
 .view_button_desktop,
 .qr_button_desktop,
+.share_button_desktop,
 .save_button_desktop {
   width: 150px;
 }
 
 .view_button_mobile,
 .qr_button_mobile,
+.share_button_mobile,
 .save_button_mobile {
   display: none !important;
 }
@@ -30,11 +37,13 @@
 @media (max-width: 700px) {
   .view_button_desktop,
   .qr_button_desktop,
+  .share_button_desktop,
   .save_button_desktop {
     display: none !important;
   }
   .view_button_mobile,
   .qr_button_mobile,
+  .share_button_mobile,
   .save_button_mobile {
     display: inline-flex !important;
   }
