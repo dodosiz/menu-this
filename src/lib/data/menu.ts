@@ -15,6 +15,8 @@ import { templateToMenu } from "./template-data";
 
 const MENU_COLLECTION = "menu";
 
+export type Variant = "none" | "inverse" | "bordered" | "underlined";
+
 export class Menu {
   brandColor: string;
   titleColor: string;
@@ -32,6 +34,8 @@ export class Menu {
   brandFont: string;
   titleFont: string;
   contentFont: string;
+  categoryVariant: Variant;
+  productVariant: Variant;
   template: string | null;
   constructor(
     brandColor: string,
@@ -50,6 +54,8 @@ export class Menu {
     brandFont: string,
     titleFont: string,
     contentFont: string,
+    categoryVariant: Variant,
+    productVariant: Variant,
     template: string | null
   ) {
     this.brandColor = brandColor;
@@ -68,6 +74,8 @@ export class Menu {
     this.brandFont = brandFont;
     this.titleFont = titleFont;
     this.contentFont = contentFont;
+    this.categoryVariant = categoryVariant;
+    this.productVariant = productVariant;
     this.template = template;
   }
 }
@@ -91,6 +99,8 @@ const menuConverter: FirestoreDataConverter<Menu> = {
       brandFont: menu.brandFont,
       titleFont: menu.titleFont,
       contentFont: menu.contentFont,
+      categoryVariant: menu.categoryVariant,
+      productVariant: menu.productVariant,
     };
   },
   fromFirestore: (snapshot, options) => {
@@ -112,6 +122,8 @@ const menuConverter: FirestoreDataConverter<Menu> = {
       menu.brandFont,
       menu.titleFont,
       menu.contentFont,
+      menu.categoryVariant,
+      menu.productVariant,
       menu.template
     );
   },
@@ -161,6 +173,8 @@ export interface MenuDTO {
   brandFont: string;
   titleFont: string;
   contentFont: string;
+  categoryVariant: Variant;
+  productVariant: Variant;
   userId: string;
 }
 
@@ -182,6 +196,8 @@ export async function createMenu(data: MenuDTO) {
     brandFont: data.brandFont,
     titleFont: data.titleFont,
     contentFont: data.contentFont,
+    categoryVariant: data.categoryVariant,
+    productVariant: data.productVariant,
     template: null,
   };
   await setDoc(doc(db, MENU_COLLECTION, data.userId), document);
@@ -214,6 +230,8 @@ export async function updateDesign(data: UpdateDesignData) {
     brandFont: data.menu.brandFont,
     titleFont: data.menu.titleFont,
     contentFont: data.menu.contentFont,
+    categoryVariant: data.menu.categoryVariant,
+    productVariant: data.menu.productVariant,
   });
   // update background images
   for (const c of data.categories) {

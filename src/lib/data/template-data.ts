@@ -6,9 +6,9 @@ export const BASE_MENU: Omit<Menu, "userId" | "template"> = {
   nameColor: "#2d3748",
   descriptionColor: "#718096",
   brandMargin: 200,
-  titleMargin: 200,
+  titleMargin: 100,
   nameMargin: 10,
-  nameTitleMargin: 100,
+  nameTitleMargin: 50,
   brandSize: "2xl",
   titleSize: "lg",
   nameSize: "md",
@@ -17,6 +17,8 @@ export const BASE_MENU: Omit<Menu, "userId" | "template"> = {
   titleFont: "'Open Sans', sans-serif",
   contentFont: "'Raleway', sans-serif",
   backgroundColor: "#fdfdfd",
+  categoryVariant: "none",
+  productVariant: "none",
 };
 
 export const templateToMenu: { [key: string]: Partial<Menu> } = {
@@ -29,6 +31,8 @@ export const templateToMenu: { [key: string]: Partial<Menu> } = {
     brandFont: "'Gloria Hallelujah', cursive",
     titleFont: "'Roboto', sans-serif",
     contentFont: "'Roboto', sans-serif",
+    categoryVariant: "inverse",
+    productVariant: "bordered",
   },
   vintage: {
     backgroundColor: "#4D455D",
@@ -39,6 +43,7 @@ export const templateToMenu: { [key: string]: Partial<Menu> } = {
     brandFont: "'Lato', sans-serif",
     titleFont: "'Lato', sans-serif",
     contentFont: "'Lato', sans-serif",
+    categoryVariant: "underlined",
   },
   retro: {
     backgroundColor: "#4E6E81",
@@ -49,6 +54,7 @@ export const templateToMenu: { [key: string]: Partial<Menu> } = {
     brandFont: "'Raleway', sans-serif",
     titleFont: "'Raleway', sans-serif",
     contentFont: "'Raleway', sans-serif",
+    categoryVariant: "inverse",
   },
   summer: {
     backgroundColor: "#FFF1DC",
@@ -59,6 +65,7 @@ export const templateToMenu: { [key: string]: Partial<Menu> } = {
     brandFont: "'Handlee', cursive",
     titleFont: "'Montserrat', sans-serif",
     contentFont: "'Montserrat', sans-serif",
+    categoryVariant: "inverse",
   },
   dark: {
     backgroundColor: "#1A120B",
@@ -69,6 +76,7 @@ export const templateToMenu: { [key: string]: Partial<Menu> } = {
     brandFont: "'Gloria Hallelujah', cursive",
     titleFont: "'Open Sans', sans-serif",
     contentFont: "'Open Sans', sans-serif",
+    categoryVariant: "underlined",
   },
   warm: {
     backgroundColor: "#FCDDB0",
@@ -79,6 +87,8 @@ export const templateToMenu: { [key: string]: Partial<Menu> } = {
     brandFont: "'Playfair Display', serif",
     titleFont: "'Playfair Display', serif",
     contentFont: "'Playfair Display', serif",
+    categoryVariant: "underlined",
+    productVariant: "underlined",
   },
   cold: {
     backgroundColor: "#C0EEF2",
@@ -89,6 +99,7 @@ export const templateToMenu: { [key: string]: Partial<Menu> } = {
     brandFont: "'Montserrat', sans-serif",
     titleFont: "'Montserrat', sans-serif",
     contentFont: "'Montserrat', sans-serif",
+    productVariant: "bordered",
   },
   coffee: {
     backgroundColor: "#F8EAD8",
@@ -99,6 +110,7 @@ export const templateToMenu: { [key: string]: Partial<Menu> } = {
     brandFont: "'Lato', sans-serif",
     titleFont: "'Lato', sans-serif",
     contentFont: "'Lato', sans-serif",
+    categoryVariant: "bordered",
   },
   food: {
     backgroundColor: "#0A1D37",
@@ -109,6 +121,7 @@ export const templateToMenu: { [key: string]: Partial<Menu> } = {
     brandFont: "'Beth Ellen', cursive",
     titleFont: "'Raleway', sans-serif",
     contentFont: "'Raleway', sans-serif",
+    categoryVariant: "underlined",
   },
 };
 

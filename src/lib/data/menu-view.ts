@@ -37,6 +37,8 @@ export async function getMenuViewData(userId: string): Promise<MenuViewData> {
       brandFont: menu.brandFont,
       titleFont: menu.titleFont,
       contentFont: menu.contentFont,
+      categoryVariant: menu.categoryVariant,
+      productVariant: menu.productVariant,
       template: menu.template,
     },
     categories: categories.map((c) => ({

@@ -3,7 +3,7 @@ import { Layout } from "@/components/commons/layout";
 import { useEffect, useState } from "react";
 import { LoadingPage } from "@/components/commons/loadingPage";
 import { UnauthorizedPage } from "@/components/commons/unauthorizedPage";
-import { Box, Grid, GridItem, Heading, Tooltip } from "@chakra-ui/react";
+import { Box, Grid, GridItem, Heading, Image, Tooltip } from "@chakra-ui/react";
 import { CustomizeDrawer } from "@/components/design-menu/customizeDrawer";
 import { MenuViewer } from "@/components/design-menu/menuViewer";
 import { TemplateDrawer } from "@/components/design-menu/templateDrawer";
@@ -12,7 +12,6 @@ import { Menu, MenuDTO, UpdateDesignData } from "@/lib/data/menu";
 import { Router } from "next/router";
 import { BASE_MENU, templateToMenu } from "@/lib/data/template-data";
 import styles from "@/styles/designMenu.module.css";
-import Image from "next/image";
 import { ActionPage } from "@/components/commons/actionPage";
 import { auth } from "@/lib/config/firebase";
 import { Brand } from "@/lib/data/brand";
@@ -139,6 +138,8 @@ export default function DesignMenu() {
         brandFont: menu.brandFont,
         titleFont: menu.titleFont,
         contentFont: menu.contentFont,
+        categoryVariant: menu.categoryVariant,
+        productVariant: menu.productVariant,
         userId: user.uid,
       };
       const data: UpdateDesignData = {
@@ -179,6 +180,8 @@ export default function DesignMenu() {
         brandFont: menu.brandFont,
         titleFont: menu.titleFont,
         contentFont: menu.contentFont,
+        categoryVariant: menu.categoryVariant,
+        productVariant: menu.productVariant,
         userId: user.uid,
       };
       await dbCreateMenu(data);
@@ -257,8 +260,6 @@ export default function DesignMenu() {
                       <GridItem colSpan={{ base: 3, md: 1 }} key={templateName}>
                         <Tooltip hasArrow bg="teal.500" label={templateName}>
                           <Image
-                            width={600}
-                            height={600}
                             className={styles.template_image}
                             src={`/templates/${templateName}.PNG`}
                             alt={templateName}
