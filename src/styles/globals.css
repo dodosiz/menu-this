@@ -9,3 +9,13 @@
   color: var(--logo-color);
   margin: 5% 0;
 }
+
+.logo {
+  color: var(--logo-color);
+  flex-grow: 1;
+  font-weight: bolder;
+}
+
+.logo > a {
+  text-decoration: none !important;
+}

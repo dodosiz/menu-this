@@ -56,7 +56,7 @@ export function Layout({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <nav className={styles.navigation}>
-        <div className={styles.logo}>
+        <div className="logo">
           <Link
             as={NextLink}
             onClick={(e) => {
@@ -87,7 +87,7 @@ export function Layout({
               <DrawerHeader
                 fontSize="1.5em"
                 textAlign="center"
-                className={styles.logo}
+                className="logo"
               >
                 <Link onClick={() => setOpen(false)} as={NextLink} href="/">
                   DEINLOG

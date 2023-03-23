@@ -15,16 +15,6 @@
   min-height: 100vh;
 }
 
-.logo {
-  color: var(--logo-color);
-  flex-grow: 1;
-  font-weight: bolder;
-}
-
-.logo > a {
-  text-decoration: none !important;
-}
-
 .nav_item {
   color: var(--main-color) !important;
   text-decoration: none !important;
