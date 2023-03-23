@@ -106,6 +106,7 @@ export default function CreateMenu() {
           name: r.name,
           description: r.description,
           price: r.price,
+          secondPrice: r.secondPrice,
         };
       }
       return p;

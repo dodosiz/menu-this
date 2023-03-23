@@ -3,6 +3,7 @@ import {
   Button,
   Grid,
   GridItem,
+  IconButton,
   Input,
   NumberDecrementStepper,
   NumberIncrementStepper,
@@ -12,7 +13,7 @@ import {
   Textarea,
   Tooltip,
 } from "@chakra-ui/react";
-import { IoMdAdd, IoMdCheckmark } from "react-icons/io";
+import { IoMdAdd, IoMdCheckmark, IoMdRemove } from "react-icons/io";
 import styles from "@/styles/components/create-menu/product/productForm.module.css";
 import { FormEvent, useState } from "react";
 import {
@@ -52,11 +53,19 @@ export function ProductForm({
   const [price, setPrice] = useState(
     editedProduct ? editedProduct.price.toString() : ""
   );
+  const [secondPrice, setSecondPrice] = useState(
+    editedProduct && editedProduct.secondPrice
+      ? editedProduct.secondPrice.toString()
+      : ""
+  );
   const [name, setName] = useState(editedProduct ? editedProduct.name : "");
   const [description, setDescription] = useState(
     editedProduct ? editedProduct.description : ""
   );
   const [isLoading, setLoading] = useState(false);
+  const [showSecondPrice, setShowSecondPrice] = useState(
+    !!editedProduct && !!editedProduct.secondPrice
+  );
 
   function scrollToBottom() {
     setTimeout(() => {
@@ -83,6 +92,7 @@ export function ProductForm({
         name,
         description,
         price,
+        secondPrice,
         productId: editedProduct.id,
         userId,
       };
@@ -99,6 +109,7 @@ export function ProductForm({
 
   async function createProduct() {
     setPrice("");
+    setSecondPrice("");
     setName("");
     setDescription("");
     setLoading(true);
@@ -107,6 +118,7 @@ export function ProductForm({
         name: name,
         description: description,
         price: price,
+        secondPrice: secondPrice,
         categoryId: categoryId,
         userId: userId,
       };
@@ -123,8 +135,8 @@ export function ProductForm({
   return (
     <Box className={styles.new_product}>
       <form onSubmit={handleSubmit}>
-        <Grid templateColumns="repeat(5, 1fr)" gap={4}>
-          <GridItem colSpan={{ base: 5, sm: 5, md: 4 }}>
+        <Grid templateColumns="repeat(10, 1fr)" gap={4}>
+          <GridItem colSpan={{ base: 10, sm: 10, md: 8 }}>
             <Input
               name="name"
               required={true}
@@ -135,13 +147,14 @@ export function ProductForm({
               onChange={(e) => setName(e.target.value)}
             />
           </GridItem>
-          <GridItem colSpan={{ base: 5, sm: 5, md: 1 }}>
+          <GridItem colSpan={{ base: 8, sm: 8, md: 1 }}>
             <NumberInput
               name="price"
               focusBorderColor="teal.200"
               onChange={(p) => setPrice(p.replace(",", "."))}
               min={0}
               precision={2}
+              display="inline"
               isValidCharacter={(v) => /^[Ee0-9+\-.,]$/.test(v)}
               step={0.1}
               value={price}
@@ -153,7 +166,19 @@ export function ProductForm({
               </NumberInputStepper>
             </NumberInput>
           </GridItem>
-          <GridItem colSpan={{ base: 5, sm: 5, md: 4 }}>
+          <GridItem colSpan={{ base: 2, sm: 2, md: 1 }}>
+            {!showSecondPrice && (
+              <IconButton
+                colorScheme="teal"
+                variant="ghost"
+                aria-label="Add second price"
+                icon={<IoMdAdd />}
+                onClick={() => setShowSecondPrice(true)}
+                size="md"
+              />
+            )}
+          </GridItem>
+          <GridItem colSpan={{ base: 10, sm: 10, md: 8 }}>
             <Textarea
               name="description"
               value={description}
@@ -164,7 +189,43 @@ export function ProductForm({
               maxLength={250}
             />
           </GridItem>
-          <GridItem colSpan={{ base: 5, sm: 5, md: 1 }}>
+          <GridItem colSpan={{ base: 8, sm: 8, md: 1 }}>
+            {showSecondPrice && (
+              <NumberInput
+                name="second_price"
+                focusBorderColor="teal.200"
+                onChange={(p) => setSecondPrice(p.replace(",", "."))}
+                min={0}
+                precision={2}
+                isValidCharacter={(v) => /^[Ee0-9+\-.,]$/.test(v)}
+                step={0.1}
+                value={secondPrice}
+              >
+                <NumberInputField placeholder="€ 0.00" />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            )}
+          </GridItem>
+          <GridItem colSpan={{ base: 2, sm: 2, md: 1 }}>
+            {showSecondPrice && (
+              <IconButton
+                colorScheme="red"
+                variant="ghost"
+                aria-label="Remove second price"
+                icon={<IoMdRemove />}
+                onClick={() => {
+                  setShowSecondPrice(false);
+                  setSecondPrice("");
+                }}
+                size="md"
+              />
+            )}
+          </GridItem>
+          <GridItem colSpan={{ base: 10, sm: 10, md: 8 }} />
+          <GridItem colSpan={{ base: 10, sm: 10, md: 2 }}>
             <Tooltip
               label={
                 products.length >= PRODUCT_LIMIT
@@ -179,12 +240,12 @@ export function ProductForm({
                   (!editedProduct && products.length >= PRODUCT_LIMIT)
                 }
                 type="submit"
-                leftIcon={editedProduct ? <IoMdCheckmark /> : <IoMdAdd />}
+                leftIcon={editedProduct ? <IoMdCheckmark /> : undefined}
                 colorScheme="teal"
                 variant="outline"
                 isLoading={isLoading}
               >
-                {editedProduct ? "Update" : "Add Product"}
+                {editedProduct ? "Update" : "Create Product"}
               </Button>
             </Tooltip>
             {editedProduct && setEditedProductId && (
