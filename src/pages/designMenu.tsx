@@ -139,6 +139,8 @@ export default function DesignMenu() {
         brandFont: menu.brandFont,
         titleFont: menu.titleFont,
         contentFont: menu.contentFont,
+        categoryVariant: menu.categoryVariant,
+        productVariant: menu.productVariant,
         userId: user.uid,
       };
       const data: UpdateDesignData = {
@@ -179,6 +181,8 @@ export default function DesignMenu() {
         brandFont: menu.brandFont,
         titleFont: menu.titleFont,
         contentFont: menu.contentFont,
+        categoryVariant: menu.categoryVariant,
+        productVariant: menu.productVariant,
         userId: user.uid,
       };
       await dbCreateMenu(data);
@@ -257,8 +261,8 @@ export default function DesignMenu() {
                       <GridItem colSpan={{ base: 3, md: 1 }} key={templateName}>
                         <Tooltip hasArrow bg="teal.500" label={templateName}>
                           <Image
-                            width={600}
-                            height={600}
+                            width={400}
+                            height={800}
                             className={styles.template_image}
                             src={`/templates/${templateName}.PNG`}
                             alt={templateName}

@@ -21,7 +21,7 @@ import styles from "@/styles/components/design-menu/customizeDrawer.module.css";
 import { ColorPicker } from "./form/color-picker";
 import { SliderInput } from "./form/slider-input";
 import { SelectInput } from "./form/select-input";
-import { Menu } from "@/lib/data/menu";
+import { Menu, Variant } from "@/lib/data/menu";
 
 interface DesignDrawerProps {
   menu: Menu;
@@ -30,6 +30,8 @@ interface DesignDrawerProps {
   setMenu: (_m: Menu) => void;
   setCustomDirty: (_b: boolean) => void;
 }
+
+const VARIANTS = ["none", "inverse", "bordered", "underlined"];
 
 const FONTS = [
   "'Montserrat', sans-serif",
@@ -358,6 +360,45 @@ export function CustomizeDrawer({
                         setMenu({
                           ...menu,
                           contentFont: f,
+                        });
+                        setCustomDirty(true);
+                      }}
+                    />
+                  </AccordionPanel>
+                </AccordionItem>
+                <AccordionItem>
+                  <h2>
+                    <AccordionButton
+                      _expanded={{ bg: "teal.500", color: "white" }}
+                      paddingLeft={0}
+                    >
+                      <Box as="span" flex="1" textAlign="left">
+                        Edit design variants
+                      </Box>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel paddingLeft={0} pb={4}>
+                    <Text className={styles.label}>Category variant</Text>
+                    <SelectInput
+                      options={VARIANTS}
+                      value={menu.categoryVariant}
+                      setValue={(v) => {
+                        setMenu({
+                          ...menu,
+                          categoryVariant: v as Variant,
+                        });
+                        setCustomDirty(true);
+                      }}
+                    />
+                    <Text className={styles.label}>Product variant</Text>
+                    <SelectInput
+                      options={VARIANTS}
+                      value={menu.productVariant}
+                      setValue={(v) => {
+                        setMenu({
+                          ...menu,
+                          productVariant: v as Variant,
                         });
                         setCustomDirty(true);
                       }}

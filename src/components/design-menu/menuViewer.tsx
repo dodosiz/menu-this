@@ -12,6 +12,7 @@ import "@fontsource/beth-ellen/400.css";
 import { Fragment, useState } from "react";
 import {
   Box,
+  BoxProps,
   Center,
   Container,
   Grid,
@@ -26,7 +27,7 @@ import { getImageData, templateToMenu } from "@/lib/data/template-data";
 import { HiOutlinePhotograph } from "react-icons/hi";
 import { ChoosePhotoModal } from "./choosePhotoModal";
 import { Brand } from "@/lib/data/brand";
-import { Menu } from "@/lib/data/menu";
+import { Menu, Variant } from "@/lib/data/menu";
 import { Category } from "@/lib/data/categories";
 import { Product } from "@/lib/data/products";
 import Link from "next/link";
@@ -66,8 +67,33 @@ export function MenuViewer({
     titleFont,
     titleMargin,
     titleSize,
+    categoryVariant,
+    productVariant,
   } = menu.template ? { ...templateToMenu[menu.template], ...menu } : menu;
   const [categoryId, setCategoryId] = useState<string | undefined>(undefined);
+  function getVariantStyle(
+    variant: Variant,
+    color: string,
+    backgroundColor: string
+  ): Partial<BoxProps> {
+    if (variant === "bordered") {
+      return {
+        border: `1px solid ${color}`,
+        color,
+      };
+    } else if (variant === "underlined") {
+      return {
+        borderBottom: `1px solid ${color}`,
+        color,
+      };
+    } else if (variant === "inverse") {
+      return {
+        color: backgroundColor,
+        backgroundColor: color,
+      };
+    }
+    return { color };
+  }
   return (
     <>
       {!inEdit && (
@@ -86,7 +112,7 @@ export function MenuViewer({
         className={styles.menu}
         backgroundColor={backgroundColor}
       >
-        <Center paddingLeft="20px" paddingRight="20px">
+        <Center paddingLeft="15px" paddingRight="15px">
           <Heading
             color={brandColor}
             size={brandSize}
@@ -112,36 +138,63 @@ export function MenuViewer({
                 />
               )}
               <Box
-                paddingLeft="20px"
-                paddingRight="20px"
                 key={`cb-${category.id}`}
+                paddingLeft="10px"
+                paddingRight="10px"
               >
                 <Heading
                   marginTop={!category.background ? titleMargin : 0}
-                  color={titleColor}
                   size={titleSize}
                   as="h1"
                   fontFamily={titleFont}
+                  paddingTop="10px"
+                  paddingBottom="10px"
+                  paddingLeft="5px"
+                  paddingRight="5px"
+                  {...getVariantStyle(
+                    categoryVariant,
+                    titleColor,
+                    backgroundColor
+                  )}
                 >
                   {category.title}
                   {inEdit && (
                     <IconButton
                       icon={<HiOutlinePhotograph />}
-                      color={titleColor}
+                      color={
+                        categoryVariant === "inverse"
+                          ? backgroundColor
+                          : titleColor
+                      }
                       aria-label="design"
                       variant="outline"
                       size="md"
                       onClick={() => setCategoryId(category.id)}
                       _hover={{
-                        background: titleColor,
-                        color: backgroundColor,
+                        background:
+                          categoryVariant === "inverse"
+                            ? backgroundColor
+                            : titleColor,
+                        color:
+                          categoryVariant === "inverse"
+                            ? titleColor
+                            : backgroundColor,
                       }}
                       borderRadius="50%"
                       float="right"
                     />
                   )}
                 </Heading>
-                <Grid templateColumns="repeat(5, 1fr)">
+                <Grid
+                  templateColumns="repeat(5, 1fr)"
+                  paddingLeft="5px"
+                  paddingRight="5px"
+                  {...getVariantStyle(
+                    productVariant,
+                    nameColor,
+                    backgroundColor
+                  )}
+                >
                   {products
                     .filter((p) => p.categoryId === category.id)
                     .map((product, i) => (
@@ -152,7 +205,6 @@ export function MenuViewer({
                         >
                           <Heading
                             fontFamily={contentFont}
-                            color={nameColor}
                             as="h2"
                             size={nameSize}
                           >
@@ -167,23 +219,33 @@ export function MenuViewer({
                             display="flex"
                             fontFamily={contentFont}
                             justifyContent="flex-end"
-                            color={nameColor}
                             as="h2"
                             size={nameSize}
                           >
                             € {product.price.toFixed(2)}
                           </Heading>
                         </GridItem>
-                        <GridItem colSpan={{ base: 3, md: 4 }}>
-                          <Text
-                            fontFamily={contentFont}
-                            fontSize={descriptionSize}
-                            color={descriptionColor}
-                          >
-                            <TextWithLineBreaks text={product.description} />
-                          </Text>
-                        </GridItem>
-                        <GridItem colSpan={{ base: 2, md: 1 }}></GridItem>
+                        {product.description &&
+                          product.description.length > 0 && (
+                            <>
+                              <GridItem colSpan={{ base: 3, md: 4 }}>
+                                <Text
+                                  fontFamily={contentFont}
+                                  fontSize={descriptionSize}
+                                  color={
+                                    productVariant === "inverse"
+                                      ? backgroundColor
+                                      : descriptionColor
+                                  }
+                                >
+                                  <TextWithLineBreaks
+                                    text={product.description}
+                                  />
+                                </Text>
+                              </GridItem>
+                              <GridItem colSpan={{ base: 2, md: 1 }}></GridItem>
+                            </>
+                          )}
                       </Fragment>
                     ))}
                 </Grid>
