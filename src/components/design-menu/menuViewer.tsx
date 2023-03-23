@@ -30,6 +30,7 @@ import { Menu } from "@/lib/data/menu";
 import { Category } from "@/lib/data/categories";
 import { Product } from "@/lib/data/products";
 import Link from "next/link";
+import { TextWithLineBreaks } from "../commons/textWithLineBreaks";
 
 interface DesignMenuViewer {
   categories: Category[];
@@ -179,7 +180,7 @@ export function MenuViewer({
                             fontSize={descriptionSize}
                             color={descriptionColor}
                           >
-                            {product.description}
+                            <TextWithLineBreaks text={product.description} />
                           </Text>
                         </GridItem>
                         <GridItem colSpan={{ base: 2, md: 1 }}></GridItem>

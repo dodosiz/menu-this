@@ -12,6 +12,7 @@ import {
   SwapResult,
   UpdateProductResult,
 } from "@/lib/data/products";
+import { TextWithLineBreaks } from "@/components/commons/textWithLineBreaks";
 
 interface ProductsListProps {
   categoryId: string;
@@ -132,7 +133,7 @@ export function ProductsList({
                   </GridItem>
                   <GridItem colSpan={{ base: 3, md: 4 }}>
                     <Text fontSize="md" className={styles.product_text}>
-                      {product.description}
+                      <TextWithLineBreaks text={product.description} />
                     </Text>
                   </GridItem>
                 </Grid>
