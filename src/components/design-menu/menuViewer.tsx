@@ -99,12 +99,12 @@ export function MenuViewer({
   function getProductLeftColumnWidth(
     product: Product
   ): ResponsiveValue<number | "auto"> {
-    return product.secondPrice ? { base: 6, md: 7 } : { base: 8, md: 8 };
+    return product.secondPrice ? { base: 5, md: 7 } : { base: 8, md: 8 };
   }
   function getProductRightColumnWidth(
     product: Product
   ): ResponsiveValue<number | "auto"> {
-    return product.secondPrice ? { base: 4, md: 3 } : { base: 2, md: 2 };
+    return product.secondPrice ? { base: 5, md: 3 } : { base: 2, md: 2 };
   }
   return (
     <>
