@@ -20,6 +20,7 @@ import {
   Heading,
   IconButton,
   Image,
+  ResponsiveValue,
   Text,
 } from "@chakra-ui/react";
 import styles from "@/styles/components/design-menu/designMenuViewer.module.css";
@@ -94,6 +95,16 @@ export function MenuViewer({
       };
     }
     return { color };
+  }
+  function getProductLeftColumnWidth(
+    product: Product
+  ): ResponsiveValue<number | "auto"> {
+    return product.secondPrice ? { base: 6, md: 7 } : { base: 8, md: 8 };
+  }
+  function getProductRightColumnWidth(
+    product: Product
+  ): ResponsiveValue<number | "auto"> {
+    return product.secondPrice ? { base: 4, md: 3 } : { base: 2, md: 2 };
   }
   return (
     <>
@@ -203,7 +214,7 @@ export function MenuViewer({
                       <Fragment key={`gi-${product.id}`}>
                         <GridItem
                           marginTop={i > 0 ? nameMargin : nameTitleMargin}
-                          colSpan={{ base: 4, md: 6 }}
+                          colSpan={getProductLeftColumnWidth(product)}
                         >
                           <Heading
                             fontFamily={contentFont}
@@ -215,7 +226,7 @@ export function MenuViewer({
                         </GridItem>
                         <GridItem
                           marginTop={i > 0 ? nameMargin : nameTitleMargin}
-                          colSpan={{ base: 6, md: 4 }}
+                          colSpan={getProductRightColumnWidth(product)}
                         >
                           <Heading
                             display="flex"
@@ -230,7 +241,9 @@ export function MenuViewer({
                         {product.description &&
                           product.description.length > 0 && (
                             <>
-                              <GridItem colSpan={{ base: 4, md: 6 }}>
+                              <GridItem
+                                colSpan={getProductLeftColumnWidth(product)}
+                              >
                                 <Text
                                   fontFamily={contentFont}
                                   fontSize={descriptionSize}
@@ -245,7 +258,9 @@ export function MenuViewer({
                                   />
                                 </Text>
                               </GridItem>
-                              <GridItem colSpan={{ base: 6, md: 4 }}></GridItem>
+                              <GridItem
+                                colSpan={getProductRightColumnWidth(product)}
+                              ></GridItem>
                             </>
                           )}
                       </Fragment>
