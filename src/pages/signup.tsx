@@ -60,7 +60,7 @@ export default function SignUp() {
         )}
         {!!user && !user.emailVerified && (
           <Heading className="main_heading" size="xl" as="h1">
-            Please confirm your email address.
+            Check in your inbox to confirm your email, if nothing is there check also the spam folder.
           </Heading>
         )}
         {!user && (
