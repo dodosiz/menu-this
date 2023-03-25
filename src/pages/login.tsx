@@ -1,5 +1,12 @@
 import { useRouter } from "next/router";
-import { Button, Container, Heading, Input } from "@chakra-ui/react";
+import {
+  Button,
+  Container,
+  Heading,
+  Input,
+  Link,
+  VStack,
+} from "@chakra-ui/react";
 import { Layout } from "@/components/commons/layout";
 import styles from "@/styles/signup.module.css";
 import { PasswordInput } from "@/components/commons/passwordInput";
@@ -9,6 +16,7 @@ import { Notification } from "@/components/commons/notification";
 import { FcGoogle } from "react-icons/fc";
 import { auth, provider } from "@/lib/config/firebase";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import NextLink from "next/link";
 
 export default function Login() {
   const user = auth.currentUser;
@@ -93,6 +101,14 @@ export default function Login() {
               Log in with Google
             </Button>
           </form>
+          <VStack alignItems="left">
+            <Link as={NextLink} href="/signup">
+              {"Don't have an account? Sign up first."}
+            </Link>
+            <Link as={NextLink} href="/resetPassword">
+              {"Forgot your password? Click here to reset your password."}
+            </Link>
+          </VStack>
         </Container>
       </>
     </Layout>

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { Button, Container, Heading, Input } from "@chakra-ui/react";
+import { Button, Container, Heading, Input, Link } from "@chakra-ui/react";
 import { Layout } from "@/components/commons/layout";
 import { FormEvent, useState } from "react";
 import styles from "@/styles/signup.module.css";
@@ -11,6 +11,7 @@ import {
   sendEmailVerification,
 } from "firebase/auth";
 import { auth } from "@/lib/config/firebase";
+import NextLink from "next/link";
 
 export default function SignUp() {
   const router = useRouter();
@@ -60,7 +61,8 @@ export default function SignUp() {
         )}
         {!!user && !user.emailVerified && (
           <Heading className="main_heading" size="xl" as="h1">
-            Check in your inbox to confirm your email, if nothing is there check also the spam folder.
+            Check in your inbox to confirm your email, if nothing is there check
+            also the spam folder.
           </Heading>
         )}
         {!user && (
@@ -99,6 +101,9 @@ export default function SignUp() {
                 Sign up
               </Button>
             </form>
+            <Link as={NextLink} href="/login">
+              {"Already have an account? Log in."}
+            </Link>
           </Container>
         )}
       </>
