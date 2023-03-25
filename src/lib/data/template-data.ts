@@ -10,8 +10,8 @@ export const BASE_MENU: Omit<Menu, "userId" | "template"> = {
   nameMargin: 10,
   nameTitleMargin: 50,
   brandSize: "2xl",
-  titleSize: "lg",
-  nameSize: "md",
+  titleSize: "md",
+  nameSize: "sm",
   descriptionSize: "1em",
   brandFont: "'Open Sans', sans-serif",
   titleFont: "'Open Sans', sans-serif",
@@ -132,90 +132,188 @@ interface ImageData {
 type ImageDataMap = { [k: string]: ImageData };
 
 export const BACKGROUND_IMG: { [k: string]: ImageDataMap } = {
-  Burger: {
-    burger: {
-      path: "/background/burger.jpg",
-      alt: "A juicy burger",
+  Beer: {
+    beer1: {
+      path: "/background/beer/beer1.jpg",
+      alt: "Beers variety on table",
     },
-    burger_2: {
-      path: "/background/burger_2.jpg",
-      alt: "Double beef burger",
+    beer2: {
+      path: "/background/beer/beer2.jpg",
+      alt: "A 0,5 liter beer",
     },
-  },
-  "Meat and grill": {
-    steak: {
-      path: "/background/steak.jpg",
-      alt: "Steak",
+    beer3: {
+      path: "/background/beer/beer3.jpg",
+      alt: "Beer with nice foam",
     },
-    steak_2: {
-      path: "/background/steak_2.jpg",
-      alt: "Steak",
+    beer4: {
+      path: "/background/beer/beer4.jpg",
+      alt: "Beers variety on table",
     },
-    hot_dog: {
-      path: "/background/hot_dog.jpg",
-      alt: "Hot dogs",
+    beer5: {
+      path: "/background/beer/beer5.jpg",
+      alt: "Blonde beers",
     },
-  },
-  Italian: {
-    spaghetti: {
-      path: "/background/spaghetti.jpg",
-      alt: "Spaghetti",
-    },
-    risotto: {
-      path: "/background/risotto.jpg",
-      alt: "Risotto",
-    },
-    pizza: {
-      path: "/background/pizza.jpg",
-      alt: "Pizza",
-    },
-    pizza_2: {
-      path: "/background/pizza_2.jpg",
-      alt: "Pizza",
+    beer6: {
+      path: "/background/beer/beer6.jpg",
+      alt: "Beer tasting",
     },
   },
   Wine: {
-    red_wine: {
-      path: "/background/red_wine.jpg",
-      alt: "Red wine",
+    wine1: {
+      path: "/background/wine/wine1.jpg",
+      alt: "Glasses of wine on barel",
     },
-    white_wine: {
-      path: "/background/white_wine.jpg",
-      alt: "White wine",
+    wine2: {
+      path: "/background/wine/wine2.jpg",
+      alt: "Three glasses of white wine",
+    },
+    wine3: {
+      path: "/background/wine/wine3.jpg",
+      alt: "Red wine pouring in glass",
+    },
+    wine4: {
+      path: "/background/wine/wine4.jpg",
+      alt: "Red wine pouring in glass",
+    },
+    wine5: {
+      path: "/background/wine/wine5.jpg",
+      alt: "Wine by the beach",
+    },
+    wine6: {
+      path: "/background/wine/wine6.jpg",
+      alt: "Two glasses of red wine",
     },
   },
-  Beer: {
-    beer: {
-      path: "/background/beer.jpg",
-      alt: "Blonde beer",
+  Coffee: {
+    coffee1: {
+      path: "/background/coffee/coffee1.jpg",
+      alt: "Esspresso with coffee beans",
     },
-    beer_2: {
-      path: "/background/beer_2.jpg",
-      alt: "Beer variety",
+    coffee2: {
+      path: "/background/coffee/coffee2.jpg",
+      alt: "Warm esspresso shot",
+    },
+    coffee3: {
+      path: "/background/coffee/coffee3.jpg",
+      alt: "Fiter coffee",
+    },
+    coffee4: {
+      path: "/background/coffee/coffee4.jpg",
+      alt: "Coffee to go",
+    },
+    coffee5: {
+      path: "/background/coffee/coffee5.jpg",
+      alt: "Cold coffee variants",
+    },
+    coffee6: {
+      path: "/background/coffee/coffee6.jpg",
+      alt: "Two esspresso shots",
     },
   },
-  "Coffee and tea": {
-    coffee: {
-      path: "/background/coffee.jpg",
-      alt: "Cold coffee",
+  Tea: {
+    tea1: {
+      path: "/background/tea/tea1.jpg",
+      alt: "Tea with tea pot",
     },
-    coffee_2: {
-      path: "/background/coffee_2.jpg",
-      alt: "Warm coffee",
+    tea2: {
+      path: "/background/tea/tea2.jpg",
+      alt: "Black tea on table",
     },
-    tea: {
-      path: "/background/tea.jpg",
-      alt: "Tea",
+    tea3: {
+      path: "/background/tea/tea3.jpg",
+      alt: "Green tea detox",
+    },
+    tea4: {
+      path: "/background/tea/tea4.jpg",
+      alt: "Black tea with bread",
+    },
+    tea5: {
+      path: "/background/tea/tea5.jpg",
+      alt: "Tea with pot",
+    },
+    tea6: {
+      path: "/background/tea/tea6.jpg",
+      alt: "Black tea",
+    },
+  },
+  Drinks: {
+    drink1: {
+      path: "/background/drinks/drink1.jpg",
+      alt: "Whiskey coctail",
+    },
+    drink2: {
+      path: "/background/drinks/drink2.jpg",
+      alt: "Three exotic coctails",
+    },
+    drink3: {
+      path: "/background/drinks/drink3.jpg",
+      alt: "Whiskey sour",
+    },
+    drink4: {
+      path: "/background/drinks/drink4.jpg",
+      alt: "Three refreshing coctails",
+    },
+    drink5: {
+      path: "/background/drinks/drink5.jpg",
+      alt: "Bottles of drinks",
+    },
+    drink6: {
+      path: "/background/drinks/drink6.jpg",
+      alt: "Red coctail",
+    },
+  },
+  "Meat plates": {
+    grill1: {
+      path: "/background/grill/grill1.jpg",
+      alt: "Steak on grill",
+    },
+    grill2: {
+      path: "/background/grill/grill2.jpg",
+      alt: "Steaks on wood",
+    },
+    grill3: {
+      path: "/background/grill/grill3.jpg",
+      alt: "Hot dogs",
+    },
+    grill4: {
+      path: "/background/grill/grill4.jpg",
+      alt: "Burger with fries",
+    },
+    grill5: {
+      path: "/background/grill/grill5.jpg",
+      alt: "Burger",
+    },
+    grill6: {
+      path: "/background/grill/grill6.jpg",
+      alt: "Meat plate",
     },
   },
   Bread: {
-    bread: {
-      path: "/background/bread.jpg",
-      alt: "Healthy bread",
+    bread1: {
+      path: "/background/bread/bread1.jpg",
+      alt: "Whole grain bread",
     },
-    bread_2: {
-      path: "/background/bread_2.jpg",
-      alt: "Healthy bread",
+    bread2: {
+      path: "/background/bread/bread2.jpg",
+      alt: "Bread",
+    },
+    bread3: {
+      path: "/background/bread/bread3.jpg",
+      alt: "Croisson",
+    },
+  },
+  Salat: {
+    salat1: {
+      path: "/background/salat/salat1.jpg",
+      alt: "Salat with croutons",
+    },
+    salat2: {
+      path: "/background/salat/salat2.jpg",
+      alt: "Salat bowl",
+    },
+    salat3: {
+      path: "/background/salat/salat3.jpg",
+      alt: "Salat variety",
     },
   },
 };

@@ -160,8 +160,8 @@ export function MenuViewer({
                   size={titleSize}
                   as="h1"
                   fontFamily={titleFont}
-                  paddingTop="10px"
-                  paddingBottom="10px"
+                  paddingTop="18px"
+                  paddingBottom="18px"
                   paddingLeft="5px"
                   paddingRight="5px"
                   {...getVariantStyle(
@@ -181,7 +181,7 @@ export function MenuViewer({
                       }
                       aria-label="design"
                       variant="outline"
-                      size="md"
+                      size={titleSize}
                       onClick={() => setCategoryId(category.id)}
                       _hover={{
                         background:
