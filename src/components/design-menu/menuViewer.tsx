@@ -20,6 +20,7 @@ import {
   Heading,
   IconButton,
   Image,
+  Link,
   ResponsiveValue,
   Text,
 } from "@chakra-ui/react";
@@ -31,7 +32,6 @@ import { Brand } from "@/lib/data/brand";
 import { Menu, Variant } from "@/lib/data/menu";
 import { Category } from "@/lib/data/categories";
 import { Product } from "@/lib/data/products";
-import Link from "next/link";
 import { TextWithLineBreaks } from "../commons/textWithLineBreaks";
 import { displayProductPrice } from "../utils";
 
@@ -113,7 +113,7 @@ export function MenuViewer({
           <div>
             Powered by{" "}
             <span className="logo">
-              <Link href="/">DEINLOG</Link>
+              <Link href="https://www.deinlog.com/">DEINLOG</Link>
             </span>
           </div>
         </Center>

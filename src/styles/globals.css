@@ -1,8 +1,11 @@
 :root {
   --main-color: rgb(45, 55, 72);
+  --nav-color: rgb(50, 60, 77);
+  --active-color: rgb(65, 75, 92);
   --secondary-color: rgb(113, 128, 150);
   --logo-color: rgb(49, 151, 149);
   --logo-color-light: rgb(98, 177, 175);
+  --navigation-color: rgb(245, 244, 243);
 }
 
 .main_heading {

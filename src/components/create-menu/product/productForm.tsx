@@ -136,7 +136,7 @@ export function ProductForm({
     <Box className={styles.new_product}>
       <form onSubmit={handleSubmit}>
         <Grid templateColumns="repeat(10, 1fr)" gap={4}>
-          <GridItem colSpan={{ base: 10, sm: 10, md: 8 }}>
+          <GridItem colSpan={{ base: 10, sm: 10, md: 7 }}>
             <Input
               name="name"
               required={true}
@@ -147,7 +147,7 @@ export function ProductForm({
               onChange={(e) => setName(e.target.value)}
             />
           </GridItem>
-          <GridItem colSpan={{ base: 8, sm: 8, md: 1 }}>
+          <GridItem colSpan={{ base: 8, sm: 8, md: 2 }}>
             <NumberInput
               name="price"
               focusBorderColor="teal.200"
@@ -178,7 +178,7 @@ export function ProductForm({
               />
             )}
           </GridItem>
-          <GridItem colSpan={{ base: 10, sm: 10, md: 8 }}>
+          <GridItem colSpan={{ base: 10, sm: 10, md: 7 }}>
             <Textarea
               name="description"
               value={description}
@@ -189,7 +189,7 @@ export function ProductForm({
               maxLength={250}
             />
           </GridItem>
-          <GridItem colSpan={{ base: 8, sm: 8, md: 1 }}>
+          <GridItem colSpan={{ base: 8, sm: 8, md: 2 }}>
             {showSecondPrice && (
               <NumberInput
                 name="second_price"
@@ -224,8 +224,8 @@ export function ProductForm({
               />
             )}
           </GridItem>
-          <GridItem colSpan={{ base: 10, sm: 10, md: 8 }} />
-          <GridItem colSpan={{ base: 10, sm: 10, md: 2 }}>
+          <GridItem colSpan={{ base: 10, sm: 10, md: 7 }} />
+          <GridItem colSpan={{ base: 10, sm: 10, md: 3 }}>
             <Tooltip
               label={
                 products.length >= PRODUCT_LIMIT

@@ -16,7 +16,6 @@
 
 .banner_text {
   color: var(--secondary-color);
-  width: 50vw;
   margin-top: 2rem;
   text-align: justify;
 }
