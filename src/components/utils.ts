@@ -13,3 +13,7 @@ export function displayProductPrice(product: Product) {
     return `${product.price.toFixed(2)}€`;
   }
 }
+
+export function linkActive(path: string) {
+  return !!global.window ? global.window.location.pathname === path : false;
+}
