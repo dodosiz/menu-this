@@ -22,6 +22,7 @@ export default function Home() {
     if (user) {
       setShowVerificationInfo(!user.emailVerified);
       if (user.emailVerified) {
+        setLoading(true);
         fetch(`/api/user/${user.uid}`)
           .then((res) => res.json())
           .then((data: UserStatus) => {
