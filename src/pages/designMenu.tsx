@@ -13,7 +13,7 @@ import { Router } from "next/router";
 import { BASE_MENU, templateToMenu } from "@/lib/data/template-data";
 import styles from "@/styles/designMenu.module.css";
 import { ActionPage } from "@/components/commons/actionPage";
-import { auth } from "@/lib/config/firebase";
+import { auth, storage } from "@/lib/config/firebase";
 import { Brand } from "@/lib/data/brand";
 import { MenuData } from "./api/menu/[userId]";
 import { Category } from "@/lib/data/categories";
@@ -22,6 +22,7 @@ import {
   createMenu as dbCreateMenu,
   updateDesign as dbUpdateDesign,
 } from "@/lib/data/menu";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export default function DesignMenu() {
   const user = auth.currentUser;
@@ -203,6 +204,29 @@ export default function DesignMenu() {
     setBackgroundDirty(true);
   }
 
+  async function uploadImage(categoryId: string, file: File) {
+    const storageRef = ref(storage, `background/${user?.uid}/${categoryId}`);
+    setLoading(true);
+    try {
+      const uploadTask = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(uploadTask.ref);
+      const updatedCategories = categories.map((c) => {
+        return c.id === categoryId
+          ? {
+              ...c,
+              background: downloadURL,
+            }
+          : c;
+      });
+      setLoading(false);
+      setCategories(updatedCategories);
+      setBackgroundDirty(true);
+    } catch {
+      setLoading(false);
+      setErrorMessage("Failed to upload image");
+    }
+  }
+
   return (
     <Layout
       user={user}
@@ -292,6 +316,7 @@ export default function DesignMenu() {
                   <MenuViewer
                     categories={categories}
                     setBackground={setBackground}
+                    uploadImage={uploadImage}
                     products={products}
                     menu={menu}
                     inEdit={true}

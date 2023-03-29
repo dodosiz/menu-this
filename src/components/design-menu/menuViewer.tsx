@@ -38,6 +38,7 @@ import { displayProductPrice } from "../utils";
 interface DesignMenuViewer {
   categories: Category[];
   setBackground?: (_categoryId: string, _background: string | null) => void;
+  uploadImage?: (_categoryId: string, _file: File) => void;
   products: Product[];
   menu: Menu;
   inEdit?: boolean;
@@ -51,6 +52,7 @@ export function MenuViewer({
   inEdit,
   brand,
   setBackground,
+  uploadImage,
 }: DesignMenuViewer) {
   const {
     backgroundColor,
@@ -275,6 +277,7 @@ export function MenuViewer({
             categoryId={categoryId}
             setCategoryId={setCategoryId}
             setBackground={setBackground}
+            uploadImage={uploadImage}
           />
         )}
       </Container>

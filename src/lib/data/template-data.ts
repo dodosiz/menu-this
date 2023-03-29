@@ -325,5 +325,5 @@ export function getImageData(name: string): ImageData {
       return section[name];
     }
   }
-  return { alt: "", path: "" };
+  return { alt: "Uploaded image", path: name };
 }

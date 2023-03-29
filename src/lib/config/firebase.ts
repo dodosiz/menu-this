@@ -6,6 +6,7 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth";
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
+import { connectStorageEmulator, getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_API_KEY,
@@ -18,7 +19,7 @@ const firebaseConfig = {
 };
 
 // change this to activate emulation
-const dev = process.env.NEXT_DEV || false;
+const dev = false;
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -30,8 +31,12 @@ if (dev) {
 
 export const provider = new GoogleAuthProvider();
 
-// DEV
 export const db = dev ? getFirestore() : getFirestore(app);
 if (dev && !(db as any)._settingsFrozen) {
   connectFirestoreEmulator(db, "localhost", 8080);
+}
+
+export const storage = dev ? getStorage() : getStorage(app);
+if (dev) {
+  connectStorageEmulator(storage, "localhost", 9199);
 }
