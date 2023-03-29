@@ -32,8 +32,8 @@ export function UploadImage({
           onChange={(event) => {
             const uploadedFile = event.target.files?.[0];
             if (uploadedFile) {
-              const fileSizeInKB = uploadedFile.size / 1024;
-              if (fileSizeInKB < 500) {
+              const fileSizeInMB = uploadedFile.size / (1024 * 1024);
+              if (fileSizeInMB < 4) {
                 setShowImageSizeWarning(false);
                 setSelectedImage(uploadedFile);
               } else {
@@ -44,7 +44,7 @@ export function UploadImage({
         />
       </InputGroup>
       {showImageSizeWarning && (
-        <Text color="red.500">Image size should be less than 500 KB</Text>
+        <Text color="red.500">Image size should be less than 4 MB</Text>
       )}
       {selectedImage && (
         <Image
