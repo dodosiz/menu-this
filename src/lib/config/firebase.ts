@@ -6,23 +6,19 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth";
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDkId_yr37X52Wcy9X-k9q6YgR3vrs_ILA",
-  authDomain: "deinlog.firebaseapp.com",
-  projectId: "deinlog",
-  storageBucket: "deinlog.appspot.com",
-  messagingSenderId: "983079717547",
-  appId: "1:983079717547:web:e5b305ef9e6dce353805ee",
-  measurementId: "G-NQW3WK9KP9",
+  apiKey: process.env.NEXT_PUBLIC_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_API_ID,
+  measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID,
 };
 
 // change this to activate emulation
-const dev = false;
+const dev = process.env.NEXT_DEV || false;
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
