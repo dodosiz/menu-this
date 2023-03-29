@@ -113,8 +113,8 @@ function OptionButton({
   return (
     <Button
       size="md"
-      height="200px"
-      width="400px"
+      height="100%"
+      width="100%"
       border="2px"
       borderColor="teal.500"
       onClick={onClick}
