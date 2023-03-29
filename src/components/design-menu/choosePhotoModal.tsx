@@ -1,15 +1,7 @@
-import { BACKGROUND_IMG } from "@/lib/data/template-data";
 import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Box,
   Button,
   Grid,
   GridItem,
-  Image,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -18,14 +10,16 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-import styles from "@/styles/designMenu.module.css";
 import { useState } from "react";
 import { Category } from "@/lib/data/categories";
+import { PhotoLibrary } from "./photoLibrary";
+import { UploadImage } from "./uploadImage";
 
 interface ChoosePhotoModalProps {
   categoryId: string | undefined;
   categories: Category[];
   setBackground?: (_categoryId: string, _background: string | null) => void;
+  uploadImage?: (_categoryId: string, _file: File) => void;
   setCategoryId: (_b: string | undefined) => void;
 }
 
@@ -33,11 +27,16 @@ export function ChoosePhotoModal({
   categoryId,
   setCategoryId,
   setBackground,
+  uploadImage,
   categories,
 }: ChoosePhotoModalProps) {
   const category = categories.find((c) => c.id === categoryId);
   const [selectedBackground, setSelectedBackground] = useState<string | null>(
-    category ? category.background : null
+    null
+  );
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [selectedMode, setSelectedMode] = useState<"UPLOAD" | "CHOOSE" | null>(
+    null
   );
   return (
     <Modal
@@ -53,55 +52,45 @@ export function ChoosePhotoModal({
         <ModalCloseButton />
 
         <ModalBody maxHeight="50vh" overflowY="scroll">
-          <Accordion allowMultiple>
-            {Object.keys(BACKGROUND_IMG).map((section) => (
-              <AccordionItem key={section}>
-                <h2>
-                  <AccordionButton
-                    _expanded={{ bg: "teal.500", color: "white" }}
-                    paddingLeft={0}
-                  >
-                    <Box as="span" flex="1" textAlign="left">
-                      {section}
-                    </Box>
-                    <AccordionIcon />
-                  </AccordionButton>
-                </h2>
-                <AccordionPanel paddingLeft={0} pb={4}>
-                  <Grid templateColumns="repeat(3, 1fr)" gap={10}>
-                    {Object.keys(BACKGROUND_IMG[section]).map((id) => (
-                      <GridItem colSpan={{ base: 3, md: 1 }} key={id}>
-                        <Image
-                          className={
-                            id === selectedBackground
-                              ? styles.template_image_active
-                              : styles.template_image
-                          }
-                          id={id === selectedBackground ? "selected" : id}
-                          src={BACKGROUND_IMG[section][id].path}
-                          alt={BACKGROUND_IMG[section][id].alt}
-                          onClick={() => {
-                            if (id === selectedBackground) {
-                              setSelectedBackground(null);
-                            } else {
-                              setSelectedBackground(id);
-                            }
-                          }}
-                        />
-                      </GridItem>
-                    ))}
-                  </Grid>
-                </AccordionPanel>
-              </AccordionItem>
-            ))}
-          </Accordion>
+          {selectedMode === null && (
+            <Grid templateColumns="repeat(2, 1fr)" gap={5}>
+              <GridItem colSpan={{ base: 1 }}>
+                <OptionButton
+                  onClick={() => setSelectedMode("UPLOAD")}
+                  label="Upload image"
+                />
+              </GridItem>
+              <GridItem colSpan={{ base: 1 }}>
+                <OptionButton
+                  onClick={() => setSelectedMode("CHOOSE")}
+                  label="Choose from gallery"
+                />
+              </GridItem>
+            </Grid>
+          )}
+          {selectedMode === "UPLOAD" && (
+            <UploadImage
+              selectedImage={selectedImage}
+              setSelectedImage={setSelectedImage}
+            />
+          )}
+          {selectedMode === "CHOOSE" && (
+            <PhotoLibrary
+              selectedBackground={selectedBackground}
+              setSelectedBackground={setSelectedBackground}
+            />
+          )}
         </ModalBody>
 
         <ModalFooter>
           <Button
             variant="outline"
             onClick={() => {
-              setBackground?.(categoryId!!, selectedBackground);
+              if (categoryId && setBackground && selectedBackground !== null) {
+                setBackground(categoryId, selectedBackground);
+              } else if (categoryId && uploadImage && selectedImage !== null) {
+                uploadImage(categoryId, selectedImage);
+              }
               setCategoryId(undefined);
             }}
             colorScheme="teal"
@@ -111,5 +100,26 @@ export function ChoosePhotoModal({
         </ModalFooter>
       </ModalContent>
     </Modal>
+  );
+}
+
+function OptionButton({
+  onClick,
+  label,
+}: {
+  onClick: () => void;
+  label: string;
+}) {
+  return (
+    <Button
+      size="md"
+      height="200px"
+      width="400px"
+      border="2px"
+      borderColor="teal.500"
+      onClick={onClick}
+    >
+      {label}
+    </Button>
   );
 }
