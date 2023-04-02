@@ -16,7 +16,7 @@ import {
   deleteUserData,
   UserStatus,
 } from "@/lib/data/user";
-import { LeaveAlert } from "@/components/commons/leave-alert";
+import { ConfirmDialog } from "@/components/commons/confirm-dialog";
 import { Notification } from "@/components/commons/notification";
 import { LoadingPage } from "@/components/commons/loadingPage";
 import { Router, useRouter } from "next/router";
@@ -173,7 +173,7 @@ export default function Profile() {
           </Grid>
         )}
         {showDeleteUserConfirm && user && (
-          <LeaveAlert
+          <ConfirmDialog
             title="Delete Profile"
             confirmMessage="Are you sure you want to delete your profile? All your data will be lost."
             isOpen={showDeleteUserConfirm}

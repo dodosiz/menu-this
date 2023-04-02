@@ -18,7 +18,7 @@ interface LeaveAlertProps {
   onConfirm: () => void;
 }
 
-export function LeaveAlert({
+export function ConfirmDialog({
   confirmMessage,
   isOpen,
   title,

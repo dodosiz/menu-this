@@ -12,8 +12,9 @@ import {
   setDoc,
   updateDoc,
 } from "firebase/firestore";
+import { deleteObject, ref } from "firebase/storage";
 import { v4 } from "uuid";
-import { db } from "../config/firebase";
+import { db, storage } from "../config/firebase";
 import { deleteProduct, getProductsForCategory } from "./products";
 
 export const CATEGORY_COLLECTION = "categories";
@@ -132,9 +133,15 @@ export interface DeleteData {
 export async function deleteCategory(data: DeleteData) {
   await deleteDoc(getCategoryDocumentReference(data.userId, data.categoryId));
   const products = await getProductsForCategory(data.userId, data.categoryId);
+  await deleteCategoryImage(data);
   for (const p of products) {
     await deleteProduct({ productId: p.id, userId: data.userId });
   }
+}
+
+async function deleteCategoryImage(data: DeleteData) {
+  const fileRef = ref(storage, `background/${data.userId}/${data.categoryId}`);
+  await deleteObject(fileRef);
 }
 
 export interface SwapData {

@@ -17,7 +17,7 @@ import {
 import { useRouter } from "next/router";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { useState } from "react";
-import { LeaveAlert } from "./leave-alert";
+import { ConfirmDialog } from "./confirm-dialog";
 import { User } from "firebase/auth";
 import { ProfileItems } from "./profileItems";
 import { ActionItems } from "./actionItems";
@@ -116,7 +116,7 @@ export function Layout({
         </div>
       </nav>
       {showConfirm && (
-        <LeaveAlert
+        <ConfirmDialog
           title="Unsaved changes"
           confirmMessage={confirmMessage ?? ""}
           isOpen={showConfirm}

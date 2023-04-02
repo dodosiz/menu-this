@@ -6,12 +6,12 @@
   position: sticky;
   top: 0;
   width: 100%;
-  z-index: 101;
+  z-index: 10;
 }
 
 .sidebar {
   background-color: var(--main-color);
-  z-index: 100;
+  z-index: 9;
   height: 100%;
 }
 
