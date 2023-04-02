@@ -83,19 +83,38 @@ export function ChoosePhotoModal({
         </ModalBody>
 
         <ModalFooter>
+          {(selectedBackground || selectedImage) && (
+            <Button
+              variant="outline"
+              marginRight={5}
+              onClick={() => {
+                if (
+                  categoryId &&
+                  setBackground &&
+                  selectedBackground !== null
+                ) {
+                  setBackground(categoryId, selectedBackground);
+                } else if (
+                  categoryId &&
+                  uploadImage &&
+                  selectedImage !== null
+                ) {
+                  uploadImage(categoryId, selectedImage);
+                }
+                setCategoryId(undefined);
+              }}
+              colorScheme="teal"
+            >
+              Apply
+            </Button>
+          )}
           <Button
             variant="outline"
-            onClick={() => {
-              if (categoryId && setBackground && selectedBackground !== null) {
-                setBackground(categoryId, selectedBackground);
-              } else if (categoryId && uploadImage && selectedImage !== null) {
-                uploadImage(categoryId, selectedImage);
-              }
-              setCategoryId(undefined);
-            }}
-            colorScheme="teal"
+            colorScheme="gray"
+            mr={3}
+            onClick={() => setCategoryId(undefined)}
           >
-            Apply
+            Close
           </Button>
         </ModalFooter>
       </ModalContent>
