@@ -1,13 +1,7 @@
-import {
-  Image,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
-import { AiOutlineCamera } from "react-icons/ai";
+import { IconButton, Image, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
+import { RxCross2 } from "react-icons/rx";
+import FileInput from "../commons/fileInput";
 
 interface UploadImageProps {
   selectedImage: File | null;
@@ -21,14 +15,8 @@ export function UploadImage({
   const [showImageSizeWarning, setShowImageSizeWarning] = useState(false);
   return (
     <VStack alignItems="baseline">
-      <InputGroup>
-        <InputLeftElement pointerEvents="none">
-          <AiOutlineCamera />
-        </InputLeftElement>
-        <Input
-          type="file"
-          accept=".jpg,.png"
-          placeholder="Choose image"
+      {!selectedImage && (
+        <FileInput
           onChange={(event) => {
             const uploadedFile = event.target.files?.[0];
             if (uploadedFile) {
@@ -42,9 +30,19 @@ export function UploadImage({
             }
           }}
         />
-      </InputGroup>
+      )}
       {showImageSizeWarning && (
         <Text color="red.500">Image size should be less than 4 MB</Text>
+      )}
+      {selectedImage && (
+        <IconButton
+          aria-label="remove"
+          icon={<RxCross2 />}
+          variant="outline"
+          colorScheme="gray"
+          onClick={() => setSelectedImage(null)}
+          size="sm"
+        />
       )}
       {selectedImage && (
         <Image

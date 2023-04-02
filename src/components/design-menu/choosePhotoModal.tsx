@@ -54,13 +54,13 @@ export function ChoosePhotoModal({
         <ModalBody maxHeight="50vh" overflowY="scroll">
           {selectedMode === null && (
             <Grid templateColumns="repeat(2, 1fr)" gap={5}>
-              <GridItem colSpan={{ base: 1 }}>
+              <GridItem colSpan={{ base: 2, md: 1 }}>
                 <OptionButton
                   onClick={() => setSelectedMode("UPLOAD")}
                   label="Upload image"
                 />
               </GridItem>
-              <GridItem colSpan={{ base: 1 }}>
+              <GridItem colSpan={{ base: 2, md: 1 }}>
                 <OptionButton
                   onClick={() => setSelectedMode("CHOOSE")}
                   label="Choose from gallery"
@@ -113,7 +113,7 @@ function OptionButton({
   return (
     <Button
       size="md"
-      height="100%"
+      height={100}
       width="100%"
       border="2px"
       borderColor="teal.500"
