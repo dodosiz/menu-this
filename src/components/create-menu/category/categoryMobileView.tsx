@@ -100,6 +100,9 @@ export function CategoryMobileView(props: CategoryMobileViewProps) {
           onOpenConfirm={() => setConfirmOpen(true)}
           onMoveDown={props.onMoveDown}
           onMoveUp={props.onMoveUp}
+          onCreate={() => {
+            setCategoryModalOpen(true);
+          }}
         />
       )}
       {!props.categories.length && (
