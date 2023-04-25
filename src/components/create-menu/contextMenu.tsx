@@ -23,6 +23,7 @@ import {
   AiOutlineArrowRight,
   AiOutlineArrowUp,
 } from "react-icons/ai";
+import { IoMdAdd } from "react-icons/io";
 
 export interface CategoryContextMenuProps {
   confirmTitle: string;
@@ -36,6 +37,7 @@ export interface CategoryContextMenuProps {
   onMoveDown?: () => void;
   onMoveRight?: () => void;
   onMoveLeft?: () => void;
+  onCreate?: () => void;
 }
 
 export function ContextMenu(props: CategoryContextMenuProps) {
@@ -103,6 +105,11 @@ export function ContextMenu(props: CategoryContextMenuProps) {
               icon={<AiOutlineArrowRight />}
             >
               Move Right
+            </MenuItem>
+          )}
+          {props.onCreate && (
+            <MenuItem onClick={props.onCreate} icon={<IoMdAdd />}>
+              Create
             </MenuItem>
           )}
           <MenuItem onClick={props.onEditClick} icon={<RiEditLine />}>
