@@ -14,11 +14,17 @@
   color: var(--logo-color);
 }
 
+.step_heading {
+  color: var(--logo-color);
+  text-align: left;
+  width: 100%;
+}
+
 .banner_text {
   color: var(--secondary-color);
   width: 50vw;
   margin-top: 2rem;
-  text-align: justify;
+  text-align: center;
 }
 
 .banner_button {
@@ -41,6 +47,14 @@
   padding: 10px 0;
 }
 
+.desktop_only {
+  display: block;
+}
+
+.mobile_only {
+  display: none;
+}
+
 @media (max-width: 700px) {
   .grid_item {
     display: flex;
@@ -51,5 +65,11 @@
   }
   .banner_text {
     width: 70vw;
+  }
+  .desktop_only {
+    display: none;
+  }
+  .mobile_only {
+    display: block;
   }
 }

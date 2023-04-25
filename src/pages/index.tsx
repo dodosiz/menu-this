@@ -1,5 +1,5 @@
 import { Layout } from "@/components/layout";
-import { Grid, GridItem, Heading, Link } from "@chakra-ui/react";
+import { Box, Grid, GridItem, Heading, Link, VStack } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
 import styles from "@/styles/home.module.css";
 import { Divider } from "@chakra-ui/react";
@@ -7,8 +7,10 @@ import { Button } from "@chakra-ui/react";
 import { FaArrowRight } from "react-icons/fa";
 import Image from "next/image";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 
 export default function Home() {
+  const router = useRouter();
   return (
     <Layout>
       <>
@@ -17,10 +19,11 @@ export default function Home() {
             Create your <span className={styles.coloured}>online menu</span>
           </Heading>
           <Text className={styles.banner_text} fontSize="md">
-            With <strong className={styles.coloured}>DEINLOG</strong>, you can
-            easily design and customize your own digital menu that is perfect
-            for restaurants, cafes, and other food-related businesses.
-            <br /> Use our tool to create the menu of your business online.
+            Use{" "}
+            <Link as={NextLink} href="https://www.app.deinlog.com/">
+              <strong className={styles.coloured}>DEINLOG</strong>
+            </Link>{" "}
+            to create the perfect menu for your business in just a few clicks!{" "}
           </Text>
           <Button
             className={styles.banner_button}
@@ -29,24 +32,26 @@ export default function Home() {
             rightIcon={<FaArrowRight />}
             minWidth="180px"
             maxWidth="180px"
+            onClick={() => router.push("https://www.app.deinlog.com/")}
           >
-            <Link as={NextLink} href="https://www.app.deinlog.com/">
-              Get started
-            </Link>
+            Get started
           </Button>
         </div>
-        <Divider />
+        <hr />
         <Grid className={styles.grid} templateColumns="repeat(3, 1fr)" gap={4}>
           <GridItem className={styles.grid_item} colSpan={{ base: 3, md: 1 }}>
-            <Text
-              className={styles.banner_text + " " + styles.text_justify}
-              fontSize="md"
-            >
-              Our <strong>menu data management system</strong> is designed to
-              make category and product creation, updating, and deletion as easy
-              and intuitive as possible. With our user-friendly interface, you
-              will be able to manage your menu items quickly and efficiently.
-            </Text>
+            <VStack>
+              <Heading as="h3" fontSize="3xl" className={styles.step_heading}>
+                Step 1
+              </Heading>
+              <Text
+                className={styles.banner_text + " " + styles.text_justify}
+                fontSize="md"
+              >
+                Design and develop a range of products, and organize them into
+                different categories.
+              </Text>
+            </VStack>
           </GridItem>
           <GridItem className={styles.grid_item} colSpan={{ base: 3, md: 1 }}>
             <Image
@@ -66,90 +71,134 @@ export default function Home() {
           </GridItem>
         </Grid>
         <Divider />
-        <Grid className={styles.grid} templateColumns="repeat(3, 1fr)" gap={4}>
-          <GridItem className={styles.grid_item} colSpan={{ base: 3, md: 1 }}>
-            <Image
-              height={400}
-              width={200}
-              src="/screen/screen3.png"
-              alt="Choose templates for your online menu"
-            />
-          </GridItem>
-          <GridItem className={styles.grid_item} colSpan={{ base: 3, md: 1 }}>
-            <Image
-              height={400}
-              width={200}
-              src="/screen/screen4.png"
-              alt="View the design of your online menu"
-            />
-          </GridItem>
-          <GridItem className={styles.grid_item} colSpan={{ base: 3, md: 1 }}>
-            <Text
-              className={styles.banner_text + " " + styles.text_justify}
-              fontSize="md"
-            >
-              Our <strong>templates</strong> are designed to make the process of
-              creating a menu as easy as possible. Simply choose the template
-              that best fits your needs, add your own content, and customize it
-              to your liking. With a few clicks, you can have a
-              professional-looking menu that perfectly represents your brand.
-            </Text>
-          </GridItem>
-        </Grid>
+        <Box className={styles.desktop_only}>
+          <Grid
+            className={styles.grid}
+            templateColumns="repeat(3, 1fr)"
+            gap={4}
+          >
+            <GridItem className={styles.grid_item} colSpan={{ base: 3, md: 1 }}>
+              <Image
+                height={400}
+                width={200}
+                src="/screen/screen3.png"
+                alt="Choose templates for your online menu"
+              />
+            </GridItem>
+            <GridItem className={styles.grid_item} colSpan={{ base: 3, md: 1 }}>
+              <Image
+                height={400}
+                width={200}
+                src="/screen/screen4.png"
+                alt="View the design of your online menu"
+              />
+            </GridItem>
+            <GridItem className={styles.grid_item} colSpan={{ base: 3, md: 1 }}>
+              <VStack>
+                <Heading as="h3" fontSize="3xl" className={styles.step_heading}>
+                  Step 2
+                </Heading>
+                <Text
+                  className={styles.banner_text + " " + styles.text_justify}
+                  fontSize="md"
+                >
+                  Utilize customizable templates and design tools to add a
+                  personalized touch to your menu.
+                </Text>
+              </VStack>
+            </GridItem>
+          </Grid>
+        </Box>
+        <Box className={styles.mobile_only}>
+          <Grid
+            className={styles.grid}
+            templateColumns="repeat(3, 1fr)"
+            gap={4}
+          >
+            <GridItem className={styles.grid_item} colSpan={{ base: 3, md: 1 }}>
+              <VStack>
+                <Heading as="h3" fontSize="3xl" className={styles.step_heading}>
+                  Step 2
+                </Heading>
+                <Text
+                  className={styles.banner_text + " " + styles.text_justify}
+                  fontSize="md"
+                >
+                  Utilize customizable templates and design tools to add a
+                  personalized touch to your menu.
+                </Text>
+              </VStack>
+            </GridItem>
+            <GridItem className={styles.grid_item} colSpan={{ base: 3, md: 1 }}>
+              <Image
+                height={400}
+                width={200}
+                src="/screen/screen3.png"
+                alt="Choose templates for your online menu"
+              />
+            </GridItem>
+            <GridItem className={styles.grid_item} colSpan={{ base: 3, md: 1 }}>
+              <Image
+                height={400}
+                width={200}
+                src="/screen/screen4.png"
+                alt="View the design of your online menu"
+              />
+            </GridItem>
+          </Grid>
+        </Box>
         <Divider />
         <Grid className={styles.grid} templateColumns="repeat(3, 1fr)" gap={4}>
           <GridItem
             className={styles.grid_item + " " + styles.grid_item_column}
             colSpan={{ base: 3, md: 1 }}
           >
-            <Text
-              className={styles.banner_text + " " + styles.text_justify}
-              fontSize="md"
-            >
-              For those who want to take their design to the next level, our app
-              offers powerful <strong>customization tools</strong>. You can
-              choose from a variety of font styles and colors, adjust the
-              layout, and even add your own images to create a truly unique
-              design.
-              <br />
-              <br />
-              Our app also offers the convenience of an{" "}
-              <strong>autogenerated QR code</strong> for your menu. Simply
-              create your menu, and our app will generate a unique QR code that
-              your customers can easily scan with their smartphones. This saves
-              time and makes it easy for your customers to access your menu
-              quickly and efficiently.
-            </Text>
-            <Button
-              className={styles.banner_button}
-              colorScheme="teal"
-              variant="solid"
-              rightIcon={<FaArrowRight />}
-              minWidth="180px"
-              maxWidth="180px"
-            >
-              <Link as={NextLink} href="https://www.app.deinlog.com/">
-                Start creating
-              </Link>
-            </Button>
+            <VStack>
+              <Heading as="h3" fontSize="3xl" className={styles.step_heading}>
+                Step 3
+              </Heading>
+              <Text
+                className={styles.banner_text + " " + styles.text_justify}
+                fontSize="md"
+              >
+                Generate your printable QR code to impress and engage your
+                customers.
+              </Text>
+            </VStack>
           </GridItem>
           <GridItem className={styles.grid_item} colSpan={{ base: 3, md: 1 }}>
             <Image
-              height={400}
-              width={200}
-              src="/screen/screen5.png"
-              alt="Edit the design of your online menu"
-            />
-          </GridItem>
-          <GridItem className={styles.grid_item} colSpan={{ base: 3, md: 1 }}>
-            <Image
-              height={400}
-              width={200}
-              src="/screen/screen6.png"
+              height={800}
+              width={800}
+              src="/screen/qr.PNG"
               alt="Generate the QR code of the online menu"
             />
           </GridItem>
         </Grid>
+        <Divider />
+        <div className={styles.banner}>
+          <Text className={styles.banner_text} fontSize="md">
+            Did we wake up your interest? Take the first step towards
+            digitalizing your menu by trying out{" "}
+            <Link as={NextLink} href="https://www.app.deinlog.com/">
+              <strong className={styles.coloured}>DEINLOG</strong>
+            </Link>{" "}
+            today! Not only is our app completely free, but as a new potential
+            business, we value your feedback to help us improve and provide the
+            best possible service.
+          </Text>
+          <Button
+            className={styles.banner_button}
+            colorScheme="teal"
+            variant="solid"
+            rightIcon={<FaArrowRight />}
+            minWidth="180px"
+            maxWidth="180px"
+            onClick={() => router.push("https://www.app.deinlog.com/")}
+          >
+            Try for free
+          </Button>
+        </div>
       </>
     </Layout>
   );

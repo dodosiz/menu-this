@@ -72,8 +72,17 @@ export function Layout({ children }: LayoutProps) {
       <main className={styles.main}>{children}</main>
       <footer className={styles.footer}>
         <p>
-          <Link href="/privacyPolicy">Privacy Policy</Link> |{" "}
-          <Link href="/cookiePolicy">Cookie Policy</Link>
+          <Link as={NextLink} href="/privacyPolicy">
+            Privacy Policy
+          </Link>{" "}
+          |{" "}
+          <Link as={NextLink} href="/cookiePolicy">
+            Cookie Policy
+          </Link>{" "}
+          |{" "}
+          <Link as={NextLink} href="/whoWeAre">
+            Who we are
+          </Link>
         </p>
         <p>&copy; {new Date().getFullYear()} deinlog.com</p>
       </footer>
@@ -83,12 +92,17 @@ export function Layout({ children }: LayoutProps) {
 
 function MenuItems() {
   return (
-    <Link
-      as={NextLink}
-      href="https://www.app.deinlog.com/"
-      className={styles.nav_item}
-    >
-      App
-    </Link>
+    <>
+      <Link as={NextLink} href="/whoWeAre" className={styles.nav_item}>
+        Who we are
+      </Link>
+      <Link
+        as={NextLink}
+        href="https://www.app.deinlog.com/"
+        className={styles.nav_item}
+      >
+        Try Deinlog
+      </Link>
+    </>
   );
 }
