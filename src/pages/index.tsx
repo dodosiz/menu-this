@@ -185,7 +185,15 @@ export default function Home() {
             </Link>{" "}
             today! Not only is our app completely free, but as a new potential
             business, we value your feedback to help us improve and provide the
-            best possible service.
+            best possible service. You can give us your feedback by filling out
+            this anonymous{" "}
+            <Link
+              as={NextLink}
+              href="https://docs.google.com/forms/d/e/1FAIpQLScv9Bg-98EUGdR3tHEE3Ipq1151GuJWFQ7iXY2dZQC8yRnyIQ/viewform?usp=sf_link"
+            >
+              survey
+            </Link>
+            .
           </Text>
           <Button
             className={styles.banner_button}

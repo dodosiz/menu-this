@@ -47,12 +47,19 @@ export default function Home() {
                 href="https://www.linkedin.com/in/theodossios-aswestopoulos-2199b8116/"
               >
                 LinkedIn
-              </Link>{" "}
-              or{" "}
+              </Link>
+              ,{" "}
               <Link as={NextLink} href="https://github.com/dodosiz">
                 Github
               </Link>{" "}
-              - I value and appreciate any input!
+              or by filling out this anonymous{" "}
+              <Link
+                as={NextLink}
+                href="https://docs.google.com/forms/d/e/1FAIpQLScv9Bg-98EUGdR3tHEE3Ipq1151GuJWFQ7iXY2dZQC8yRnyIQ/viewform?usp=sf_link"
+              >
+                survey
+              </Link>{" "}
+              I value and appreciate any input!
             </Text>
           </GridItem>
         </Grid>
