@@ -84,7 +84,7 @@ export function Layout({ children }: LayoutProps) {
             Who we are
           </Link>
         </p>
-        <p>&copy; {new Date().getFullYear()} deinlog.com</p>
+        <p>&copy; {new Date().getFullYear()} Theodosios Asvestopoulos</p>
       </footer>
     </>
   );
