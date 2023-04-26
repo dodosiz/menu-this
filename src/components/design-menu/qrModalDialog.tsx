@@ -21,7 +21,7 @@ interface QrDialogProps {
   brandTitle: string;
   brandFont: string;
   backgroundColor: string;
-  brandColor: string;
+  descriptionColor: string;
   url: string;
   isOpen: boolean;
   setOpen: (_b: boolean) => void;
@@ -30,7 +30,7 @@ interface QrDialogProps {
 export function QrDialog({
   url,
   backgroundColor,
-  brandColor,
+  descriptionColor,
   brandFont,
   brandTitle,
   isOpen,
@@ -73,7 +73,7 @@ export function QrDialog({
           >
             <Heading
               fontFamily={brandFont}
-              color={brandColor}
+              color={descriptionColor}
               as="h2"
               size="2xl"
               marginBottom={20}
@@ -88,12 +88,14 @@ export function QrDialog({
                 scale: 4,
                 width: 200,
                 color: {
-                  dark: brandColor,
+                  dark: descriptionColor,
                   light: backgroundColor,
                 },
               }}
             />
-            <Text color={brandColor}>Scan the QR code to view our menu.</Text>
+            <Text color={descriptionColor}>
+              Scan the QR code to view our menu.
+            </Text>
           </VStack>
         </ModalBody>
 

@@ -18,64 +18,31 @@ const MENU_COLLECTION = "menu";
 export type Variant = "none" | "inverse" | "bordered" | "underlined";
 
 export class Menu {
-  brandColor: string;
-  titleColor: string;
-  nameColor: string;
   descriptionColor: string;
   backgroundColor: string;
   brandMargin: number;
   titleMargin: number;
-  nameMargin: number;
-  nameTitleMargin: number;
-  brandSize: string;
-  titleSize: string;
-  nameSize: string;
-  descriptionSize: string;
   brandFont: string;
-  titleFont: string;
   contentFont: string;
   categoryVariant: Variant;
-  productVariant: Variant;
   template: string | null;
   constructor(
-    brandColor: string,
-    titleColor: string,
-    nameColor: string,
     descriptionColor: string,
     backgroundColor: string,
     brandMargin: number,
     titleMargin: number,
-    nameMargin: number,
-    nameTitleMargin: number,
-    brandSize: string,
-    titleSize: string,
-    nameSize: string,
-    descriptionSize: string,
     brandFont: string,
-    titleFont: string,
     contentFont: string,
     categoryVariant: Variant,
-    productVariant: Variant,
     template: string | null
   ) {
-    this.brandColor = brandColor;
-    this.titleColor = titleColor;
-    this.nameColor = nameColor;
     this.descriptionColor = descriptionColor;
     this.backgroundColor = backgroundColor;
     this.brandMargin = brandMargin;
     this.titleMargin = titleMargin;
-    this.nameMargin = nameMargin;
-    this.nameTitleMargin = nameTitleMargin;
-    this.brandSize = brandSize;
-    this.titleSize = titleSize;
-    this.nameSize = nameSize;
-    this.descriptionSize = descriptionSize;
     this.brandFont = brandFont;
-    this.titleFont = titleFont;
     this.contentFont = contentFont;
     this.categoryVariant = categoryVariant;
-    this.productVariant = productVariant;
     this.template = template;
   }
 }
@@ -83,47 +50,25 @@ export class Menu {
 const menuConverter: FirestoreDataConverter<Menu> = {
   toFirestore: (menu) => {
     return {
-      brandColor: menu.brandColor,
-      titleColor: menu.titleColor,
-      nameColor: menu.nameColor,
       descriptionColor: menu.descriptionColor,
       backgroundColor: menu.backgroundColor,
       brandMargin: menu.brandMargin,
       titleMargin: menu.titleMargin,
-      nameMargin: menu.nameMargin,
-      nameTitleMargin: menu.nameTitleMargin,
-      brandSize: menu.brandSize,
-      titleSize: menu.titleSize,
-      nameSize: menu.nameSize,
-      descriptionSize: menu.descriptionSize,
       brandFont: menu.brandFont,
-      titleFont: menu.titleFont,
       contentFont: menu.contentFont,
       categoryVariant: menu.categoryVariant,
-      productVariant: menu.productVariant,
     };
   },
   fromFirestore: (snapshot, options) => {
     const menu = snapshot.data(options);
     return new Menu(
-      menu.brandColor,
-      menu.titleColor,
-      menu.nameColor,
       menu.descriptionColor,
       menu.backgroundColor,
       menu.brandMargin,
       menu.titleMargin,
-      menu.nameMargin,
-      menu.nameTitleMargin,
-      menu.brandSize,
-      menu.titleSize,
-      menu.nameSize,
-      menu.descriptionSize,
       menu.brandFont,
-      menu.titleFont,
       menu.contentFont,
       menu.categoryVariant,
-      menu.productVariant,
       menu.template
     );
   },
@@ -157,47 +102,25 @@ export async function getMenuOrThrow(userId: string): Promise<Menu> {
 }
 
 export interface MenuDTO {
-  brandColor: string;
-  titleColor: string;
-  nameColor: string;
   descriptionColor: string;
   backgroundColor: string;
   brandMargin: number;
   titleMargin: number;
-  nameMargin: number;
-  nameTitleMargin: number;
-  brandSize: string;
-  titleSize: string;
-  nameSize: string;
-  descriptionSize: string;
   brandFont: string;
-  titleFont: string;
   contentFont: string;
   categoryVariant: Variant;
-  productVariant: Variant;
   userId: string;
 }
 
 export async function createMenu(data: MenuDTO) {
   const document: Menu = {
-    brandColor: data.brandColor,
-    titleColor: data.titleColor,
-    nameColor: data.nameColor,
     descriptionColor: data.descriptionColor,
     backgroundColor: data.backgroundColor,
     brandMargin: data.brandMargin,
     titleMargin: data.titleMargin,
-    nameMargin: data.nameMargin,
-    nameTitleMargin: data.nameTitleMargin,
-    brandSize: data.brandSize,
-    titleSize: data.titleSize,
-    nameSize: data.nameSize,
-    descriptionSize: data.descriptionSize,
     brandFont: data.brandFont,
-    titleFont: data.titleFont,
     contentFont: data.contentFont,
     categoryVariant: data.categoryVariant,
-    productVariant: data.productVariant,
     template: null,
   };
   await setDoc(doc(db, MENU_COLLECTION, data.userId), document);
@@ -214,24 +137,13 @@ export async function updateDesign(data: UpdateDesignData) {
   await updateDoc(getMenuDocumentReference(data.menu.userId), {
     ...menu,
     template: data.template,
-    brandColor: data.menu.brandColor,
-    titleColor: data.menu.titleColor,
-    nameColor: data.menu.nameColor,
     descriptionColor: data.menu.descriptionColor,
     backgroundColor: data.menu.backgroundColor,
     brandMargin: data.menu.brandMargin,
     titleMargin: data.menu.titleMargin,
-    nameMargin: data.menu.nameMargin,
-    nameTitleMargin: data.menu.nameTitleMargin,
-    brandSize: data.menu.brandSize,
-    titleSize: data.menu.titleSize,
-    nameSize: data.menu.nameSize,
-    descriptionSize: data.menu.descriptionSize,
     brandFont: data.menu.brandFont,
-    titleFont: data.menu.titleFont,
     contentFont: data.menu.contentFont,
     categoryVariant: data.menu.categoryVariant,
-    productVariant: data.menu.productVariant,
   });
   // update background images
   for (const c of data.categories) {

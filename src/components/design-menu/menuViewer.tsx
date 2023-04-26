@@ -45,6 +45,9 @@ interface DesignMenuViewer {
   brand: Brand;
 }
 
+const PRODUCT_NAME_MARGIN = 5;
+const PRODUCTS_TO_CATEGORY_MARGIN = 50;
+
 export function MenuViewer({
   categories,
   products,
@@ -58,21 +61,10 @@ export function MenuViewer({
     backgroundColor,
     contentFont,
     descriptionColor,
-    descriptionSize,
-    nameColor,
-    nameMargin,
-    nameSize,
-    nameTitleMargin,
-    brandColor,
     brandMargin,
-    brandSize,
     brandFont,
-    titleColor,
-    titleFont,
     titleMargin,
-    titleSize,
     categoryVariant,
-    productVariant,
   } = menu.template ? { ...templateToMenu[menu.template], ...menu } : menu;
   const [categoryId, setCategoryId] = useState<string | undefined>(undefined);
   function getVariantStyle(
@@ -129,8 +121,8 @@ export function MenuViewer({
       >
         <Center paddingLeft="15px" paddingRight="15px">
           <Heading
-            color={brandColor}
-            size={brandSize}
+            color={descriptionColor}
+            size="2xl"
             as="h1"
             fontFamily={brandFont}
             marginTop={brandMargin}
@@ -146,7 +138,7 @@ export function MenuViewer({
                 <Image
                   marginTop={titleMargin}
                   position="relative"
-                  marginBottom={nameMargin}
+                  marginBottom={PRODUCT_NAME_MARGIN}
                   width="100vw"
                   src={getImageData(category.background).path}
                   alt={getImageData(category.background).alt}
@@ -159,16 +151,16 @@ export function MenuViewer({
               >
                 <Heading
                   marginTop={!category.background ? titleMargin : 0}
-                  size={titleSize}
+                  size="lg"
                   as="h1"
-                  fontFamily={titleFont}
+                  fontFamily={contentFont}
                   paddingTop="18px"
                   paddingBottom="18px"
                   paddingLeft="5px"
                   paddingRight="5px"
                   {...getVariantStyle(
                     categoryVariant,
-                    titleColor,
+                    descriptionColor,
                     backgroundColor
                   )}
                 >
@@ -179,20 +171,20 @@ export function MenuViewer({
                       color={
                         categoryVariant === "inverse"
                           ? backgroundColor
-                          : titleColor
+                          : descriptionColor
                       }
                       aria-label="design"
                       variant="outline"
-                      size={titleSize}
+                      size="lg"
                       onClick={() => setCategoryId(category.id)}
                       _hover={{
                         background:
                           categoryVariant === "inverse"
                             ? backgroundColor
-                            : titleColor,
+                            : descriptionColor,
                         color:
                           categoryVariant === "inverse"
-                            ? titleColor
+                            ? descriptionColor
                             : backgroundColor,
                       }}
                       borderRadius="50%"
@@ -204,30 +196,30 @@ export function MenuViewer({
                   templateColumns="repeat(10, 1fr)"
                   paddingLeft="5px"
                   paddingRight="5px"
-                  {...getVariantStyle(
-                    productVariant,
-                    nameColor,
-                    backgroundColor
-                  )}
+                  color={descriptionColor}
                 >
                   {products
                     .filter((p) => p.categoryId === category.id)
                     .map((product, i) => (
                       <Fragment key={`gi-${product.id}`}>
                         <GridItem
-                          marginTop={i > 0 ? nameMargin : nameTitleMargin}
+                          marginTop={
+                            i > 0
+                              ? PRODUCT_NAME_MARGIN
+                              : PRODUCTS_TO_CATEGORY_MARGIN
+                          }
                           colSpan={getProductLeftColumnWidth(product)}
                         >
-                          <Heading
-                            fontFamily={contentFont}
-                            as="h2"
-                            size={nameSize}
-                          >
+                          <Heading fontFamily={contentFont} as="h2" size="sm">
                             {product.name}
                           </Heading>
                         </GridItem>
                         <GridItem
-                          marginTop={i > 0 ? nameMargin : nameTitleMargin}
+                          marginTop={
+                            i > 0
+                              ? PRODUCT_NAME_MARGIN
+                              : PRODUCTS_TO_CATEGORY_MARGIN
+                          }
                           colSpan={getProductRightColumnWidth(product)}
                         >
                           <Heading
@@ -235,7 +227,7 @@ export function MenuViewer({
                             fontFamily={contentFont}
                             justifyContent="flex-end"
                             as="h2"
-                            size={nameSize}
+                            size="sm"
                           >
                             {displayProductPrice(product)}
                           </Heading>
@@ -248,12 +240,8 @@ export function MenuViewer({
                               >
                                 <Text
                                   fontFamily={contentFont}
-                                  fontSize={descriptionSize}
-                                  color={
-                                    productVariant === "inverse"
-                                      ? backgroundColor
-                                      : descriptionColor
-                                  }
+                                  fontSize="1em"
+                                  color={descriptionColor}
                                 >
                                   <TextWithLineBreaks
                                     text={product.description}
@@ -271,16 +259,16 @@ export function MenuViewer({
               </Box>
             </>
           ))}
-        {categoryId !== undefined && (
-          <ChoosePhotoModal
-            categories={categories}
-            categoryId={categoryId}
-            setCategoryId={setCategoryId}
-            setBackground={setBackground}
-            uploadImage={uploadImage}
-          />
-        )}
       </Container>
+      {categoryId !== undefined && (
+        <ChoosePhotoModal
+          categories={categories}
+          categoryId={categoryId}
+          setCategoryId={setCategoryId}
+          setBackground={setBackground}
+          uploadImage={uploadImage}
+        />
+      )}
     </>
   );
 }

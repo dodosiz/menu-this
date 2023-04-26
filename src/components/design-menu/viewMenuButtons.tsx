@@ -12,7 +12,7 @@ interface ViewMenuButtonsProps {
   userId: string;
   brandFont: string;
   backgroundColor: string;
-  brandColor: string;
+  descriptionColor: string;
   updateDesign: () => {};
 }
 
@@ -20,7 +20,7 @@ export function ViewMenuButtons({
   brandTitle,
   userId,
   backgroundColor,
-  brandColor,
+  descriptionColor,
   brandFont,
   updateDesign,
 }: ViewMenuButtonsProps) {
@@ -32,7 +32,7 @@ export function ViewMenuButtons({
       <QrDialog
         brandTitle={brandTitle}
         backgroundColor={backgroundColor}
-        brandColor={brandColor}
+        descriptionColor={descriptionColor}
         brandFont={brandFont}
         isOpen={showQR}
         setOpen={setShowQR}
