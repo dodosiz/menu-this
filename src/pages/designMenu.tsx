@@ -123,24 +123,13 @@ export default function DesignMenu() {
     setLoading(true);
     try {
       const updateMenuData: MenuDTO = {
-        brandColor: menu.brandColor,
-        titleColor: menu.titleColor,
-        nameColor: menu.nameColor,
         descriptionColor: menu.descriptionColor,
         backgroundColor: menu.backgroundColor,
         brandMargin: menu.brandMargin,
         titleMargin: menu.titleMargin,
-        nameMargin: menu.nameMargin,
-        nameTitleMargin: menu.nameTitleMargin,
-        brandSize: menu.brandSize,
-        titleSize: menu.titleSize,
-        nameSize: menu.nameSize,
-        descriptionSize: menu.descriptionSize,
         brandFont: menu.brandFont,
-        titleFont: menu.titleFont,
         contentFont: menu.contentFont,
         categoryVariant: menu.categoryVariant,
-        productVariant: menu.productVariant,
         userId: user.uid,
       };
       const data: UpdateDesignData = {
@@ -165,24 +154,13 @@ export default function DesignMenu() {
     }
     try {
       const data: MenuDTO = {
-        brandColor: menu.brandColor,
-        titleColor: menu.titleColor,
-        nameColor: menu.nameColor,
         descriptionColor: menu.descriptionColor,
         backgroundColor: menu.backgroundColor,
         brandMargin: menu.brandMargin,
         titleMargin: menu.titleMargin,
-        nameMargin: menu.nameMargin,
-        nameTitleMargin: menu.nameTitleMargin,
-        brandSize: menu.brandSize,
-        titleSize: menu.titleSize,
-        nameSize: menu.nameSize,
-        descriptionSize: menu.descriptionSize,
         brandFont: menu.brandFont,
-        titleFont: menu.titleFont,
         contentFont: menu.contentFont,
         categoryVariant: menu.categoryVariant,
-        productVariant: menu.productVariant,
         userId: user.uid,
       };
       await dbCreateMenu(data);
@@ -343,7 +321,7 @@ export default function DesignMenu() {
                     updateDesign={updateDesign}
                     brandTitle={brand.title}
                     backgroundColor={menu.backgroundColor}
-                    brandColor={menu.brandColor}
+                    descriptionColor={menu.descriptionColor}
                     brandFont={menu.brandFont}
                   />
                 </GridItem>

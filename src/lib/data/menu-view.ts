@@ -21,24 +21,13 @@ export async function getMenuViewData(userId: string): Promise<MenuViewData> {
   const brand = await getBrand(userId);
   return {
     menu: {
-      brandColor: menu.brandColor,
-      titleColor: menu.titleColor,
-      nameColor: menu.nameColor,
       descriptionColor: menu.descriptionColor,
       backgroundColor: menu.backgroundColor,
       brandMargin: menu.brandMargin,
       titleMargin: menu.titleMargin,
-      nameMargin: menu.nameMargin,
-      nameTitleMargin: menu.nameTitleMargin,
-      brandSize: menu.brandSize,
-      titleSize: menu.titleSize,
-      nameSize: menu.nameSize,
-      descriptionSize: menu.descriptionSize,
       brandFont: menu.brandFont,
-      titleFont: menu.titleFont,
       contentFont: menu.contentFont,
       categoryVariant: menu.categoryVariant,
-      productVariant: menu.productVariant,
       template: menu.template,
     },
     categories: categories.map((c) => ({
