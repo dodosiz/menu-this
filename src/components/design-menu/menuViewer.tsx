@@ -151,7 +151,7 @@ export function MenuViewer({
               >
                 <Heading
                   marginTop={!category.background ? titleMargin : 0}
-                  size="lg"
+                  size="md"
                   as="h1"
                   fontFamily={contentFont}
                   paddingTop="18px"
@@ -175,7 +175,7 @@ export function MenuViewer({
                       }
                       aria-label="design"
                       variant="outline"
-                      size="lg"
+                      size="md"
                       onClick={() => setCategoryId(category.id)}
                       _hover={{
                         background:
@@ -200,15 +200,27 @@ export function MenuViewer({
                 >
                   {products
                     .filter((p) => p.categoryId === category.id)
-                    .map((product, i) => (
+                    .map((product) => (
                       <Fragment key={`gi-${product.id}`}>
                         <GridItem
                           marginTop={5}
                           colSpan={getProductLeftColumnWidth(product)}
                         >
-                          <Heading fontFamily={contentFont} as="h2" size="sm">
+                          <Heading fontFamily={contentFont} as="h2" size="xs">
                             {product.name}
                           </Heading>
+                          {product.description &&
+                            product.description.length > 0 && (
+                              <Text
+                                fontFamily={contentFont}
+                                fontSize="0.85em"
+                                color={descriptionColor}
+                              >
+                                <TextWithLineBreaks
+                                  text={product.description}
+                                />
+                              </Text>
+                            )}
                         </GridItem>
                         <GridItem
                           marginTop={5}
@@ -219,7 +231,7 @@ export function MenuViewer({
                             fontFamily={contentFont}
                             justifyContent="flex-end"
                             as="h2"
-                            size="sm"
+                            size="xs"
                           >
                             {displayProductPrice(product)}
                           </Heading>
@@ -228,30 +240,6 @@ export function MenuViewer({
                           marginTop={5}
                           colSpan={getGapColumnWidth()}
                         ></GridItem>
-                        {product.description &&
-                          product.description.length > 0 && (
-                            <>
-                              <GridItem
-                                colSpan={getProductLeftColumnWidth(product)}
-                              >
-                                <Text
-                                  fontFamily={contentFont}
-                                  fontSize="1em"
-                                  color={descriptionColor}
-                                >
-                                  <TextWithLineBreaks
-                                    text={product.description}
-                                  />
-                                </Text>
-                              </GridItem>
-                              <GridItem
-                                colSpan={getProductRightColumnWidth(product)}
-                              ></GridItem>
-                              <GridItem
-                                colSpan={getGapColumnWidth()}
-                              ></GridItem>
-                            </>
-                          )}
                       </Fragment>
                     ))}
                 </Grid>
