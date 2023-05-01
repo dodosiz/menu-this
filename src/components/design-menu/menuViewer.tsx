@@ -45,9 +45,6 @@ interface DesignMenuViewer {
   brand: Brand;
 }
 
-const PRODUCT_NAME_MARGIN = 5;
-const PRODUCTS_TO_CATEGORY_MARGIN = 50;
-
 export function MenuViewer({
   categories,
   products,
@@ -93,12 +90,15 @@ export function MenuViewer({
   function getProductLeftColumnWidth(
     product: Product
   ): ResponsiveValue<number | "auto"> {
-    return product.secondPrice ? { base: 5, md: 7 } : { base: 8, md: 8 };
+    return product.secondPrice ? { base: 4, md: 2 } : { base: 7, md: 3 };
   }
   function getProductRightColumnWidth(
     product: Product
   ): ResponsiveValue<number | "auto"> {
-    return product.secondPrice ? { base: 5, md: 3 } : { base: 2, md: 2 };
+    return product.secondPrice ? { base: 5, md: 2 } : { base: 2, md: 1 };
+  }
+  function getGapColumnWidth(): ResponsiveValue<number | "auto"> {
+    return { base: 0, md: 1 };
   }
   return (
     <>
@@ -138,7 +138,7 @@ export function MenuViewer({
                 <Image
                   marginTop={titleMargin}
                   position="relative"
-                  marginBottom={PRODUCT_NAME_MARGIN}
+                  marginBottom={5}
                   width="100vw"
                   src={getImageData(category.background).path}
                   alt={getImageData(category.background).alt}
@@ -203,11 +203,7 @@ export function MenuViewer({
                     .map((product, i) => (
                       <Fragment key={`gi-${product.id}`}>
                         <GridItem
-                          marginTop={
-                            i > 0
-                              ? PRODUCT_NAME_MARGIN
-                              : PRODUCTS_TO_CATEGORY_MARGIN
-                          }
+                          marginTop={5}
                           colSpan={getProductLeftColumnWidth(product)}
                         >
                           <Heading fontFamily={contentFont} as="h2" size="sm">
@@ -215,11 +211,7 @@ export function MenuViewer({
                           </Heading>
                         </GridItem>
                         <GridItem
-                          marginTop={
-                            i > 0
-                              ? PRODUCT_NAME_MARGIN
-                              : PRODUCTS_TO_CATEGORY_MARGIN
-                          }
+                          marginTop={5}
                           colSpan={getProductRightColumnWidth(product)}
                         >
                           <Heading
@@ -232,6 +224,10 @@ export function MenuViewer({
                             {displayProductPrice(product)}
                           </Heading>
                         </GridItem>
+                        <GridItem
+                          marginTop={5}
+                          colSpan={getGapColumnWidth()}
+                        ></GridItem>
                         {product.description &&
                           product.description.length > 0 && (
                             <>
@@ -250,6 +246,9 @@ export function MenuViewer({
                               </GridItem>
                               <GridItem
                                 colSpan={getProductRightColumnWidth(product)}
+                              ></GridItem>
+                              <GridItem
+                                colSpan={getGapColumnWidth()}
                               ></GridItem>
                             </>
                           )}
