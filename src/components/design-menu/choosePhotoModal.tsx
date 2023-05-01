@@ -108,6 +108,19 @@ export function ChoosePhotoModal({
               Apply
             </Button>
           )}
+          {(selectedMode === "CHOOSE" || selectedMode === "UPLOAD") && (
+            <Button
+              variant="outline"
+              marginRight={5}
+              onClick={() => {
+                setSelectedMode(null);
+                setSelectedBackground(null);
+                setSelectedImage(null);
+              }}
+            >
+              Go Back
+            </Button>
+          )}
           <Button
             variant="outline"
             colorScheme="gray"
