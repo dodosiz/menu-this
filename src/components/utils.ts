@@ -9,8 +9,10 @@ export function validateEmail(email: string) {
 export function displayProductPrice(product: Product) {
   if (product.secondPrice) {
     return `${product.price.toFixed(2)}€ / ${product.secondPrice.toFixed(2)}€`;
-  } else {
+  } else if (product.price) {
     return `${product.price.toFixed(2)}€`;
+  } else {
+    return "";
   }
 }
 
